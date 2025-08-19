@@ -7,7 +7,11 @@ import "../styles/page-loader.css";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 
-const PageLoader = ({ isLoading = true }: { isLoading: boolean }) => {
+const PageLoader = ({
+  isLoading = true,
+}: {
+  isLoading: boolean | "instant";
+}) => {
   const timerRef = React.useRef<NodeJS.Timeout>(null);
   const container = React.useRef<HTMLDivElement>(null);
   const animationTimeline = React.useRef<gsap.core.Timeline>(null);
@@ -42,7 +46,8 @@ const PageLoader = ({ isLoading = true }: { isLoading: boolean }) => {
             ease: "power2.out",
           },
           "<0.25"
-        );
+        )
+        .addLabel("finish");
     },
     { scope: container }
   );
@@ -56,6 +61,10 @@ const PageLoader = ({ isLoading = true }: { isLoading: boolean }) => {
   });
 
   React.useEffect(() => {
+    // if isLoading is "instant", play the animation immediately
+    if (isLoading === "instant") {
+      animationTimeline.current?.play("finish");
+    }
     if (isLoading) {
       animationTimeline.current?.play();
     } else {

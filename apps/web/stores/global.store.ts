@@ -1,27 +1,31 @@
 import { createStore } from "@/lib/zustand";
 
 type InitialState = {
-  isLoading: boolean;
+  isLoading: boolean | "instant";
 };
 
-type Actions = {
-  setIsLoading: (isLoading: boolean) => void;
-};
-
-type Func = (props: { state: number }) => void;
-
-const func = (fu: Func) => {};
-
-export const useGlobalState = createStore<InitialState, Actions>({
+export const useGlobalState = createStore({
   name: "global",
   persist: true,
   storage: "local",
   state: {
-    isLoading: false,
-  },
+    isLoading: "instant",
+  } as InitialState,
   actions: (set, get) => ({
-    setIsLoading: (isLoading: boolean) => {
-      set((data) => {});
-    },
+    setIsLoading: (isLoading: boolean | "instant") =>
+      set((data) => {
+        data.state.isLoading = isLoading;
+      }),
   }),
 });
+
+/**
+  Notes
+  Debugging a Slices pattern based store
+  addBear: () =>
+    set(
+      (state) => ({ bears: state.bears + 1 }),
+      undefined,
+      'jungle:bear/addBear',
+    ),
+ */

@@ -1,84 +1,69 @@
-import { create, StateCreator } from "zustand";
+import { create } from "zustand";
 import {
   devtools,
   persist,
   createJSONStorage,
   PersistOptions,
+  combine,
 } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
-type StoreOptions<T extends {}, A extends {}> = {
+type StoreOptions<T, A> = {
   name: string;
   persist?: boolean;
+  // default is local
   storage?: "local" | "session";
-  // initializer: (
-  //   set: (state: { state: T; actions: A }) => void,
-  //   get: () => { state: T; actions: A }
-  // ) => {
-  //   state: T;
-  //   actions: A;
-  // };
   state: T;
+  enableDevTools?: boolean;
   actions: (
     set: (
       nextStateOrUpdater:
-        | {
-            state: T;
-            actions: A;
-          }
-        | Partial<{
-            state: T;
-            actions: A;
-          }>
-        | ((state: { state: T; actions: A }) => void),
+        | { state: T }
+        | Partial<{ state: T }>
+        | ((state: { state: T }) => void),
       shouldReplace?: false
     ) => void,
-    get: () => { state: T; actions: A }
+    get: () => { state: T }
   ) => A;
 };
 
-export const createStore = <T extends {}, A extends {}>({
-  name,
-  persist: shouldPersist = false,
-  storage = "local",
-  state,
-  actions,
-}: StoreOptions<T, A>) => {
-  type CombineState = { state: T; actions: A };
+const DEV_TOOLS = true;
 
-  // Apply persistence middleware
+export function createStore<T extends {}, A extends {}>(
+  options: StoreOptions<T, A>
+) {
+  type Combine = { state: T; actions: A };
+  const {
+    name,
+    persist: shouldPersist = false,
+    storage = "local",
+    state,
+    enableDevTools = DEV_TOOLS,
+  } = options;
+
+  const immerCombine = immer(
+    combine({ state }, (set, get) => ({
+      actions: options.actions(set as any, get),
+    }))
+  );
+
   if (shouldPersist) {
-    const persistConfig: PersistOptions<CombineState> = {
+    const persistConfig: PersistOptions<Combine, { state: T }> = {
       name,
       storage: createJSONStorage(() =>
         storage === "local" ? localStorage : sessionStorage
       ),
+      partialize: (s) => ({ state: s.state }), // only persist state, not actions
     };
-    return create<{ state: T; actions: A }>()(
-      devtools(
-        persist(
-          immer((set, get) => {
-            return {
-              state,
-              actions: actions(set, get),
-            };
-          }),
-          persistConfig
-        ),
-        { name }
-      )
+
+    const persistFun = persist(immerCombine, persistConfig);
+
+    return create<Combine>()(
+      devtools(persistFun, { name, enabled: enableDevTools })
     );
   }
 
-  return create<{ state: T; actions: A }>()(
-    devtools(
-      immer((set, get) => {
-        return {
-          state,
-          actions: actions(set, get),
-        };
-      }),
-      { name }
-    )
+  return create<Combine>()(
+    devtools(immerCombine, { name, enabled: enableDevTools })
   );
-};
+}

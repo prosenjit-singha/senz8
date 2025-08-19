@@ -1,6 +1,6 @@
 "use client";
 import Camera from "@/components/threejs/camera";
-import { GizmoHelper, GizmoViewcube, GizmoViewport } from "@react-three/drei";
+import { GizmoHelper, GizmoViewport } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import LightRays from "@workspace/next-ui/components/light-rays-bg";
 import Navbar from "@workspace/next-ui/components/navbar";
@@ -13,14 +13,12 @@ import { useGlobalState } from "@/stores/global.store";
 const bottlePosition = [2, 1, 0] as [number, number, number];
 
 export default function Page() {
-  const [isCanvasReady, setIsCanvasReady] = React.useState(false);
-
   const { state, actions } = useGlobalState();
 
   return (
     <>
       <Navbar />
-      <PageLoader isLoading={!isCanvasReady} />
+      <PageLoader isLoading={state.isLoading} />
 
       {/* <PageLoader /> */}
       {/* <LightRays className="z-[-1] fixed top-0 left-0 w-full h-full" /> */}
@@ -35,7 +33,7 @@ export default function Page() {
               <div key={i} className="bg-white" />
             ))}
           </div> */}
-          <Canvas shadows onCreated={() => setIsCanvasReady(true)}>
+          <Canvas shadows onCreated={() => actions.setIsLoading(false)}>
             {/* Ambient light for subtle fill */}
 
             <Camera
@@ -64,7 +62,10 @@ export default function Page() {
       <main className="px-page-margin-auto flex flex-col min-h-[calc(100svh-100px)]">
         <HomeHeroContent />
 
-        <button className="px-3 py-2 rounded-3xl border-golden mx-auto mt-auto text-golden-linear-gradient shadow-xl shadow-transparent hover:shadow-amber-500/10 text-shadow-lg hover:text-shadow-amber-400/10 cursor-pointer mb-20">
+        <button
+          onClick={() => actions.setIsLoading(true)}
+          className="px-3 py-2 rounded-3xl border-golden mx-auto mt-auto text-golden-linear-gradient shadow-xl shadow-transparent hover:shadow-amber-500/10 text-shadow-lg hover:text-shadow-amber-400/10 cursor-pointer mb-20"
+        >
           Shop Now
         </button>
       </main>
