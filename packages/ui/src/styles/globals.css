@@ -1,11 +1,17 @@
 @import "tailwindcss";
 @source "../../../apps/**/*.{ts,tsx}";
 @source "../../../components/**/*.{ts,tsx}";
+@source "../../../next-ui/src/**/*.{ts,tsx}";
 @source "../**/*.{ts,tsx}";
 
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
+
+:root {
+  --max-width-limit: 1500px;
+  --page-margin: clamp(1rem, 3vw, 2rem);
+}
 
 :root {
   --background: oklch(1 0 0);
@@ -123,5 +129,105 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@utility border-highlight {
+  @apply border-t-black/10 border-b-black/20 dark:border-t-white/20 dark:border-b-white/10;
+}
+
+@utility max-w-page {
+  max-width: var(--max-width-limit);
+}
+@utility w-page {
+  width: var(--max-width-limit);
+}
+@utility min-w-page {
+  min-width: var(--max-width-limit);
+}
+@utility mx-page-margin {
+  margin-inline: var(--page-margin);
+}
+@utility my-page-margin {
+  margin-block: var(--page-margin);
+}
+@utility mt-page-margin {
+  margin-top: var(--page-margin);
+}
+@utility mb-page-margin {
+  margin-bottom: var(--page-margin);
+}
+@utility ml-page-margin {
+  margin-left: var(--page-margin);
+}
+@utility mr-page-margin {
+  margin-right: var(--page-margin);
+}
+@utility m-page-margin {
+  margin: var(--page-margin);
+}
+@utility mx-page-margin-auto {
+  margin-inline: max(
+    var(--page-margin),
+    calc((100vw - var(--max-width-limit)) / 2)
+  );
+}
+
+@utility p-page-margin {
+  padding: var(--page-margin);
+}
+@utility pt-page-margin {
+  padding-top: var(--page-margin);
+}
+@utility pb-page-margin {
+  padding-bottom: var(--page-margin);
+}
+@utility pl-page-margin {
+  padding-left: var(--page-margin);
+}
+@utility pr-page-margin {
+  padding-right: var(--page-margin);
+}
+@utility px-page-margin {
+  padding-inline: var(--page-margin);
+}
+@utility py-page-margin {
+  padding-block: var(--page-margin);
+}
+@utility px-page-margin-auto {
+  padding-inline: max(
+    var(--page-margin),
+    calc((100vw - var(--max-width-limit)) / 2)
+  );
+}
+
+@utility text-golden-linear-gradient {
+  color: transparent;
+  background: linear-gradient(91.73deg, #ccb076 3.66%, #fef0d3);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@utility border-golden {
+  position: relative;
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    padding: 2px;
+    background: linear-gradient(
+      90deg,
+      #65583c,
+      #dcc081 16.5%,
+      #dcc081 36.5%,
+      #65583c 47%,
+      #dcc081 77.54%,
+      #65583c
+    );
+    border-radius: inherit;
+    mask:
+      conic-gradient(#000 0 0) content-box exclude,
+      conic-gradient(#000 0 0);
   }
 }
