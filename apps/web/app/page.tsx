@@ -18,14 +18,15 @@ export default function Page() {
   return (
     <>
       <Navbar />
-      <PageLoader isLoading={state.isLoading} />
+      {/* <PageLoader isLoading={state.isLoading === "instant"} /> */}
 
       {/* <PageLoader /> */}
       {/* <LightRays className="z-[-1] fixed top-0 left-0 w-full h-full" /> */}
 
-      <div className="fixed z-[-1] w-full h-full">
-        <div className="h-full w-full relative">
-          {/* <div
+      <main className="">
+        <div className="w-full h-screen" id="hero-section">
+          <div className="h-full w-full relative">
+            {/* <div
             data-slot="window-light"
             className="absolute top-[45%] left-1/2 w-20 h-30 grid grid-cols-2 gap-4 -translate-x-1/2 -translate-y-1/2 opacity-80 blur-md -skew-y-12"
           >
@@ -33,41 +34,43 @@ export default function Page() {
               <div key={i} className="bg-white" />
             ))}
           </div> */}
-          <Canvas shadows onCreated={() => actions.setIsLoading(false)}>
-            {/* Ambient light for subtle fill */}
+            <Canvas shadows onCreated={() => actions.setIsLoading(false)}>
+              {/* Ambient light for subtle fill */}
 
-            <Camera
+              {/* <Camera
               position={[0, 1, 6]}
               fov={50}
               lookAt={[0, 0.5, 0]}
               useOrbitControls
-            />
-            <ambientLight intensity={80} />
-            <BottlesScene />
+            /> */}
+              <ambientLight intensity={80} />
+              <BottlesScene />
 
-            <GizmoHelper alignment="bottom-right" margin={[80, 80]}>
-              <GizmoViewport />
-              {/* <GizmoViewcube /> */}
-            </GizmoHelper>
-            {/* <mesh position={[0, 0, -1]}>
+              <GizmoHelper alignment="bottom-right" margin={[80, 80]}>
+                <GizmoViewport />
+                {/* <GizmoViewcube /> */}
+              </GizmoHelper>
+              {/* <mesh position={[0, 0, -1]}>
               <planeGeometry args={[20, 20]} />
               <meshStandardMaterial color="#000000" />
             </mesh> */}
-            {/* <gridHelper args={[20, 20, "red"]} />
+              {/* <gridHelper args={[20, 20, "red"]} />
             <axesHelper scale={2} args={[10]} /> */}
-          </Canvas>
+            </Canvas>
+          </div>
+          <section className="pointer-events-none absolute top-0 left-0 w-full h-full px-page-margin-auto flex flex-col min-h-[calc(100svh-100px)] pt-[150px]">
+            <HomeHeroContent />
+
+            <button
+              onClick={() => actions.setIsLoading(true)}
+              className="pointer-events-auto px-3 py-2 rounded-3xl border-golden mx-auto mt-auto text-golden-linear-gradient shadow-xl shadow-transparent hover:shadow-amber-500/10 text-shadow-lg hover:text-shadow-amber-400/10 cursor-pointer mb-25 transition-all hover:scale-110"
+            >
+              Shop Now
+            </button>
+          </section>
         </div>
-      </div>
 
-      <main className="px-page-margin-auto flex flex-col min-h-[calc(100svh-100px)]">
-        <HomeHeroContent />
-
-        <button
-          onClick={() => actions.setIsLoading(true)}
-          className="px-3 py-2 rounded-3xl border-golden mx-auto mt-auto text-golden-linear-gradient shadow-xl shadow-transparent hover:shadow-amber-500/10 text-shadow-lg hover:text-shadow-amber-400/10 cursor-pointer mb-20"
-        >
-          Shop Now
-        </button>
+        <section className="px-page-margin-auto flex flex-col min-h-[calc(100svh-100px)]"></section>
       </main>
     </>
   );

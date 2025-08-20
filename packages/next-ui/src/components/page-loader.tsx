@@ -63,7 +63,7 @@ const PageLoader = ({
   React.useEffect(() => {
     // if isLoading is "instant", play the animation immediately
     if (isLoading === "instant") {
-      animationTimeline.current?.play("finish");
+      animationTimeline.current?.progress(1); // or tl.totalProgress(1)
     }
     if (isLoading) {
       animationTimeline.current?.play();
