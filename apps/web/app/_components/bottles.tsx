@@ -160,15 +160,14 @@ const BottlesScene = () => {
         inclination={0.55}
         azimuth={0.28}
         sunPosition={[0, 0.1, -1]}
-        showGUI
-        // exposure={0.08}
+        // showGUI
       />
 
       <Camera
         // position={[0, 1, 6]}
         // fov={50}
         // lookAt={[0, 0.5, 0]}
-        // useOrbitControls
+        useOrbitControls
         focusDistance={5}
       />
       <group

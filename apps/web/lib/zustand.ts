@@ -42,6 +42,7 @@ export function createStore<T extends {}, A extends {}>(
   } = options;
 
   const immerCombine = immer(
+    // @ts-ignore
     combine({ state }, (set, get) => ({
       actions: options.actions(set as any, get),
     }))
