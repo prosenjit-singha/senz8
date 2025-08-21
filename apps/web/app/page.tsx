@@ -63,7 +63,7 @@ export default function Page() {
 
             <button
               onClick={() => actions.setIsLoading(true)}
-              className="pointer-events-auto px-3 py-2 rounded-3xl border-golden mx-auto mt-auto text-golden-linear-gradient shadow-xl shadow-transparent hover:shadow-amber-500/10 text-shadow-lg hover:text-shadow-amber-400/10 cursor-pointer mb-25 transition-all hover:scale-110"
+              className="pointer-events-auto px-3 py-2 rounded-3xl border-golden mx-auto mt-auto text-golden-linear-gradient shadow-xl shadow-transparent hover:shadow-amber-500/10 text-shadow-lg hover:text-shadow-amber-400/10 cursor-pointer mb-25 transition-all hover:scale-110 backdrop-blur-3xl"
             >
               Shop Now
             </button>

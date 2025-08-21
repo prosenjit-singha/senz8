@@ -6,6 +6,9 @@ import React from "react";
 import * as THREE from "three";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Camera from "@/components/threejs/camera";
+import Ocean from "./oceam-water";
+import SkyWithGUI from "@/components/threejs/sky";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -23,6 +26,8 @@ const BottlesScene = () => {
   const topLight = React.useRef<THREE.DirectionalLight>(null);
   const leftLight = React.useRef<THREE.DirectionalLight>(null);
   const rightLight = React.useRef<THREE.DirectionalLight>(null);
+  const frontLight = React.useRef<THREE.DirectionalLight>(null);
+
   const { camera } = useThree();
   const perspectiveCamera = camera as THREE.PerspectiveCamera;
   const { contextSafe } = useGSAP(
@@ -146,16 +151,30 @@ const BottlesScene = () => {
 
   return (
     <>
-      {/* <Camera
-        position={[0, 1, 6]}
-        fov={50}
-        lookAt={[0, 0.5, 0]}
-        useOrbitControls
-      /> */}
+      <SkyWithGUI
+        distance={4000}
+        turbidity={1.2}
+        rayleigh={0}
+        mieCoefficient={0.001}
+        mieDirectionalG={0.85}
+        inclination={0.55}
+        azimuth={0.28}
+        sunPosition={[0, 0.1, -1]}
+        showGUI
+        // exposure={0.08}
+      />
+
+      <Camera
+        // position={[0, 1, 6]}
+        // fov={50}
+        // lookAt={[0, 0.5, 0]}
+        // useOrbitControls
+        focusDistance={5}
+      />
       <group
         position={[0, -1, 0]}
-        onPointerEnter={onPointerEnter}
-        onPointerLeave={onPointerLeave}
+        // onPointerEnter={onPointerEnter}
+        // onPointerLeave={onPointerLeave}
       >
         {/* <Environment preset="studio" background={false} /> */}
         <DirectionalLight
@@ -179,6 +198,13 @@ const BottlesScene = () => {
           intensity={0}
           useHelper={showHelpers}
         />
+        <DirectionalLight
+          ref={frontLight}
+          position={[1, 1, 2]}
+          size={3}
+          intensity={100}
+          useHelper={showHelpers}
+        />
         <PerfumeBottleModel position={[0, 0, 0]} scale={20} />
         <PerfumeBottleModel position={[-1, 0, -0.55]} scale={20} />
         <PerfumeBottleModel position={[1, 0, -0.55]} scale={20} />
@@ -186,6 +212,8 @@ const BottlesScene = () => {
         <PerfumeBottleModel position={[2, 0, -1.15]} scale={20} />
         <PerfumeBottleModel position={[-2, 0, -1.15]} scale={20} />
       </group>
+      <Ocean />
+      {/* <WaterSim /> */}
     </>
   );
 };
