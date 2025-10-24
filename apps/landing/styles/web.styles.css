@@ -1,0 +1,11 @@
+*,
+*::before,
+*::after {
+  text-transform: uppercase;
+  font-family: var(--font-futura-lt-pro-book);
+}
+
+button {
+  text-transform: uppercase;
+  font-family: var(--font-walbaum-pro);
+}
