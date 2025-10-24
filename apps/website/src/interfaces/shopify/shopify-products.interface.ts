@@ -24,6 +24,13 @@ interface Product {
   publicationCount: number;
   images: Image[];
   options: Option[];
+  variants: {
+    id: string;
+    title: string;
+    price: string;
+    availableForSale: boolean;
+    quantityAvailable: number;
+  }[];
 }
 
 interface Image {

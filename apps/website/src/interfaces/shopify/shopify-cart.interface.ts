@@ -64,6 +64,8 @@ export interface ShopifyCartCreateInput {
   }[];
 }
 
+export type ShopifyDeliveryMethod = "PICK_UP" | "PICKUP_POINT" | "SHIPPING";
+
 export interface ShopifyCart {
   id: string;
   createdAt: string;
@@ -133,7 +135,8 @@ export interface ShopifyCart {
     preferences?: {
       delivery?: {
         /** e.g., ["PICK_UP", "SHIP_TO_HOME"] */
-        deliveryMethod?: string[];
+        deliveryMethod: ShopifyDeliveryMethod[];
+        pickupHandle: string[];
       };
     };
   };

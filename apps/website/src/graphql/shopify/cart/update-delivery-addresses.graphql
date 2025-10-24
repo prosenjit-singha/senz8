@@ -1,0 +1,40 @@
+mutation CartDeliveryAddressesUpdate(
+  $id: ID!
+  $addresses: [CartSelectableAddressUpdateInput!]!
+) {
+  cartDeliveryAddressesUpdate(cartId: $id, addresses: $addresses) {
+    userErrors {
+      message
+      code
+      field
+    }
+    warnings {
+      message
+      code
+      target
+    }
+    cart {
+      id
+      delivery {
+        addresses {
+          id
+          selected
+          oneTimeUse
+          address {
+            ... on CartDeliveryAddress {
+              firstName
+              lastName
+              company
+              address1
+              address2
+              city
+              provinceCode
+              zip
+              countryCode
+            }
+          }
+        }
+      }
+    }
+  }
+}

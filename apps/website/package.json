@@ -6,7 +6,8 @@
     "dev": "next dev -p 3030 --turbopack",
     "build": "next build --turbopack",
     "start": "next start -p 3030",
-    "lint": "eslint"
+    "lint": "eslint",
+    "codegen": "cross-env SHOPIFY_STOREFRONT_ACCESS_TOKEN=$SHOPIFY_STOREFRONT_ACCESS_TOKEN graphql-codegen"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",

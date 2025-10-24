@@ -6,7 +6,13 @@ import { useGlobalStore } from "@/stores/global.store";
 import BrandLogo from "@workspace/next-ui/components/brand-logo";
 import { Button } from "@workspace/ui/components/button";
 import { Input } from "@workspace/ui/components/input";
-import { LogInIcon, MoveRightIcon, PlusIcon, SearchIcon, ShoppingBagIcon } from "lucide-react";
+import {
+  LogInIcon,
+  MoveRightIcon,
+  PlusIcon,
+  SearchIcon,
+  ShoppingBagIcon,
+} from "lucide-react";
 import Link from "next/link";
 import { useGSAP } from "@gsap/react";
 import SplitText from "gsap/SplitText";
@@ -28,7 +34,7 @@ const Navbar = () => {
   const { data: session } = useSession();
   const navItemSplitRef = React.useRef<globalThis.SplitText>(null);
   const { state, actions } = useGlobalStore();
-  const { actions: cartActions } = useCartStore();
+  const { state: cartState, actions: cartActions } = useCartStore();
   const pathname = usePathname();
 
   const { contextSafe } = useGSAP(() => {
@@ -111,7 +117,7 @@ const Navbar = () => {
   });
 
   return (
-    <header className="px-page-margin-auto flex gap-4 items-center border-b bg-black fixed top-0 left-0 w-full z-10">
+    <header className="px-page-margin-auto flex gap-4 items-center border-b bg-black fixed top-0 left-0 w-full z-20">
       <div className="sm:hidden">
         <Hamburger
           toggled={state.isNavMenuOpen}
@@ -131,7 +137,9 @@ const Navbar = () => {
             <Link
               href={link.href}
               data-active={
-                link.href.length > 1 ? pathname.startsWith(link.href) : pathname === link.href
+                link.href.length > 1
+                  ? pathname.startsWith(link.href)
+                  : pathname === link.href
               }
               className="text-white hover:text-primary transition-colors data-[active=true]:text-primary"
             >
@@ -146,9 +154,11 @@ const Navbar = () => {
           onClick={() => cartActions.setOpenState(true)}
           className="p-2 rounded-md hover:bg-white/10 text-white cursor-pointer relative active:scale-95 transition-[transform,background-color]"
         >
-          <span className="size-5 rounded-full bg-primary absolute top-0 right-0 flex items-center justify-center text-xs font-bold leading-none">
-            2
-          </span>
+          {!!cartState.data?.lines && cartState.data?.lines?.length > 0 && (
+            <span className="size-5 rounded-full bg-primary absolute top-0 right-0 flex items-center justify-center text-xs font-bold leading-none">
+              {cartState.data.lines?.length}
+            </span>
+          )}
           <ShoppingBagIcon />
         </button>
 
@@ -169,14 +179,20 @@ const Navbar = () => {
         <div className="px-page-margin-auto py-4 flex flex-col h-full">
           <ul className="flex flex-col gap-4 uppercase text-2xl justify-center">
             <li className="relative mb-4">
-              <Input placeholder="Search Product" className="pl-8 peer border-white/20" />
+              <Input
+                placeholder="Search Product"
+                className="pl-8 peer border-white/20"
+              />
               <SearchIcon
                 size={16}
                 className="absolute top-1/2 left-2 -translate-y-1/2 peer-focus-visible:text-primary text-muted"
               />
             </li>
             {links.map((link) => (
-              <li key={link.href} className="group flex gap-4 items-center justify-center">
+              <li
+                key={link.href}
+                className="group flex gap-4 items-center justify-center"
+              >
                 <Link
                   href={link.href}
                   className="nav-link-item group-hover:text-primary transition-colors"

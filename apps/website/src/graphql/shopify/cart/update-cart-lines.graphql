@@ -1,0 +1,89 @@
+mutation CartLinesUpdate($cartId: ID!, $lines: [CartLineUpdateInput!]!) {
+  cartLinesUpdate(cartId: $cartId, lines: $lines) {
+    cart {
+      id
+      lines(first: 50) {
+        edges {
+          node {
+            id
+            quantity
+            cost {
+              totalAmount {
+                amount
+                currencyCode
+              }
+              compareAtAmountPerQuantity {
+                amount
+                currencyCode
+              }
+            }
+            merchandise {
+              ... on ProductVariant {
+                id
+                title
+                sku
+                image {
+                  url
+                  altText
+                }
+                product {
+                  id
+                  title
+                  handle
+                }
+                price {
+                  amount
+                  currencyCode
+                }
+              }
+            }
+          }
+        }
+      }
+      cost {
+        subtotalAmount {
+          amount
+          currencyCode
+        }
+        totalAmount {
+          amount
+          currencyCode
+        }
+        totalTaxAmount {
+          amount
+          currencyCode
+        }
+      }
+      delivery {
+        addresses {
+          id
+          selected
+          oneTimeUse
+          address {
+            ... on CartDeliveryAddress {
+              firstName
+              lastName
+              company
+              address1
+              address2
+              city
+              provinceCode
+              zip
+              countryCode
+            }
+          }
+        }
+      }
+    }
+    userErrors {
+      message
+      code
+      field
+    }
+    warnings {
+      message
+      code
+      target
+    }
+  }
+}

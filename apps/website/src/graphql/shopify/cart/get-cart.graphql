@@ -1,0 +1,81 @@
+query GetCart($cartId: ID!) {
+  cart(id: $cartId) {
+    id
+    checkoutUrl
+    lines(first: 50) {
+      edges {
+        node {
+          id
+          quantity
+          merchandise {
+            ... on ProductVariant {
+              id
+              title
+              sku
+              product {
+                id
+                title
+                handle
+              }
+              price {
+                amount
+                currencyCode
+              }
+            }
+          }
+          cost {
+            totalAmount {
+              amount
+              currencyCode
+            }
+          }
+        }
+      }
+    }
+    cost {
+      subtotalAmount {
+        amount
+        currencyCode
+      }
+      totalAmount {
+        amount
+        currencyCode
+      }
+      totalTaxAmount {
+        amount
+        currencyCode
+      }
+    }
+    buyerIdentity {
+      email
+      phone
+      countryCode
+      customer {
+        id
+        email
+        firstName
+        lastName
+      }
+    }
+    delivery {
+      addresses {
+        id
+        selected
+        oneTimeUse
+        address {
+          ... on CartDeliveryAddress {
+            firstName
+            lastName
+            company
+            address1
+            address2
+            city
+            provinceCode
+            zip
+            countryCode
+          }
+        }
+      }
+    }
+  }
+}

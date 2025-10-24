@@ -1,0 +1,28 @@
+mutation CartCreate($input: CartInput) {
+  cartCreate(input: $input) {
+    cart {
+      id
+      createdAt
+      updatedAt
+      checkoutUrl
+      cost {
+        totalAmount {
+          amount
+          currencyCode
+        }
+        subtotalAmount {
+          amount
+          currencyCode
+        }
+        totalTaxAmount {
+          amount
+          currencyCode
+        }
+      }
+    }
+    userErrors {
+      field
+      message
+    }
+  }
+}
