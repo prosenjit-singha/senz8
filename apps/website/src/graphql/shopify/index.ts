@@ -18,10 +18,5 @@ export const storefrontGraphQlRequest = <
   document: TypedDocumentNode<A, B>,
   variables?: V
 ) => {
-  return request<ClientResponse<T>>(
-    endpoint,
-    document,
-    variables as object,
-    headers
-  );
+  return request<T>(endpoint, document, variables as object, headers);
 };

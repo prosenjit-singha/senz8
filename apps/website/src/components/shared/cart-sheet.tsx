@@ -29,30 +29,47 @@ function CartSheet() {
         </SheetHeader>
         <ScrollArea className="h-[calc(100vh-8rem)]">
           <ul className="flex flex-col gap-2 p-4">
-            {Array.from({ length: 20 }).map((_, i) => (
+            {state.data?.lines?.map((item, i) => (
               <li key={i} className="flex gap-4 items-center">
                 <Checkbox />
                 <div className="flex gap-3 border rounded-md p-2 flex-1">
                   <figure className="w-20 aspect-square rounded bg-muted"></figure>
 
                   <div className="flex flex-col ">
-                    <p className="font-semibold text-lg truncate">Perfect Perfume</p>
+                    <p className="font-semibold text-lg truncate">Test</p>
                     <span className="text-muted-foreground">variant</span>
                     <b className="font-black">{formatAmount(1000, "INR")}</b>
                   </div>
 
                   <div className="flex flex-col gap-2 ml-auto items-end">
-                    <Button size="icon" variant="destructive" aria-label="Remove">
+                    <Button
+                      size="icon"
+                      variant="destructive"
+                      aria-label="Remove"
+                    >
                       <TrashIcon />
                     </Button>
                     <ButtonGroup orientation="horizontal">
-                      <Button size="icon" variant="outline" aria-label="increase quantity">
+                      <Button
+                        size="icon"
+                        variant="outline"
+                        aria-label="increase quantity"
+                      >
                         <MinusIcon />
                       </Button>
-                      <Button size="icon" variant="outline" aria-label="quantity" aria-readonly>
+                      <Button
+                        size="icon"
+                        variant="outline"
+                        aria-label="quantity"
+                        aria-readonly
+                      >
                         1
                       </Button>
-                      <Button size="icon" variant="outline" aria-label="decrease quantity">
+                      <Button
+                        size="icon"
+                        variant="outline"
+                        aria-label="decrease quantity"
+                      >
                         <PlusIcon />
                       </Button>
                     </ButtonGroup>

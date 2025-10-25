@@ -12,10 +12,34 @@ query GetCart($cartId: ID!) {
               id
               title
               sku
+              availableForSale
+              currentlyNotInStock
+              image {
+                id
+                altText
+                height
+                thumbhash
+                url
+              }
               product {
                 id
                 title
+                type
                 handle
+                availableForSale
+                images(first: 5) {
+                  nodes {
+                    id
+                    altText
+                    height
+                    thumbhash
+                    url
+                  }
+                }
+                category {
+                  id
+                  name
+                }
               }
               price {
                 amount
@@ -24,6 +48,10 @@ query GetCart($cartId: ID!) {
             }
           }
           cost {
+            amountPerQuantity {
+              amount
+              currencyCode
+            }
             totalAmount {
               amount
               currencyCode

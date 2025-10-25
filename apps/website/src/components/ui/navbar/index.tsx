@@ -21,6 +21,8 @@ import { useCartStore } from "@/stores/cart.store";
 import { usePathname } from "next/navigation";
 import UserMenuButton from "./user-menu-button";
 import { useSession } from "@/components/providers/session.provider";
+import { useGetCartQuery } from "@/hooks/api/shopify-cart.hooks";
+import { Spinner } from "@workspace/ui/components/spinner";
 gsap.registerPlugin(SplitText);
 
 const links = [
@@ -36,6 +38,8 @@ const Navbar = () => {
   const { state, actions } = useGlobalStore();
   const { state: cartState, actions: cartActions } = useCartStore();
   const pathname = usePathname();
+
+  const { data: cart, isFetching } = useGetCartQuery();
 
   const { contextSafe } = useGSAP(() => {
     const split = SplitText.create(".nav-link-item", {
@@ -159,7 +163,7 @@ const Navbar = () => {
               {cartState.data.lines?.length}
             </span>
           )}
-          <ShoppingBagIcon />
+          {isFetching ? <Spinner /> : <ShoppingBagIcon />}
         </button>
 
         {session ? (

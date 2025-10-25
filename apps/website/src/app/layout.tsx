@@ -7,6 +7,7 @@ import { FuturaLTPro, WalbaumPro } from "@/lib/fonts";
 import CartSheet from "@/components/shared/cart-sheet";
 import { Toaster } from "@workspace/ui/components/sonner";
 import { SessionProvider } from "@/components/providers/session.provider";
+import ReactQueryProvider from "@/components/providers/react-query.provider";
 
 export const metadata: Metadata = {
   title: "SENZ8",
@@ -24,13 +25,15 @@ export default function RootLayout({
       <body
         className={`${FuturaLTPro.variable} ${WalbaumPro.variable} font-sans antialiased`}
       >
-        <SessionProvider>
-          <Toaster />
-          <Navbar />
-          {children}
-          <PublicPageFooter />
-          <CartSheet />
-        </SessionProvider>
+        <ReactQueryProvider>
+          <SessionProvider>
+            <Toaster />
+            <Navbar />
+            {children}
+            <PublicPageFooter />
+            <CartSheet />
+          </SessionProvider>
+        </ReactQueryProvider>
       </body>
     </html>
   );
