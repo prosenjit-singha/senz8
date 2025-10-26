@@ -3,6 +3,10 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
   try {
+    console.log(
+      "process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN",
+      process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN
+    );
     const { searchParams } = req.nextUrl;
     searchParams.set("status", "active");
 

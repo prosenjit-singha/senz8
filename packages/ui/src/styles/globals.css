@@ -127,7 +127,7 @@
     @apply border-border outline-ring/50;
   }
   body {
-    overflow: overlay;
+    /* overflow: overlay;  */
     @apply bg-background text-foreground;
   }
 }

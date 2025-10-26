@@ -28,6 +28,7 @@
   "include": [
     "next-env.d.ts",
     "**/*.ts",
+    "types/**/*.d.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
     "../../../packages/typescript-config/fonts.d.ts",

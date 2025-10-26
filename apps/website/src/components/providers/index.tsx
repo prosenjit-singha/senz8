@@ -7,6 +7,7 @@ import Navbar from "../ui/navbar";
 import PublicPageFooter from "../ui/footer";
 import CartSheet from "../shared/cart-sheet";
 import { SessionProvider } from "./session.provider";
+import SmoothScrollProvider from "@/components/providers/smooth-scroll-provider";
 
 export function Providers({
   children,
@@ -15,6 +16,7 @@ export function Providers({
 }) {
   return (
     <>
+      {/* <SmoothScrollProvider> */}
       <Toaster />
       <ReactQueryProvider>
         <SessionProvider>
@@ -24,6 +26,7 @@ export function Providers({
           <CartSheet />
         </SessionProvider>
       </ReactQueryProvider>
+      {/* </SmoothScrollProvider> */}
     </>
   );
 }

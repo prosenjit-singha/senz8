@@ -39,7 +39,10 @@ function CartSheet() {
 
   return (
     <Sheet open={state.isOpen} onOpenChange={actions.setOpenState}>
-      <SheetContent className="!w-full sm:max-w-md lg:max-w-lg xl:max-w-xl gap-0">
+      <SheetContent
+        data-lenis-prevent
+        className="!w-full sm:max-w-md lg:max-w-lg xl:max-w-xl gap-0"
+      >
         <SheetHeader className="border-b">
           <SheetTitle>My Cart</SheetTitle>
           <SheetDescription></SheetDescription>

@@ -5,7 +5,16 @@ import { LenisRef, ReactLenis } from "lenis/react";
 import { useEffect, useRef } from "react";
 import { cancelFrame, frame } from "motion";
 
-const SmoothScrollProvider = ({ children }: { children?: React.ReactNode | React.ReactNode[] }) => {
+/**
+ * you need add data attribute data-lenis-prevent to block-wrapper of your popup
+example <div class="some-class" data-lenis-prevent></div> 
+ */
+
+const SmoothScrollProvider = ({
+  children,
+}: {
+  children?: React.ReactNode | React.ReactNode[];
+}) => {
   const lenisRef = useRef<LenisRef>(null);
 
   useEffect(() => {
@@ -25,6 +34,12 @@ const SmoothScrollProvider = ({ children }: { children?: React.ReactNode | React
       gsap.ticker.remove(updateGSAP);
       cancelFrame(updateMotion);
     };
+  }, []);
+
+  useEffect(() => {
+    if (process.env.NODE_ENV === "development") {
+      window.lenisRef = lenisRef;
+    }
   }, []);
 
   return (

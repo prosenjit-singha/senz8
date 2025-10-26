@@ -16,7 +16,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      {/* <SmoothScrollProvider /> */}
       <body
         className={`${FuturaLTPro.variable} ${WalbaumPro.variable} font-sans antialiased`}
       >
