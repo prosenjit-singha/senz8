@@ -1,16 +1,13 @@
-mutation CartLinesUpdate($cartId: ID!, $lines: [CartLineUpdateInput!]!) {
-  cartLinesUpdate(cartId: $cartId, lines: $lines) {
+mutation CartLinesRemove($cartId: ID!, $lineIds: [ID!]!) {
+  cartLinesRemove(cartId: $cartId, lineIds: $lineIds) {
     cart {
       id
+      checkoutUrl
       totalQuantity
       lines(first: 50) {
         nodes {
           id
           quantity
-          attributes {
-            key
-            value
-          }
           merchandise {
             ... on ProductVariant {
               id
@@ -77,36 +74,13 @@ mutation CartLinesUpdate($cartId: ID!, $lines: [CartLineUpdateInput!]!) {
           currencyCode
         }
       }
-      delivery {
-        addresses {
-          id
-          selected
-          oneTimeUse
-          address {
-            ... on CartDeliveryAddress {
-              firstName
-              lastName
-              company
-              address1
-              address2
-              city
-              provinceCode
-              zip
-              countryCode
-            }
-          }
-        }
-      }
     }
     userErrors {
-      message
-      code
       field
-    }
-    warnings {
       message
-      code
-      target
     }
+    # warnings {
+    #   # CartWarning fields
+    # }
   }
 }

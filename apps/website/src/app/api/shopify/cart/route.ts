@@ -10,18 +10,23 @@ import {
   GetCartQuery,
   GetCartQueryVariables,
 } from "@/graphql/index";
+import { connectDB } from "@/helpers/db.helper";
 
 export const GET = apiHandler(async (req) => {
+  await connectDB();
   const session = await getSession();
   const { searchParams } = req.nextUrl;
   let cartId = searchParams.get("cartId");
 
   if (session) {
     const cart = await CustomerCart.findOne({ customerId: session?.user?.id });
+
     if (cart) {
       cartId = cart.cartId;
     }
   }
+
+  console.log({ cartId });
 
   // if cart id provided get the cart details from shopify
   if (cartId) {
@@ -31,6 +36,13 @@ export const GET = apiHandler(async (req) => {
     >(GetCartDocument, { cartId });
 
     if (shopifyCart.cart) {
+      if (session) {
+        await CustomerCart.findOneAndUpdate(
+          { customerId: session?.user?.id },
+          { cartId: shopifyCart?.cart.id },
+          { upsert: true, new: true }
+        );
+      }
       return {
         success: true,
         statusCode: 200,

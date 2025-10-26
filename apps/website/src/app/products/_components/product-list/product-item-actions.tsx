@@ -1,8 +1,7 @@
 "use client";
 import React from "react";
-import { HeartIcon, MinusIcon, PlusIcon, ShoppingCartIcon } from "lucide-react";
+import { MinusIcon, PlusIcon, ShoppingCartIcon } from "lucide-react";
 import { Button } from "@workspace/ui/components/button";
-import { useCartStore } from "@/stores/cart.store";
 import { ButtonGroup } from "@workspace/ui/components/button-group";
 import { GetShopifyProductsRes } from "@/interfaces/shopify/shopify-products.interface";
 import {
@@ -12,18 +11,71 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@workspace/ui/components/select";
-import { formatINRAmount } from "@/lib/utils";
+import {
+  useCartLinesAdd,
+  useCartLinesRemove,
+  useGetCartQuery,
+  useCartLinesUpdate,
+} from "@/hooks/api/shopify-cart.hooks";
+import { Spinner } from "@workspace/ui/components/spinner";
+import { formatAmount } from "@/helpers/currency.helper";
 function ProductItemActions({
   product,
 }: {
   product: GetShopifyProductsRes["products"][number];
 }) {
+  console.log(product);
   const [variantIndex, setVariantIndex] = React.useState(0);
-  const { state, actions } = useCartStore();
+  const { data: cache } = useGetCartQuery();
+  const { mutateAsync: addProduct, isPending: isAdding } = useCartLinesAdd();
+  const { mutateAsync: removeProduct, isPending: isRemoving } =
+    useCartLinesRemove();
+  const { mutateAsync: updateLines, isPending: isUpdating } =
+    useCartLinesUpdate();
 
-  const isAdded = state.data?.lines.find(
-    (item) => item.merchandiseId === product.variants[variantIndex].id
+  const isAdded = cache?.lines?.nodes?.find(
+    (line) => line.merchandise.id === product.variants[variantIndex].id
   );
+
+  const handleAddQuantity = () => {
+    const cartId = localStorage.getItem("cartId")!;
+    if (!cartId) return;
+    addProduct({
+      cartId,
+      lines: [
+        {
+          attributes: [],
+          quantity: 1,
+          merchandiseId: product.variants[variantIndex].id,
+          sellingPlanId: null,
+          parent: null,
+        },
+      ],
+    });
+  };
+
+  const handleRemoveProduct = () => {
+    const cartId = localStorage.getItem("cartId")!;
+    if (!cartId || !isAdded) return;
+
+    if (isAdded.quantity === 1) {
+      removeProduct({
+        cartId,
+        lineIds: [isAdded.id],
+      });
+    } else {
+      updateLines({
+        cartId,
+        lines: [
+          // @ts-expect-error
+          {
+            id: isAdded.id,
+            quantity: isAdded.quantity - 1,
+          },
+        ],
+      });
+    }
+  };
 
   return (
     <div className="grid grid-cols-2 gap-4 p-4 mt-auto">
@@ -45,7 +97,10 @@ function ProductItemActions({
         </Select>
       )}
       <strong className="text-primary font-black text-xl my-auto text-nowrap">
-        {formatINRAmount(product.variants[variantIndex].price)}
+        {formatAmount(
+          product.variants[variantIndex].price
+          // product.variants[variantIndex].unitPrice.currencyCode as any
+        )}
       </strong>
 
       {isAdded ? (
@@ -53,11 +108,10 @@ function ProductItemActions({
           <Button
             variant="outline"
             size={"icon-sm"}
-            onClick={() =>
-              actions.removeProduct(product.variants[variantIndex].id)
-            }
+            disabled={isRemoving}
+            onClick={handleRemoveProduct}
           >
-            <MinusIcon />{" "}
+            {isUpdating || isRemoving ? <Spinner /> : <MinusIcon />}
           </Button>
           <Button
             variant="outline"
@@ -65,35 +119,25 @@ function ProductItemActions({
             className="pointer-events-none"
           >
             {" "}
-            {isAdded?.quantity || 0}{" "}
+            {isAdded?.quantity}{" "}
           </Button>
           <Button
             variant="outline"
             size={"icon-sm"}
-            onClick={() =>
-              actions.addProduct({
-                quantity: 1,
-                merchandiseId: product.variants[variantIndex].id,
-                attributes: [],
-              })
-            }
+            disabled={isAdding}
+            onClick={handleAddQuantity}
           >
-            <PlusIcon />{" "}
+            {isAdding ? <Spinner /> : <PlusIcon />}
           </Button>
         </ButtonGroup>
       ) : (
         <Button
+          disabled={isAdding}
           size="icon"
           className="ml-auto"
-          onClick={() =>
-            actions.addProduct({
-              quantity: 1,
-              merchandiseId: product.variants[variantIndex].id,
-              attributes: [],
-            })
-          }
+          onClick={handleAddQuantity}
         >
-          <ShoppingCartIcon />
+          {isAdding ? <Spinner /> : <ShoppingCartIcon />}
         </Button>
       )}
     </div>

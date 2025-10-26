@@ -7,6 +7,7 @@ mutation CartBuyerIdentityUpdate(
     cart {
       id
       checkoutUrl
+      totalQuantity
       #   lines(first: 50) {
       #     edges {
       #       node {

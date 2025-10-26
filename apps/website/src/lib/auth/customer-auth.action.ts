@@ -7,14 +7,19 @@ import {
   zCustomerSignUpSchema,
 } from "@/zod-schemas/shopify/customer.z";
 import z from "zod";
-import { createCustomer, createToken } from "../shopify/shopify.customer.service";
+import {
+  createCustomer,
+  createToken,
+} from "../shopify/shopify.customer.service";
 import { createSession, deleteSession } from "./auth.session";
 import { Session } from "./auth.type";
 
 type SignUpFormState =
   | {
       success: boolean;
-      errors?: ReturnType<typeof z.flattenError<CustomerSignUpBody>>["fieldErrors"];
+      errors?: ReturnType<
+        typeof z.flattenError<CustomerSignUpBody>
+      >["fieldErrors"];
       message?: string;
     }
   | undefined;
@@ -56,7 +61,10 @@ export async function signup(
     };
   }
 
-  const tokenResult = await createToken(validatedFields.data.email, validatedFields.data.password);
+  const tokenResult = await createToken(
+    validatedFields.data.email,
+    validatedFields.data.password
+  );
 
   if (tokenResult.data && result) {
     await createSession(
@@ -64,7 +72,8 @@ export async function signup(
         accessToken: tokenResult.data.accessToken,
         user: {
           id: result.customer.id,
-          displayName: tokenResult.customer?.displayName ?? result.customer.firstName,
+          displayName:
+            tokenResult.customer?.displayName ?? result.customer.firstName,
           email: result.customer.email,
           phone: result.customer.phone,
           role: "customer",
@@ -79,7 +88,10 @@ export async function signup(
 type SignInFormState =
   | {
       success: boolean;
-      errors?: ReturnType<typeof z.flattenError<CustomerSignInBody>>["fieldErrors"];
+      session: Session | null;
+      errors?: ReturnType<
+        typeof z.flattenError<CustomerSignInBody>
+      >["fieldErrors"];
       message?: string;
     }
   | undefined;
@@ -98,29 +110,34 @@ export async function login(
     const result = await createToken(data.email, data.password);
     console.log("Create Token Result", result);
     if (result.data && result.customer) {
-      await createSession(
-        {
-          accessToken: result.data?.accessToken!,
-          user: {
-            id: result.customer?.id!,
-            displayName: result.customer?.displayName ?? result.customer?.firstName,
-            email: result.customer?.email,
-            phone: result.customer?.phone,
-            role: "customer",
-          },
-          expiredAt: result.data?.expiresAt!,
+      const session: Session = {
+        accessToken: result.data?.accessToken!,
+        user: {
+          id: result.customer?.id!,
+          displayName:
+            result.customer?.displayName ?? result.customer?.firstName,
+          email: result.customer?.email,
+          phone: result.customer?.phone,
+          role: "customer",
         },
-        "/"
-      );
+        expiredAt: result.data?.expiresAt!,
+      };
+      await createSession(session);
+      return {
+        success: true,
+        session,
+      };
     } else {
       return {
         success: false,
+        session: null,
         message: "Failed to login",
       };
     }
   } else {
     return {
       success: false,
+      session: null,
       errors: z.flattenError(error).fieldErrors,
     };
   }

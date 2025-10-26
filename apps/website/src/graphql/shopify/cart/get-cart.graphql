@@ -2,60 +2,63 @@ query GetCart($cartId: ID!) {
   cart(id: $cartId) {
     id
     checkoutUrl
+    totalQuantity
     lines(first: 50) {
-      edges {
-        node {
-          id
-          quantity
-          merchandise {
-            ... on ProductVariant {
+      nodes {
+        id
+        quantity
+        attributes {
+          key
+          value
+        }
+        merchandise {
+          ... on ProductVariant {
+            id
+            title
+            sku
+            availableForSale
+            currentlyNotInStock
+            image {
+              id
+              altText
+              height
+              thumbhash
+              url
+            }
+            product {
               id
               title
-              sku
+              handle
               availableForSale
-              currentlyNotInStock
-              image {
-                id
-                altText
-                height
-                thumbhash
-                url
-              }
-              product {
-                id
-                title
-                type
-                handle
-                availableForSale
-                images(first: 5) {
-                  nodes {
-                    id
-                    altText
-                    height
-                    thumbhash
-                    url
-                  }
-                }
-                category {
+              productType
+              images(first: 5) {
+                nodes {
                   id
-                  name
+                  altText
+                  height
+                  thumbhash
+                  url
                 }
               }
-              price {
-                amount
-                currencyCode
+              category {
+                id
+                name
               }
+            }
+            price {
+              amount
+              currencyCode
             }
           }
-          cost {
-            amountPerQuantity {
-              amount
-              currencyCode
-            }
-            totalAmount {
-              amount
-              currencyCode
-            }
+        }
+        cost {
+          amountPerQuantity {
+            amount
+            currencyCode
+          }
+          totalAmount {
+            amount
+            currencyCode
           }
         }
       }

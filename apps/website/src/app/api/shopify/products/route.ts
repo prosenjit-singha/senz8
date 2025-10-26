@@ -92,7 +92,7 @@ export const getAllProducts = async (searchParams: URLSearchParams) => {
     node {
       id
       title
-      price      # scalar string now
+      price 
       availableForSale
     }
   }

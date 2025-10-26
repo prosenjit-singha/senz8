@@ -30,6 +30,10 @@ interface Product {
     price: string;
     availableForSale: boolean;
     quantityAvailable: number;
+    unitPrice: {
+      amount: string;
+      currencyCode: string;
+    };
   }[];
 }
 

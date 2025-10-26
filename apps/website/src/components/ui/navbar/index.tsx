@@ -6,13 +6,7 @@ import { useGlobalStore } from "@/stores/global.store";
 import BrandLogo from "@workspace/next-ui/components/brand-logo";
 import { Button } from "@workspace/ui/components/button";
 import { Input } from "@workspace/ui/components/input";
-import {
-  LogInIcon,
-  MoveRightIcon,
-  PlusIcon,
-  SearchIcon,
-  ShoppingBagIcon,
-} from "lucide-react";
+import { MoveRightIcon, SearchIcon, ShoppingBagIcon } from "lucide-react";
 import Link from "next/link";
 import { useGSAP } from "@gsap/react";
 import SplitText from "gsap/SplitText";
@@ -22,7 +16,7 @@ import { usePathname } from "next/navigation";
 import UserMenuButton from "./user-menu-button";
 import { useSession } from "@/components/providers/session.provider";
 import { useGetCartQuery } from "@/hooks/api/shopify-cart.hooks";
-import { Spinner } from "@workspace/ui/components/spinner";
+
 gsap.registerPlugin(SplitText);
 
 const links = [
@@ -39,7 +33,7 @@ const Navbar = () => {
   const { state: cartState, actions: cartActions } = useCartStore();
   const pathname = usePathname();
 
-  const { data: cart, isFetching } = useGetCartQuery();
+  const { data: cart, isLoading } = useGetCartQuery();
 
   const { contextSafe } = useGSAP(() => {
     const split = SplitText.create(".nav-link-item", {
@@ -121,7 +115,7 @@ const Navbar = () => {
   });
 
   return (
-    <header className="px-page-margin-auto flex gap-4 items-center border-b bg-black fixed top-0 left-0 w-full z-20">
+    <header className="px-page-margin-auto flex gap-4 items-center border-b bg-black sticky top-0 left-0 w-full z-20">
       <div className="sm:hidden">
         <Hamburger
           toggled={state.isNavMenuOpen}
@@ -156,14 +150,15 @@ const Navbar = () => {
       <div className="flex items-center gap-4 ml-auto">
         <button
           onClick={() => cartActions.setOpenState(true)}
-          className="p-2 rounded-md hover:bg-white/10 text-white cursor-pointer relative active:scale-95 transition-[transform,background-color]"
+          data-busy={isLoading}
+          className="p-2 rounded-md hover:bg-white/10 text-white cursor-pointer relative active:scale-95 transition-[transform,background-color] h-10 w-10 data-[busy=true]:animate-pulse"
         >
-          {!!cartState.data?.lines && cartState.data?.lines?.length > 0 && (
-            <span className="size-5 rounded-full bg-primary absolute top-0 right-0 flex items-center justify-center text-xs font-bold leading-none">
-              {cartState.data.lines?.length}
+          {!!cart?.totalQuantity && cart?.totalQuantity > 0 && (
+            <span className="size-5 rounded-full bg-primary absolute top-0 right-0 flex items-center justify-center text-xs font-bold leading-none text-black">
+              {cart?.totalQuantity}
             </span>
           )}
-          {isFetching ? <Spinner /> : <ShoppingBagIcon />}
+          <ShoppingBagIcon />
         </button>
 
         {session ? (

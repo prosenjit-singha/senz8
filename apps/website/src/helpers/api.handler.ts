@@ -4,7 +4,9 @@ import z, { ZodError } from "zod";
 
 type Callback = (
   req: NextRequest
-) => Promise<IApiSuccessResponse | IApiFailedResponse | Response | NextResponse>;
+) => Promise<
+  IApiSuccessResponse | IApiFailedResponse | Response | NextResponse
+>;
 
 export const apiHandler = (callback: Callback) => async (req: NextRequest) => {
   try {
@@ -34,6 +36,7 @@ export const apiHandler = (callback: Callback) => async (req: NextRequest) => {
 
     return NextResponse.json(result, { status: result.statusCode });
   } catch (err) {
+    console.log("Uncaught Error ", err);
     if (err instanceof ZodError) {
       return NextResponse.json(
         {

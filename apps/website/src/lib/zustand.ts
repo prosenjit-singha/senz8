@@ -54,7 +54,7 @@ export function createStore<T extends object, A extends object>(
         storage === "local" ? localStorage : sessionStorage
       ),
       merge: (persistedState, currentState) => {
-        console.log({ persistedState, currentState });
+        // console.log({ persistedState, currentState });
         if (persistedState) {
           return {
             ...currentState,
