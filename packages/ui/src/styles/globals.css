@@ -123,9 +123,11 @@
 
 @layer base {
   * {
+    overscroll-behavior: contain;
     @apply border-border outline-ring/50;
   }
   body {
+    overflow: overlay;
     @apply bg-background text-foreground;
   }
 }
@@ -173,7 +175,10 @@
   margin: var(--page-margin);
 }
 @utility mx-page-margin-auto {
-  margin-inline: max(var(--page-margin), calc((100vw - var(--max-width-limit)) / 2));
+  margin-inline: max(
+    var(--page-margin),
+    calc((100vw - var(--max-width-limit)) / 2)
+  );
 }
 
 @utility p-page-margin {
@@ -198,7 +203,10 @@
   padding-block: var(--page-margin);
 }
 @utility px-page-margin-auto {
-  padding-inline: max(var(--page-margin), calc((100vw - var(--max-width-limit)) / 2));
+  padding-inline: max(
+    var(--page-margin),
+    calc((100vw - var(--max-width-limit)) / 2)
+  );
 }
 
 @utility text-golden-linear-gradient {

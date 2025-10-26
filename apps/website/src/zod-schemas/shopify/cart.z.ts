@@ -112,7 +112,7 @@ export const zShopifyCartCreateInput = z.object({
         parent: z.record(z.string(), z.any()).optional(),
       })
     )
-    .optional(),
+    .default([]),
 
   /** Discount code(s) applied to this cart. */
   discountCodes: z.array(z.string()).optional(),

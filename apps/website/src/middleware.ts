@@ -1,9 +1,8 @@
 // import { auth } from "./auth";
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { isRouteMatch } from "./helpers/pathname.helper";
 import {
   DEFAULT_LOGIN_REDIRECT,
-  AUTH_API_PREFIX,
   AUTH_ROUTES_OBJ,
   AUTH_ROUTES_ARRAY,
   PUBLIC_ROUTES,
@@ -13,15 +12,24 @@ import { getSession } from "./lib/auth/auth.session";
 export default async function middleware(req: NextRequest) {
   const { nextUrl } = req;
   const { pathname, searchParams } = nextUrl;
-  const isAuthApiRoute = pathname.startsWith(AUTH_API_PREFIX);
-  const isPublicRoute = PUBLIC_ROUTES.some((template) => isRouteMatch(template, pathname));
+  const isApiRoute = pathname.startsWith("/api");
+  const isPublicRoute = PUBLIC_ROUTES.some(
+    (template) => isRouteMatch(template, pathname).match
+  );
 
   const isAuthRoute = AUTH_ROUTES_ARRAY.includes(pathname);
   // do not do anything
-  if (isAuthApiRoute) return;
+  if (isApiRoute) return NextResponse.next();
   const session = await getSession();
 
-  console.log("Session", session);
+  console.log({
+    isAuthRoute,
+    isPublicRoute,
+    isAuthApiRoute: isApiRoute,
+    pathname,
+    session,
+    publicRoutes: PUBLIC_ROUTES,
+  });
 
   if (isAuthRoute) {
     if (session) {
@@ -31,10 +39,12 @@ export default async function middleware(req: NextRequest) {
       } else {
         callbackUrl = DEFAULT_LOGIN_REDIRECT;
       }
-      console.log(`User [${session.user.id}] has already logged in. Redirecting to ${callbackUrl}`);
+      console.log(
+        `User [${session.user.id}] has already logged in. Redirecting to ${callbackUrl}`
+      );
       return Response.redirect(new URL(callbackUrl, nextUrl));
     }
-    return;
+    return NextResponse.next();
   }
 
   //  handle protected routes
@@ -47,7 +57,7 @@ export default async function middleware(req: NextRequest) {
       new URL(`${AUTH_ROUTES_OBJ.signIn}?callbackUrl=${callbackUrl}`, nextUrl)
     );
   }
-  return;
+  return NextResponse.next();
 }
 // Optionally, don't invoke Middleware on some paths
 export const config = {

@@ -18,13 +18,18 @@ export const createFetcher = (config: FetcherConfig) => {
   };
 
   // generic request method
-  const request = async <T>(pathOrURL: string | URL, init?: FetcherRequestInit): Promise<T> => {
+  const request = async <T>(
+    pathOrURL: string | URL,
+    init?: FetcherRequestInit
+  ): Promise<T> => {
     const url = buildURL(pathOrURL);
     const mergedHeaders = { ...defaultHeaders, ...init?.headers };
     const res = await fetch(url, { ...init, headers: mergedHeaders });
 
     const contentType = res.headers.get("Content-Type") || "";
-    const data = contentType.includes("application/json") ? await res.json() : await res.text();
+    const data = contentType.includes("application/json")
+      ? await res.json()
+      : await res.text();
 
     if (!res.ok) {
       throw data;
@@ -50,7 +55,11 @@ export const createFetcher = (config: FetcherConfig) => {
         body: body ? JSON.stringify(body) : undefined,
         headers: { "Content-Type": "application/json", ...init?.headers },
       }),
-    patch: <T>(pathOrURL: string | URL, body?: any, init?: FetcherRequestInit) =>
+    patch: <T>(
+      pathOrURL: string | URL,
+      body?: any,
+      init?: FetcherRequestInit
+    ) =>
       request<T>(pathOrURL, {
         ...init,
         method: "PATCH",

@@ -46,9 +46,12 @@ export const WaterSimulation: React.FC<WaterSimulationProps> = ({
   });
 
   const [mousedown, setMousedown] = useState<boolean>(false);
-  const [mouseCoords, setMouseCoords] = useState<THREE.Vector2>(new THREE.Vector2());
+  const [mouseCoords, setMouseCoords] = useState<THREE.Vector2>(
+    new THREE.Vector2()
+  );
   const [frame, setFrame] = useState<number>(0);
-  const [currentDucksEnabled, setCurrentDucksEnabled] = useState<boolean>(ducksEnabled);
+  const [currentDucksEnabled, setCurrentDucksEnabled] =
+    useState<boolean>(ducksEnabled);
 
   const waterMeshRef = useRef<THREE.Mesh>(null);
   const meshRayRef = useRef<THREE.Mesh>(null);
@@ -104,11 +107,14 @@ export const WaterSimulation: React.FC<WaterSimulationProps> = ({
       resolution: { value: new THREE.Vector2(WIDTH, WIDTH) },
     });
 
-    const readWaterLevelShader = gpuCompute.createShaderMaterial(readWaterLevelFragmentShader, {
-      point1: { value: new THREE.Vector2() },
-      levelTexture: { value: null },
-      resolution: { value: new THREE.Vector2(WIDTH, WIDTH) },
-    });
+    const readWaterLevelShader = gpuCompute.createShaderMaterial(
+      readWaterLevelFragmentShader,
+      {
+        point1: { value: new THREE.Vector2() },
+        levelTexture: { value: null },
+        resolution: { value: new THREE.Vector2(WIDTH, WIDTH) },
+      }
+    );
     readWaterLevelShader.defines.WIDTH = WIDTH.toFixed(1);
     readWaterLevelShader.defines.BOUNDS = BOUNDS.toFixed(1);
 
@@ -130,7 +136,8 @@ export const WaterSimulation: React.FC<WaterSimulationProps> = ({
       readWaterLevelShader,
       readWaterLevelRenderTarget,
       readWaterLevelImage,
-      tmpHeightmap: gpuCompute.getCurrentRenderTarget(heightmapVariable).texture,
+      tmpHeightmap:
+        gpuCompute.getCurrentRenderTarget(heightmapVariable).texture,
     });
   };
 
@@ -188,7 +195,10 @@ export const WaterSimulation: React.FC<WaterSimulationProps> = ({
 
       setGpuState((prev) => ({ ...prev, tmpHeightmap: newHeightmap }));
 
-      if (waterMeshRef.current && waterMeshRef.current.material instanceof WaterMaterial) {
+      if (
+        waterMeshRef.current &&
+        waterMeshRef.current.material instanceof WaterMaterial
+      ) {
         // @ts-expect-error: Property 'heightmap' does not exist on type 'MeshStandardMaterial'.
         waterMeshRef.current.material.heightmap = newHeightmap;
       }
@@ -204,10 +214,16 @@ export const WaterSimulation: React.FC<WaterSimulationProps> = ({
   });
 
   const duckDynamics = (): void => {
-    if (!gpuState.readWaterLevelShader || !gpuState.tmpHeightmap || !gpuState.gpuCompute) return;
+    if (
+      !gpuState.readWaterLevelShader ||
+      !gpuState.tmpHeightmap ||
+      !gpuState.gpuCompute
+    )
+      return;
 
     if (gpuState.readWaterLevelShader.uniforms.levelTexture) {
-      gpuState.readWaterLevelShader.uniforms.levelTexture.value = gpuState.tmpHeightmap;
+      gpuState.readWaterLevelShader.uniforms.levelTexture.value =
+        gpuState.tmpHeightmap;
     }
 
     ducksRef.current.forEach((duck) => {
@@ -284,7 +300,7 @@ export const WaterSimulation: React.FC<WaterSimulationProps> = ({
     <>
       <mesh ref={waterMeshRef} rotation={[-Math.PI * 0.5, 0, 0]}>
         <planeGeometry args={[BOUNDS, BOUNDS, WIDTH - 1, WIDTH - 1]} />
-        {/* @ts-ignore */}
+        {/* @ts-expect-error Ignored keys can cause issue */}
         <waterMaterial
           color={0x001e0f}
           metalness={0.9}

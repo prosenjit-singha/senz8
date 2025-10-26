@@ -4,7 +4,11 @@ import type { Session } from "./auth.type";
 import { SignJWT, jwtVerify, JWTPayload } from "jose";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { getCustomer, renewToken, revokeToken } from "../shopify/shopify.customer.service";
+import {
+  getCustomer,
+  renewToken,
+  revokeToken,
+} from "../shopify/shopify.customer.service";
 import { addDays } from "date-fns";
 import { revalidateTag } from "next/cache";
 
@@ -30,7 +34,10 @@ export async function decryptSession(session: string | undefined = "") {
   }
 }
 
-export async function createSession(sessionPayload: Session, redirectURL?: string) {
+export async function createSession(
+  sessionPayload: Session,
+  redirectURL?: string
+) {
   const expiresAt = sessionPayload.expiredAt
     ? new Date(sessionPayload.expiredAt)
     : addDays(new Date(), 7);
@@ -50,6 +57,8 @@ export async function createSession(sessionPayload: Session, redirectURL?: strin
 
   if (redirectURL) {
     redirect(redirectURL);
+  } else {
+    return sessionPayload;
   }
 }
 

@@ -1,0 +1,76 @@
+query GetProducts(
+  $first: Int!
+  $after: String
+  $sortKey: ProductSortKeys
+  $reverse: Boolean
+  $query: String
+) {
+  products(
+    first: $first
+    after: $after
+    sortKey: $sortKey
+    reverse: $reverse
+    query: $query
+  ) {
+    nodes {
+      id
+      title
+      vendor
+      productType
+      handle
+      createdAt
+      updatedAt
+      publishedAt
+      tags
+      images(first: 10) {
+        edges {
+          node {
+            id
+            altText
+            width
+            height
+            url
+          }
+        }
+      }
+      options(first: 10) {
+        id
+        name
+        optionValues {
+          id
+          name
+          swatch {
+            color
+            image {
+              id
+              alt
+              previewImage {
+                altText
+                id
+                width
+                height
+                url
+              }
+            }
+          }
+        }
+        values
+      }
+      variants(first: 10) {
+        nodes {
+          id
+          title
+          price {
+            amount
+            currencyCode
+          }
+          availableForSale
+        }
+      }
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}
