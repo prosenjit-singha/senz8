@@ -10473,49 +10473,48 @@ export type GetCustomerOrdersQuery = {
     numberOfOrders: any;
     orders: {
       __typename?: "OrderConnection";
-      edges: Array<{
-        __typename?: "OrderEdge";
-        cursor: string;
-        node: {
-          __typename?: "Order";
-          id: string;
-          name: string;
-          orderNumber: number;
-          processedAt: any;
-          fulfillmentStatus: OrderFulfillmentStatus;
-          financialStatus: OrderFinancialStatus | null;
-          totalPrice: {
-            __typename?: "MoneyV2";
-            amount: any;
-            currencyCode: CurrencyCode;
-          };
-          lineItems: {
-            __typename?: "OrderLineItemConnection";
-            edges: Array<{
-              __typename?: "OrderLineItemEdge";
-              node: {
-                __typename?: "OrderLineItem";
+      totalCount: any;
+      nodes: Array<{
+        __typename?: "Order";
+        id: string;
+        name: string;
+        orderNumber: number;
+        processedAt: any;
+        fulfillmentStatus: OrderFulfillmentStatus;
+        financialStatus: OrderFinancialStatus | null;
+        totalPrice: {
+          __typename?: "MoneyV2";
+          amount: any;
+          currencyCode: CurrencyCode;
+        };
+        lineItems: {
+          __typename?: "OrderLineItemConnection";
+          edges: Array<{
+            __typename?: "OrderLineItemEdge";
+            node: {
+              __typename?: "OrderLineItem";
+              title: string;
+              quantity: number;
+              variant: {
+                __typename?: "ProductVariant";
+                id: string;
                 title: string;
-                quantity: number;
-                variant: {
-                  __typename?: "ProductVariant";
-                  id: string;
-                  title: string;
-                  price: {
-                    __typename?: "MoneyV2";
-                    amount: any;
-                    currencyCode: CurrencyCode;
-                  };
-                } | null;
-              };
-            }>;
-          };
+                price: {
+                  __typename?: "MoneyV2";
+                  amount: any;
+                  currencyCode: CurrencyCode;
+                };
+              } | null;
+            };
+          }>;
         };
       }>;
       pageInfo: {
         __typename?: "PageInfo";
         hasNextPage: boolean;
         endCursor: string | null;
+        hasPreviousPage: boolean;
+        startCursor: string | null;
       };
     };
   } | null;
@@ -15383,87 +15382,72 @@ export const GetCustomerOrdersDocument = {
                     selections: [
                       {
                         kind: "Field",
-                        name: { kind: "Name", value: "edges" },
+                        name: { kind: "Name", value: "totalCount" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "nodes" },
                         selectionSet: {
                           kind: "SelectionSet",
                           selections: [
                             {
                               kind: "Field",
-                              name: { kind: "Name", value: "cursor" },
+                              name: { kind: "Name", value: "id" },
                             },
                             {
                               kind: "Field",
-                              name: { kind: "Name", value: "node" },
+                              name: { kind: "Name", value: "name" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "orderNumber" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "processedAt" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "totalPrice" },
                               selectionSet: {
                                 kind: "SelectionSet",
                                 selections: [
                                   {
                                     kind: "Field",
-                                    name: { kind: "Name", value: "id" },
-                                  },
-                                  {
-                                    kind: "Field",
-                                    name: { kind: "Name", value: "name" },
+                                    name: { kind: "Name", value: "amount" },
                                   },
                                   {
                                     kind: "Field",
                                     name: {
                                       kind: "Name",
-                                      value: "orderNumber",
+                                      value: "currencyCode",
                                     },
                                   },
+                                ],
+                              },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "lineItems" },
+                              arguments: [
+                                {
+                                  kind: "Argument",
+                                  name: { kind: "Name", value: "first" },
+                                  value: { kind: "IntValue", value: "10" },
+                                },
+                              ],
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
                                   {
                                     kind: "Field",
-                                    name: {
-                                      kind: "Name",
-                                      value: "processedAt",
-                                    },
-                                  },
-                                  {
-                                    kind: "Field",
-                                    name: { kind: "Name", value: "totalPrice" },
+                                    name: { kind: "Name", value: "edges" },
                                     selectionSet: {
                                       kind: "SelectionSet",
                                       selections: [
                                         {
                                           kind: "Field",
-                                          name: {
-                                            kind: "Name",
-                                            value: "amount",
-                                          },
-                                        },
-                                        {
-                                          kind: "Field",
-                                          name: {
-                                            kind: "Name",
-                                            value: "currencyCode",
-                                          },
-                                        },
-                                      ],
-                                    },
-                                  },
-                                  {
-                                    kind: "Field",
-                                    name: { kind: "Name", value: "lineItems" },
-                                    arguments: [
-                                      {
-                                        kind: "Argument",
-                                        name: { kind: "Name", value: "first" },
-                                        value: {
-                                          kind: "IntValue",
-                                          value: "10",
-                                        },
-                                      },
-                                    ],
-                                    selectionSet: {
-                                      kind: "SelectionSet",
-                                      selections: [
-                                        {
-                                          kind: "Field",
-                                          name: {
-                                            kind: "Name",
-                                            value: "edges",
-                                          },
+                                          name: { kind: "Name", value: "node" },
                                           selectionSet: {
                                             kind: "SelectionSet",
                                             selections: [
@@ -15471,11 +15455,32 @@ export const GetCustomerOrdersDocument = {
                                                 kind: "Field",
                                                 name: {
                                                   kind: "Name",
-                                                  value: "node",
+                                                  value: "title",
+                                                },
+                                              },
+                                              {
+                                                kind: "Field",
+                                                name: {
+                                                  kind: "Name",
+                                                  value: "quantity",
+                                                },
+                                              },
+                                              {
+                                                kind: "Field",
+                                                name: {
+                                                  kind: "Name",
+                                                  value: "variant",
                                                 },
                                                 selectionSet: {
                                                   kind: "SelectionSet",
                                                   selections: [
+                                                    {
+                                                      kind: "Field",
+                                                      name: {
+                                                        kind: "Name",
+                                                        value: "id",
+                                                      },
+                                                    },
                                                     {
                                                       kind: "Field",
                                                       name: {
@@ -15487,14 +15492,7 @@ export const GetCustomerOrdersDocument = {
                                                       kind: "Field",
                                                       name: {
                                                         kind: "Name",
-                                                        value: "quantity",
-                                                      },
-                                                    },
-                                                    {
-                                                      kind: "Field",
-                                                      name: {
-                                                        kind: "Name",
-                                                        value: "variant",
+                                                        value: "price",
                                                       },
                                                       selectionSet: {
                                                         kind: "SelectionSet",
@@ -15503,42 +15501,15 @@ export const GetCustomerOrdersDocument = {
                                                             kind: "Field",
                                                             name: {
                                                               kind: "Name",
-                                                              value: "id",
+                                                              value: "amount",
                                                             },
                                                           },
                                                           {
                                                             kind: "Field",
                                                             name: {
                                                               kind: "Name",
-                                                              value: "title",
-                                                            },
-                                                          },
-                                                          {
-                                                            kind: "Field",
-                                                            name: {
-                                                              kind: "Name",
-                                                              value: "price",
-                                                            },
-                                                            selectionSet: {
-                                                              kind: "SelectionSet",
-                                                              selections: [
-                                                                {
-                                                                  kind: "Field",
-                                                                  name: {
-                                                                    kind: "Name",
-                                                                    value:
-                                                                      "amount",
-                                                                  },
-                                                                },
-                                                                {
-                                                                  kind: "Field",
-                                                                  name: {
-                                                                    kind: "Name",
-                                                                    value:
-                                                                      "currencyCode",
-                                                                  },
-                                                                },
-                                                              ],
+                                                              value:
+                                                                "currencyCode",
                                                             },
                                                           },
                                                         ],
@@ -15553,22 +15524,19 @@ export const GetCustomerOrdersDocument = {
                                       ],
                                     },
                                   },
-                                  {
-                                    kind: "Field",
-                                    name: {
-                                      kind: "Name",
-                                      value: "fulfillmentStatus",
-                                    },
-                                  },
-                                  {
-                                    kind: "Field",
-                                    name: {
-                                      kind: "Name",
-                                      value: "financialStatus",
-                                    },
-                                  },
                                 ],
                               },
+                            },
+                            {
+                              kind: "Field",
+                              name: {
+                                kind: "Name",
+                                value: "fulfillmentStatus",
+                              },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "financialStatus" },
                             },
                           ],
                         },
@@ -15586,6 +15554,14 @@ export const GetCustomerOrdersDocument = {
                             {
                               kind: "Field",
                               name: { kind: "Name", value: "endCursor" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "hasPreviousPage" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "startCursor" },
                             },
                           ],
                         },

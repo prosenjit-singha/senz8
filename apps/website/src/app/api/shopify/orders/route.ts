@@ -25,12 +25,27 @@ function buildOrderQuery({
   return filters.join(" ");
 }
 
-import { GetCustomerOrdersDocument } from "@/graphql";
+import {
+  GetCustomerOrdersDocument,
+  GetCustomerOrdersQuery,
+  GetCustomerOrdersQueryVariables,
+} from "@/graphql";
 import { storefrontGraphQlRequest } from "@/graphql/shopify";
+import { apiHandler } from "@/helpers/api.handler";
 
-export const GET = async (req: Request) => {
+export const GET = apiHandler(async (req, session) => {
+  if (!session) {
+    return {
+      success: false,
+      statusCode: 401,
+      message: "Failed to fetch orders",
+      error: {
+        type: "authentication",
+        message: "Unauthorized",
+      },
+    };
+  }
   const url = new URL(req.url);
-  const customerAccessToken = url.searchParams.get("customerAccessToken")!;
   const first = parseInt(url.searchParams.get("first") || "10", 10);
   const after = url.searchParams.get("after") || undefined;
   const orderId = url.searchParams.get("orderId") || undefined;
@@ -40,13 +55,35 @@ export const GET = async (req: Request) => {
 
   const queryFilter = buildOrderQuery({ orderId, minDate, maxDate });
 
-  const response = await storefrontGraphQlRequest(GetCustomerOrdersDocument, {
-    customerAccessToken,
+  const response = await storefrontGraphQlRequest<
+    GetCustomerOrdersQuery,
+    GetCustomerOrdersQueryVariables
+  >(GetCustomerOrdersDocument, {
+    customerAccessToken: session.accessToken,
     first,
+    // @ts-ignore
     after,
     query: queryFilter,
     reverse: !sortOrder, // Shopify API: reverse=true for ascending
   });
 
-  return new Response(JSON.stringify(response));
-};
+  if (response.customer) {
+    return {
+      success: true,
+      statusCode: 200,
+      data: response.customer,
+      message: "Orders fetched successfully",
+      error: null,
+    };
+  }
+
+  return {
+    success: false,
+    statusCode: 500,
+    message: "Failed to fetch orders",
+    error: {
+      type: "bad-request",
+      message: "Internal server error",
+    },
+  };
+});
