@@ -2,7 +2,10 @@
 
 import React from "react";
 import { useForm, useFormContext, FormProvider } from "react-hook-form";
-import { CustomerSignUpBody, zCustomerSignUpSchema } from "@/zod-schemas/shopify/customer.z";
+import {
+  CustomerSignUpBody,
+  zCustomerSignUpSchema,
+} from "@/zod-schemas/shopify/customer.z";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 const defaultValues: CustomerSignUpBody = {
@@ -19,10 +22,11 @@ interface RegistrationFormProviderProps {
   children: React.ReactNode | React.ReactNode[];
 }
 
-export function RegistrationFormProvider({ children }: RegistrationFormProviderProps) {
+export function RegistrationFormProvider({
+  children,
+}: RegistrationFormProviderProps) {
   const form = useForm<CustomerSignUpBody>({
     defaultValues,
-    // @ts-expect-error: zodResolver is not compatible with useForm
     resolver: zodResolver(zCustomerSignUpSchema),
   });
   return <FormProvider {...form}>{children}</FormProvider>;

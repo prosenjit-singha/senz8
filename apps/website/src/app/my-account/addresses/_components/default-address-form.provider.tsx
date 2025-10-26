@@ -25,7 +25,6 @@ export function DefaultAddressFormProvider({
       zip: "",
       company: "",
     },
-    // @ts-ignore
     resolver: zodResolver(zShopifyCustomerAddress),
   });
   return <FormProvider {...form}>{children}</FormProvider>;

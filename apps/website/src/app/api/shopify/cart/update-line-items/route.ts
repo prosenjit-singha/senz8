@@ -11,7 +11,6 @@ export const POST = apiHandler(async (req) => {
       body
     );
 
-  console.log(result);
   if (result?.cart) {
     return {
       success: true,

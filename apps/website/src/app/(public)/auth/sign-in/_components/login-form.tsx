@@ -120,7 +120,7 @@ export default function LoginForm({ className, ...props }: LoginFormProps) {
           {pending ? "Signing in..." : "Sign In"}
         </Button>
         <p>
-          Don't have an account?{" "}
+          Don&apos;t have an account?{" "}
           <Link href="/auth/sign-up" className="text-primary hover:underline">
             Sign Up
           </Link>

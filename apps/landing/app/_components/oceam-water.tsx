@@ -25,7 +25,7 @@ function Ocean() {
       waterColor: 0x001e0f,
       distortionScale: 0.2,
       fog: false,
-      // @ts-ignore
+      // @ts-expect-error Mathematical operation can cause error
       format: gl.encoding,
     }),
     [waterNormals]
@@ -34,15 +34,20 @@ function Ocean() {
   useFrame((state, delta) => {
     if (ref.current) {
       const speedFactor = 0.2; // Adjust this value to control the speed
-      // @ts-ignore
+      // @ts-expect-error Mathematical operation can cause error
       ref.current.material.uniforms.time.value += delta * speedFactor;
     }
   });
   return (
     <>
       {/* <SkyMesh /> */}
-      {/* @ts-ignore */}
-      <water position={[0, -1.3, 0]} ref={ref} args={[geom, config]} rotation-x={-Math.PI / 2} />
+      {/* @ts-expect-error water doesn't have any type definition */}
+      <water
+        position={[0, -1.3, 0]}
+        ref={ref}
+        args={[geom, config]}
+        rotation-x={-Math.PI / 2}
+      />
     </>
   );
 }

@@ -47,13 +47,13 @@ export function CustomerDetailsForm() {
           IApiSuccessResponse<GetCustomerQuery["customer"]>
         >("/customers/me", { next: { tags: ["my-account-details"] } })
         .then((res) => res.data),
-    // @ts-ignore: zodResolver is not compatible with useForm
+    // @ts-expect-error: zodResolver is not compatible with useForm
     resolver: zodResolver(schema),
   });
 
   const handleSave = form.handleSubmit(async (data) => {
     setIsSubmitting(true);
-    // @ts-ignore: password is not required
+    // @ts-expect-error: password is not required
     toast.promise(updateDetails(data), {
       loading: "Saving...",
       success: "Saved successfully",

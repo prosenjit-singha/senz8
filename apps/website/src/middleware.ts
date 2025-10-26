@@ -3,7 +3,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { isRouteMatch } from "./helpers/pathname.helper";
 import {
   DEFAULT_LOGIN_REDIRECT,
-  AUTH_API_PREFIX,
   AUTH_ROUTES_OBJ,
   AUTH_ROUTES_ARRAY,
   PUBLIC_ROUTES,

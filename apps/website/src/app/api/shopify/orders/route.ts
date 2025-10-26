@@ -61,7 +61,7 @@ export const GET = apiHandler(async (req, session) => {
   >(GetCustomerOrdersDocument, {
     customerAccessToken: session.accessToken,
     first,
-    // @ts-ignore
+    // @ts-expect-error Ignored keys can cause issue
     after,
     query: queryFilter,
     reverse: !sortOrder, // Shopify API: reverse=true for ascending

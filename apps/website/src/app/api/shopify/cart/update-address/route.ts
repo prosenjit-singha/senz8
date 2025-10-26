@@ -1,31 +1,38 @@
-import { CartDeliveryAddressesUpdateDocument } from "@/graphql";
+import {
+  CartDeliveryAddressesUpdateDocument,
+  CartDeliveryAddressesUpdateMutation,
+} from "@/graphql";
 import { apiHandler } from "@/helpers/api.handler";
 import { storefrontGraphQlRequest } from "@/graphql/shopify";
 
 /** Update Line Items  */
 export const POST = apiHandler(async (req) => {
   const body = await req.json();
-  const result = await storefrontGraphQlRequest(
-    CartDeliveryAddressesUpdateDocument,
-    body
-  );
-  if (Array.isArray(result.errors)) {
+  const result =
+    await storefrontGraphQlRequest<CartDeliveryAddressesUpdateMutation>(
+      CartDeliveryAddressesUpdateDocument,
+      body
+    );
+  if (result.cartDeliveryAddressesUpdate?.cart) {
     return {
-      success: false,
-      statusCode: 400,
-      message: "Failed to update cart delivery address",
-      error: {
-        type: "bad-request",
-        message: result.errors[0].message,
-        data: result.errors,
-      },
+      success: true,
+      message: "Cart delivery addresses updated successfully",
+      statusCode: 200,
+      data: result.cartDeliveryAddressesUpdate.cart,
+      error: null,
     };
   }
+
   return {
-    success: true,
-    message: "Cart delivery addresses updated successfully",
-    statusCode: 200,
-    data: result.data,
-    error: null,
+    success: false,
+    statusCode: 400,
+    message: "Failed to update cart delivery address",
+    error: {
+      type: "bad-request",
+      message:
+        result.cartDeliveryAddressesUpdate?.userErrors?.[0]?.message ??
+        "Failed to update cart delivery address",
+      data: result.cartDeliveryAddressesUpdate?.userErrors,
+    },
   };
 });

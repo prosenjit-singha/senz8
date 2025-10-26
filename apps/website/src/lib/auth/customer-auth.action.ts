@@ -111,16 +111,15 @@ export async function login(
     console.log("Create Token Result", result);
     if (result.data && result.customer) {
       const session: Session = {
-        accessToken: result.data?.accessToken!,
+        accessToken: result.data.accessToken,
         user: {
-          id: result.customer?.id!,
-          displayName:
-            result.customer?.displayName ?? result.customer?.firstName,
-          email: result.customer?.email,
-          phone: result.customer?.phone,
+          id: result.customer.id,
+          displayName: result.customer.displayName ?? result.customer.firstName,
+          email: result.customer.email,
+          phone: result.customer.phone,
           role: "customer",
         },
-        expiredAt: result.data?.expiresAt!,
+        expiredAt: result.data.expiresAt,
       };
       await createSession(session);
       return {

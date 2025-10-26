@@ -24,7 +24,6 @@ function ProductItemActions({
 }: {
   product: GetShopifyProductsRes["products"][number];
 }) {
-  console.log(product);
   const [variantIndex, setVariantIndex] = React.useState(0);
   const { data: cache } = useGetCartQuery();
   const { mutateAsync: addProduct, isPending: isAdding } = useCartLinesAdd();
@@ -67,7 +66,7 @@ function ProductItemActions({
       updateLines({
         cartId,
         lines: [
-          // @ts-expect-error
+          // @ts-expect-error: Ignored keys can cause issue
           {
             id: isAdded.id,
             quantity: isAdded.quantity - 1,

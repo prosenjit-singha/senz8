@@ -67,11 +67,13 @@ function CartSheet() {
                 </span>
               </p>
             </div>
-            <Button disabled={!data?.checkoutUrl} asChild>
-              <Link href={data?.checkoutUrl!} target="_blank">
-                Checkout
-              </Link>
-            </Button>
+            {data?.checkoutUrl && (
+              <Button disabled={!data.checkoutUrl} asChild>
+                <Link href={data.checkoutUrl} target="_blank">
+                  Checkout
+                </Link>
+              </Button>
+            )}
           </div>
         </SheetFooter>
       </SheetContent>
@@ -133,7 +135,7 @@ const LineItem = ({ data, lineIndex, className, ...props }: LineItemProps) => {
       updateLines({
         cartId,
         lines: [
-          // @ts-expect-error
+          // @ts-expect-error: Ignored keys can cause issue
           {
             id: item.id,
             quantity: item.quantity - 1,
@@ -200,7 +202,7 @@ const LineItem = ({ data, lineIndex, className, ...props }: LineItemProps) => {
       <div className="flex gap-3  p-2 flex-1">
         <figure className="w-20 aspect-square rounded bg-muted">
           <Image
-            src={data.merchandise.image?.url! || IMAGE_PLACEHOLDER}
+            src={data.merchandise.image?.url || IMAGE_PLACEHOLDER}
             alt={data.merchandise.product.title || "Product Image"}
             width={100}
             height={100}

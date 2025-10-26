@@ -26,8 +26,6 @@ export const GET = apiHandler(async (req) => {
     }
   }
 
-  console.log({ cartId });
-
   // if cart id provided get the cart details from shopify
   if (cartId) {
     const shopifyCart = await storefrontGraphQlRequest<

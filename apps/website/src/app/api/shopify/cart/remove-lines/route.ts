@@ -6,8 +6,6 @@ import { storefrontGraphQlRequest } from "@/graphql/shopify";
 export const POST = apiHandler(async (req) => {
   const body = await req.json();
 
-  console.log(body);
-
   const { cartLinesRemove: result } =
     await storefrontGraphQlRequest<CartLinesRemoveMutation>(
       CartLinesRemoveDocument,

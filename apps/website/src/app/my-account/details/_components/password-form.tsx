@@ -41,7 +41,6 @@ export function CustomerPasswordForm() {
       password: "",
       confirmPassword: "",
     },
-    // @ts-ignore: zodResolver is not compatible with useForm
     resolver: zodResolver(schema),
   });
 
@@ -51,7 +50,7 @@ export function CustomerPasswordForm() {
 
   const handleSave = form.handleSubmit(async (data) => {
     setIsSubmitting(true);
-    // @ts-ignore: only password field is provided
+    // @ts-expect-error: only password field is provided
     toast.promise(updateDetails({ password: data.password }), {
       loading: "Updating password...",
       success: "Password updated successfully",
