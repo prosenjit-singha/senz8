@@ -10365,6 +10365,8 @@ export type GetCustomerQuery = {
       nodes: Array<{
         __typename?: "MailingAddress";
         id: string;
+        firstName: string | null;
+        lastName: string | null;
         address1: string | null;
         address2: string | null;
         city: string | null;
@@ -10375,6 +10377,7 @@ export type GetCustomerQuery = {
         latitude: number | null;
         longitude: number | null;
         phone: string | null;
+        company: string | null;
         province: string | null;
         provinceCode: string | null;
         zip: string | null;
@@ -10383,10 +10386,13 @@ export type GetCustomerQuery = {
     defaultAddress: {
       __typename?: "MailingAddress";
       id: string;
+      firstName: string | null;
+      lastName: string | null;
       address1: string | null;
       address2: string | null;
       city: string | null;
       country: string | null;
+      company: string | null;
       countryCode: string | null;
       formatted: Array<string>;
       formattedArea: string | null;
@@ -14884,6 +14890,14 @@ export const GetCustomerDocument = {
                             },
                             {
                               kind: "Field",
+                              name: { kind: "Name", value: "firstName" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "lastName" },
+                            },
+                            {
+                              kind: "Field",
                               name: { kind: "Name", value: "address1" },
                             },
                             {
@@ -14924,6 +14938,10 @@ export const GetCustomerDocument = {
                             },
                             {
                               kind: "Field",
+                              name: { kind: "Name", value: "company" },
+                            },
+                            {
+                              kind: "Field",
                               name: { kind: "Name", value: "province" },
                             },
                             {
@@ -14949,6 +14967,14 @@ export const GetCustomerDocument = {
                       { kind: "Field", name: { kind: "Name", value: "id" } },
                       {
                         kind: "Field",
+                        name: { kind: "Name", value: "firstName" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "lastName" },
+                      },
+                      {
+                        kind: "Field",
                         name: { kind: "Name", value: "address1" },
                       },
                       {
@@ -14959,6 +14985,10 @@ export const GetCustomerDocument = {
                       {
                         kind: "Field",
                         name: { kind: "Name", value: "country" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "company" },
                       },
                       {
                         kind: "Field",

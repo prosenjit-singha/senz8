@@ -93,7 +93,7 @@ export function CustomerPasswordForm() {
               )}
           </div>
 
-          <FieldGroup className="grid grid-cols-2 gap-x-8 gap-y-4">
+          <FieldGroup className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4">
             <Controller
               name="password"
               control={form.control}
@@ -164,6 +164,21 @@ export function CustomerPasswordForm() {
                 </Field>
               )}
             />
+            <Button
+              disabled={isSubmitting || !form.formState.isValid}
+              className="min-w-[180px] sm:hidden w-full"
+              type="submit"
+            >
+              {isSubmitting ? (
+                <>
+                  <Spinner /> Saving...
+                </>
+              ) : (
+                <>
+                  <SaveIcon /> Update Password
+                </>
+              )}
+            </Button>
           </FieldGroup>
         </FieldSet>
       </form>

@@ -95,7 +95,7 @@ export function CustomerDetailsForm() {
               )}
           </div>
 
-          <FieldGroup className="grid grid-cols-2 gap-x-8 gap-y-4">
+          <FieldGroup className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4">
             <Controller
               name="firstName"
               control={form.control}
@@ -202,7 +202,7 @@ export function CustomerDetailsForm() {
               name="acceptsMarketing"
               control={form.control}
               render={({ field, fieldState }) => (
-                <Field className="col-span-2">
+                <Field className="sm:col-span-2">
                   <FieldLabel className="flex flex-row gap-2 items-center w-fit">
                     <Checkbox
                       checked={field.value}
@@ -217,6 +217,28 @@ export function CustomerDetailsForm() {
                 </Field>
               )}
             />
+
+            <Button
+              disabled={
+                form.formState.isLoading ||
+                isSubmitting ||
+                !form.formState.isValid ||
+                Object.keys(form.formState.touchedFields).length === 0
+              }
+              size="lg"
+              className="min-w-[180px] sm:hidden w-full"
+              type="submit"
+            >
+              {isSubmitting ? (
+                <>
+                  <Spinner /> Saving...
+                </>
+              ) : (
+                <>
+                  <SaveIcon /> Save Changes
+                </>
+              )}
+            </Button>
           </FieldGroup>
         </FieldSet>
       </form>

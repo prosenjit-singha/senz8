@@ -1,13 +1,8 @@
 import type { Metadata } from "next";
 import "@workspace/ui/styles/globals.css";
 import "@/styles/website.styles.css";
-import Navbar from "../components/ui/navbar";
-import PublicPageFooter from "../components/ui/footer";
 import { FuturaLTPro, WalbaumPro } from "@/lib/fonts";
-import CartSheet from "@/components/shared/cart-sheet";
-import { Toaster } from "@workspace/ui/components/sonner";
-import { SessionProvider } from "@/components/providers/session.provider";
-import ReactQueryProvider from "@/components/providers/react-query.provider";
+import { Providers } from "@/components/providers";
 
 export const metadata: Metadata = {
   title: "SENZ8",
@@ -25,15 +20,7 @@ export default function RootLayout({
       <body
         className={`${FuturaLTPro.variable} ${WalbaumPro.variable} font-sans antialiased`}
       >
-        <ReactQueryProvider>
-          <SessionProvider>
-            <Toaster />
-            <Navbar />
-            {children}
-            <PublicPageFooter />
-            <CartSheet />
-          </SessionProvider>
-        </ReactQueryProvider>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

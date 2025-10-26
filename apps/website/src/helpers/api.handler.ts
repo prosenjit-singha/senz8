@@ -1,16 +1,20 @@
 import { IApiFailedResponse, IApiSuccessResponse } from "@/interfaces";
+import { getSession } from "@/lib/auth/auth.session";
+import { Session } from "@/lib/auth/auth.type";
 import { NextRequest, NextResponse } from "next/server";
 import z, { ZodError } from "zod";
 
 type Callback = (
-  req: NextRequest
+  req: NextRequest,
+  session?: Session | null
 ) => Promise<
   IApiSuccessResponse | IApiFailedResponse | Response | NextResponse
 >;
 
 export const apiHandler = (callback: Callback) => async (req: NextRequest) => {
   try {
-    const result = await callback(req);
+    const session = await getSession();
+    const result = await callback(req, session);
     if (result instanceof NextResponse) {
       return result;
     }

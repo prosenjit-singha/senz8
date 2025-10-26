@@ -13,6 +13,8 @@ query GetCustomer($customerAccessToken: String!) {
     addresses(first: 10) {
       nodes {
         id
+        firstName
+        lastName
         address1
         address2
         city
@@ -23,6 +25,7 @@ query GetCustomer($customerAccessToken: String!) {
         latitude
         longitude
         phone
+        company
         province
         provinceCode
         zip
@@ -30,10 +33,13 @@ query GetCustomer($customerAccessToken: String!) {
     }
     defaultAddress {
       id
+      firstName
+      lastName
       address1
       address2
       city
       country
+      company
       countryCode
       formatted
       formattedArea

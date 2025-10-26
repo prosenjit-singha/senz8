@@ -6,7 +6,7 @@ export default function MyAccountLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-svh mx-page-margin-auto flex flex-col gap-8 py-page-margin">
+    <div className="min-h-[70vh] mx-page-margin-auto flex flex-col gap-8 py-page-margin">
       <MyAccountNavigation />
       {children}
     </div>

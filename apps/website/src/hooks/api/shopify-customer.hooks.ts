@@ -1,4 +1,11 @@
 import {
+  CustomerAddressCreateMutation,
+  CustomerAddressCreateMutationVariables,
+  CustomerAddressDeleteMutation,
+  CustomerAddressUpdateMutation,
+  CustomerAddressUpdateMutationVariables,
+  CustomerDefaultAddressUpdateMutation,
+  CustomerDefaultAddressUpdateMutationVariables,
   GetCustomerQuery,
   UpdateCustomerMutation,
   UpdateCustomerMutationVariables,
@@ -10,6 +17,7 @@ import { IApiFailedResponse, IApiSuccessResponse } from "@/interfaces";
 export const myAccountQueryKey = {
   details: ["my-account-details"],
   updateDetails: ["my-account-details-update"],
+  addAddress: ["my-account-details-add-address"],
 };
 
 export const useGetMyAccountDetailsQuery = () => {
@@ -38,6 +46,106 @@ export const useUpdateMyAccountDetailsMutation = () => {
         >("/customers/me", body)
         .then((res) => res.data),
     mutationKey: myAccountQueryKey.updateDetails,
+    meta: {
+      invalidateQueries: myAccountQueryKey.details,
+    },
+  });
+};
+
+export const useAddDeliveryAddress = () => {
+  return useMutation<
+    NonNullable<
+      CustomerAddressCreateMutation["customerAddressCreate"]
+    >["customerAddress"],
+    IApiFailedResponse,
+    CustomerAddressCreateMutationVariables["address"]
+  >({
+    mutationFn: async (body) =>
+      shopifyAPI
+        .put<
+          IApiSuccessResponse<
+            NonNullable<
+              CustomerAddressCreateMutation["customerAddressCreate"]
+            >["customerAddress"]
+          >
+        >("/customers/me/address", body)
+        .then((res) => res.data),
+    mutationKey: myAccountQueryKey.addAddress,
+    meta: {
+      invalidateQueries: myAccountQueryKey.details,
+    },
+  });
+};
+
+export const useUpdateDeliveryAddress = () => {
+  return useMutation<
+    NonNullable<
+      CustomerAddressUpdateMutation["customerAddressUpdate"]
+    >["customerAddress"],
+    IApiFailedResponse,
+    CustomerAddressUpdateMutationVariables["address"] & { id: string }
+  >({
+    mutationFn: async (body) =>
+      shopifyAPI
+        .patch<
+          IApiSuccessResponse<
+            NonNullable<
+              CustomerAddressUpdateMutation["customerAddressUpdate"]
+            >["customerAddress"]
+          >
+        >("/customers/me/address", body)
+        .then((res) => res.data),
+    mutationKey: myAccountQueryKey.addAddress,
+    meta: {
+      invalidateQueries: myAccountQueryKey.details,
+    },
+  });
+};
+
+export const useDeleteDeliveryAddress = () => {
+  return useMutation<
+    NonNullable<
+      CustomerAddressDeleteMutation["customerAddressDelete"]
+    >["deletedCustomerAddressId"],
+    IApiFailedResponse,
+    string
+  >({
+    mutationFn: async (id) =>
+      shopifyAPI
+        .delete<
+          IApiSuccessResponse<
+            NonNullable<
+              CustomerAddressDeleteMutation["customerAddressDelete"]
+            >["deletedCustomerAddressId"]
+          >
+        >("/customers/me/address?id=" + id)
+        .then((res) => res.data),
+    mutationKey: myAccountQueryKey.addAddress,
+    meta: {
+      invalidateQueries: myAccountQueryKey.details,
+    },
+  });
+};
+
+export const useUpdateDeliveryDefaultAddress = () => {
+  return useMutation<
+    NonNullable<
+      CustomerDefaultAddressUpdateMutation["customerDefaultAddressUpdate"]
+    >["customer"],
+    IApiFailedResponse,
+    string
+  >({
+    mutationFn: async (addressId) =>
+      shopifyAPI
+        .post<
+          IApiSuccessResponse<
+            NonNullable<
+              CustomerDefaultAddressUpdateMutation["customerDefaultAddressUpdate"]
+            >["customer"]
+          >
+        >("/customers/me/address", { addressId })
+        .then((res) => res.data),
+    mutationKey: myAccountQueryKey.addAddress,
     meta: {
       invalidateQueries: myAccountQueryKey.details,
     },
