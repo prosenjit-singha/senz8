@@ -1,0 +1,129 @@
+# apps/website/src/graphql/cartBuyerIdentityUpdate.graphql
+mutation CartBuyerIdentityUpdate(
+  $cartId: ID!
+  $buyerIdentity: CartBuyerIdentityInput!
+) {
+  cartBuyerIdentityUpdate(cartId: $cartId, buyerIdentity: $buyerIdentity) {
+    cart {
+      id
+      checkoutUrl
+      totalQuantity
+      #   lines(first: 50) {
+      #     edges {
+      #       node {
+      #         id
+      #         quantity
+      #         merchandise {
+      #           ... on ProductVariant {
+      #             id
+      #             title
+      #             sku
+      #             product {
+      #               id
+      #               title
+      #               handle
+      #             }
+      #             price {
+      #               amount
+      #               currencyCode
+      #             }
+      #           }
+      #         }
+      #         cost {
+      #           totalAmount {
+      #             amount
+      #             currencyCode
+      #           }
+      #         }
+      #       }
+      #     }
+      #   }
+      #   cost {
+      #     subtotalAmount {
+      #       amount
+      #       currencyCode
+      #     }
+      #     totalAmount {
+      #       amount
+      #       currencyCode
+      #     }
+      #     totalTaxAmount {
+      #       amount
+      #       currencyCode
+      #     }
+      #   }
+      buyerIdentity {
+        email
+        phone
+        countryCode
+        customer {
+          id
+          email
+          firstName
+          lastName
+          displayName
+          addresses {
+            nodes {
+              id
+              address1
+              address2
+              city
+              province
+              country
+              zip
+              latitude
+              longitude
+              company
+              formatted
+              formattedArea
+            }
+          }
+          defaultAddress {
+            id
+            address1
+            address2
+            city
+            province
+            country
+            zip
+            latitude
+            longitude
+            company
+            formatted
+            formattedArea
+          }
+        }
+      }
+      delivery {
+        addresses {
+          id
+          selected
+          oneTimeUse
+          address {
+            ... on CartDeliveryAddress {
+              firstName
+              lastName
+              company
+              address1
+              address2
+              city
+              provinceCode
+              zip
+              countryCode
+            }
+          }
+        }
+      }
+    }
+    userErrors {
+      message
+      code
+      field
+    }
+    warnings {
+      message
+      code
+      target
+    }
+  }
+}

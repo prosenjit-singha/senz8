@@ -6,7 +6,8 @@
     "dev": "next dev -p 3030 --turbopack",
     "build": "next build --turbopack",
     "start": "next start -p 3030",
-    "lint": "eslint"
+    "lint": "eslint",
+    "codegen": "cross-env SHOPIFY_STOREFRONT_ACCESS_TOKEN=$SHOPIFY_STOREFRONT_ACCESS_TOKEN graphql-codegen"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
@@ -27,7 +28,9 @@
     "@shopify/shopify-app-express": "^6.0.0",
     "@shopify/shopify-app-session-storage-mongodb": "^5.0.0",
     "@shopify/storefront-api-client": "^1.0.9",
+    "@studio-freight/react-lenis": "^0.0.47",
     "@tanstack/react-query": "^5.90.3",
+    "@tanstack/react-table": "^8.21.3",
     "@workspace/next-ui": "workspace:*",
     "@workspace/ui": "workspace:*",
     "axios": "^1.12.2",

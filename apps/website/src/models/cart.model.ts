@@ -11,4 +11,6 @@ export const mCustomerCart = new mongoose.Schema(
   { timestamps: true }
 );
 
-export const CustomerCart = mongoose.model("CustomerCart", mCustomerCart, "CustomerCart");
+export const CustomerCart =
+  mongoose.models.CustomerCart ||
+  mongoose.model("CustomerCart", mCustomerCart, "CustomerCart");

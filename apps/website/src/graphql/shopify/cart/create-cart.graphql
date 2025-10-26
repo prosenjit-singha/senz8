@@ -1,0 +1,85 @@
+mutation CartCreate($input: CartInput) {
+  cartCreate(input: $input) {
+    cart {
+      id
+      createdAt
+      updatedAt
+      totalQuantity
+      checkoutUrl
+      cost {
+        totalAmount {
+          amount
+          currencyCode
+        }
+        subtotalAmount {
+          amount
+          currencyCode
+        }
+        totalTaxAmount {
+          amount
+          currencyCode
+        }
+      }
+      lines(first: 50) {
+        nodes {
+          id
+          quantity
+          merchandise {
+            ... on ProductVariant {
+              id
+              title
+              sku
+              availableForSale
+              currentlyNotInStock
+              image {
+                id
+                altText
+                height
+                thumbhash
+                url
+              }
+              product {
+                id
+                title
+                handle
+                availableForSale
+                productType
+                images(first: 5) {
+                  nodes {
+                    id
+                    altText
+                    height
+                    thumbhash
+                    url
+                  }
+                }
+                category {
+                  id
+                  name
+                }
+              }
+              price {
+                amount
+                currencyCode
+              }
+            }
+          }
+          cost {
+            amountPerQuantity {
+              amount
+              currencyCode
+            }
+            totalAmount {
+              amount
+              currencyCode
+            }
+          }
+        }
+      }
+    }
+    userErrors {
+      field
+      message
+    }
+  }
+}

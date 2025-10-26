@@ -34,7 +34,8 @@ export interface IApiFailedResponse<E = unknown> {
       | "validation"
       | "authorization"
       | "authentication"
-      | "bad-request";
+      | "bad-request"
+      | "not-found";
     message: string;
     data?: E | null;
   };

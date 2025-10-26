@@ -1,9 +1,18 @@
 import { create } from "zustand";
-import { devtools, persist, createJSONStorage, PersistOptions, combine } from "zustand/middleware";
+import {
+  devtools,
+  persist,
+  createJSONStorage,
+  PersistOptions,
+  combine,
+} from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
 type NextStateOrUpdater<T> = (
-  nextStateOrUpdater: { state: T } | Partial<{ state: T }> | ((state: { state: T }) => void),
+  nextStateOrUpdater:
+    | { state: T }
+    | Partial<{ state: T }>
+    | ((state: { state: T }) => void),
   shouldReplace?: false
 ) => void;
 
@@ -20,7 +29,9 @@ type StoreOptions<T, A> = {
 
 const DEV_TOOLS = true;
 
-export function createStore<T extends object, A extends object>(options: StoreOptions<T, A>) {
+export function createStore<T extends object, A extends object>(
+  options: StoreOptions<T, A>
+) {
   type Combine = { state: T; actions: A };
   const {
     name,
@@ -37,18 +48,37 @@ export function createStore<T extends object, A extends object>(options: StoreOp
   );
 
   if (shouldPersist) {
-    const persistConfig: PersistOptions<Combine, { state: Partial<T> }> = {
+    const persistConfig: PersistOptions<Combine, Partial<T>> = {
       name,
-      storage: createJSONStorage(() => (storage === "local" ? localStorage : sessionStorage)),
-      partialize: (s) => ({
-        state: options.partialize ? options.partialize(s.state) : s.state,
-      }), // only persist state, not actions
+      storage: createJSONStorage(() =>
+        storage === "local" ? localStorage : sessionStorage
+      ),
+      merge: (persistedState, currentState) => {
+        // console.log({ persistedState, currentState });
+        if (persistedState) {
+          return {
+            ...currentState,
+            state: {
+              ...currentState.state,
+              ...persistedState,
+            },
+          };
+        } else return currentState;
+      },
+
+      partialize: (s) =>
+        options.partialize ? options.partialize(s.state) : s.state,
+      // only persist state, not actions
     };
 
     const persistFun = persist(immerCombine, persistConfig);
 
-    return create<Combine>()(devtools(persistFun, { name, enabled: enableDevTools }));
+    return create<Combine>()(
+      devtools(persistFun, { name, enabled: enableDevTools })
+    );
   }
 
-  return create<Combine>()(devtools(immerCombine, { name, enabled: enableDevTools }));
+  return create<Combine>()(
+    devtools(immerCombine, { name, enabled: enableDevTools })
+  );
 }

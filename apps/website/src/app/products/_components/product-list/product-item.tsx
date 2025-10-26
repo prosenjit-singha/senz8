@@ -3,6 +3,7 @@ import { GetShopifyProductsRes } from "@/interfaces/shopify/shopify-products.int
 import { cn } from "@workspace/ui/lib/utils";
 import Image from "next/image";
 import ProductItemActions from "./product-item-actions";
+import { Separator } from "@workspace/ui/components/separator";
 
 type ProductItemProps = Omit<ComponentProps<"li">, "children"> & {
   product: GetShopifyProductsRes["products"][number];
@@ -12,26 +13,33 @@ function ProductItem({ product, className, ...props }: ProductItemProps) {
   return (
     <li
       key={product.id}
-      className={cn("product-container relative group border", className)}
+      className={cn(
+        "product-container relative group border flex flex-col hover:border-primary",
+        className
+      )}
       {...props}
     >
+      <p className="absolute text-center left-4 top-4 bg-background border px-2  z-10">
+        {product.productType}
+      </p>
       {/* <div className="absolute rounded-lg w-full h-full group-hover:h-[60%] bg-transparent group-hover:bg-black/50 bottom-0 left-0 z-[-1] transition-all" /> */}
-      <div className="w-full h-auto max-h-[250px] overflow-hidden">
+      <figure className="w-full bg-blue-200 h-[300px] overflow-hidden">
         <Image
           src={
             product.images?.[0]?.url ||
             "https://media.istockphoto.com/id/2173059563/vector/coming-soon-image-on-white-background-no-photo-available.jpg?s=612x612&w=0&k=20&c=v0a_B58wPFNDPULSiw_BmPyhSNCyrP_d17i2BPPyDTk="
           }
           alt={product.images?.[0]?.altText || product.title}
-          width={250}
-          height={250}
-          className="w-full h-full object-cover group-hover:scale-125 group-hover:-translate-y-10 transition-transform"
+          width={600}
+          height={300}
+          className="w-full h-full object-cover group-hover:scale-110 duration-500 transition-transform"
         />
-      </div>
-      <span className="golden-x-line block mb-4" />
-      <div>
-        <p className="font-bold text-lg text-center">{product.title}</p>
-        <p className="text-center">{product.productType}</p>
+      </figure>
+      <div className="w-full h-auto max-h-[250px]  flex justify-center items-center"></div>
+      {/* <span className="golden-x-line block mb-4" /> */}
+      <Separator />
+      <div className="p-4">
+        <p className="font-medium text-lg text-center">{product.title}</p>
         <div className="flex gap-4 items-center justify-between px-4 mt-4">
           {/* <Rating defaultValue={3} readOnly>
                   {Array.from({ length: 5 }).map((_, index) => (
@@ -43,11 +51,9 @@ function ProductItem({ product, className, ...props }: ProductItemProps) {
                     />
                   ))}
                 </Rating> */}
-
-          <span className="text-primary font-black">₹ 4000</span>
         </div>
       </div>
-      <ProductItemActions />
+      <ProductItemActions product={product} />
     </li>
   );
 }

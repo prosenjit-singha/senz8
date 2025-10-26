@@ -1,12 +1,8 @@
 import type { Metadata } from "next";
 import "@workspace/ui/styles/globals.css";
 import "@/styles/website.styles.css";
-import Navbar from "../components/ui/navbar";
-import PublicPageFooter from "../components/ui/footer";
-import { FuturaLTProBook, FuturaLTProLight, WalbaumPro } from "@/lib/fonts";
-import CartSheet from "@/components/shared/cart-sheet";
-import { Toaster } from "@workspace/ui/components/sonner";
-import { SessionProvider } from "@/components/providers/session.provider";
+import { FuturaLTPro, WalbaumPro } from "@/lib/fonts";
+import { Providers } from "@/components/providers";
 
 export const metadata: Metadata = {
   title: "SENZ8",
@@ -22,15 +18,9 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       {/* <SmoothScrollProvider /> */}
       <body
-        className={`${FuturaLTProBook.variable} ${WalbaumPro.variable} ${FuturaLTProLight.variable} font-sans antialiased`}
+        className={`${FuturaLTPro.variable} ${WalbaumPro.variable} font-sans antialiased`}
       >
-        <SessionProvider>
-          <Toaster />
-          <Navbar />
-          {children}
-          <PublicPageFooter />
-          <CartSheet />
-        </SessionProvider>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
