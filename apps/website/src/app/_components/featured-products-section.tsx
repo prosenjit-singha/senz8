@@ -2,9 +2,6 @@
 
 import Image from "next/image";
 import React from "react";
-import { Rating, RatingButton } from "@workspace/ui/components/rating";
-import { Button } from "@workspace/ui/components/button";
-import { HeartIcon, ShoppingCartIcon } from "lucide-react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -14,6 +11,7 @@ import { cn } from "@workspace/ui/lib/utils";
 import { formatAmount } from "@/helpers/currency.helper";
 import Link from "next/link";
 import { Separator } from "@workspace/ui/components/separator";
+import { CartActions } from "@/components/shared/cart-sheet";
 
 type FeaturedProductsProps = Omit<
   React.ComponentProps<"section">,
@@ -27,6 +25,7 @@ const FeaturedProductsSection = ({
   className,
   ...props
 }: FeaturedProductsProps) => {
+  const [variantIndex, setVariantIndex] = React.useState(0);
   const scope = React.useRef<HTMLElement>(null);
   useGSAP(
     () => {
@@ -133,9 +132,26 @@ const FeaturedProductsSection = ({
             className="product-container relative group border rounded-lg"
           >
             <div className="flex absolute top-2 right-2 z-10">
-              <Button size="icon" className="ml-auto">
-                <ShoppingCartIcon />
-              </Button>
+              <CartActions
+                className="ml-auto"
+                setActiveVariantIndex={setVariantIndex}
+                data={{
+                  variants: product.variants.nodes.map((v) => ({
+                    id: v.id,
+                    title: v.title,
+                    availableForSale: v.availableForSale,
+                    price: v.price,
+                    quantityAvailable: v.quantityAvailable,
+                    currentlyNotInStock: v.currentlyNotInStock,
+                    quantityRule: v.quantityRule,
+                  })),
+                  options: product.options.map((op) => ({
+                    id: op.id,
+                    name: op.name,
+                    values: op.values,
+                  })),
+                }}
+              />
             </div>
             {/* <div className="absolute rounded-lg w-full h-full group-hover:h-[60%] bg-transparent group-hover:bg-black/50 bottom-0 left-0 z-[-1] transition-all" /> */}
             <div className="overflow-hidden">
@@ -144,7 +160,7 @@ const FeaturedProductsSection = ({
                 alt={product.images.nodes[0].altText || product.title}
                 width={250}
                 height={250}
-                className="w-full h-full object-cover group-hover:scale-110 duration-500 transition-transform"
+                className="w-full h-auto aspect-square object-cover group-hover:scale-110 duration-500 transition-transform"
               />
             </div>
             {/* <span className="golden-x-line block mb-4" /> */}

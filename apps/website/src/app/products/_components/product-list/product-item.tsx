@@ -20,6 +20,12 @@ function ProductItem({ product, className, ...props }: ProductItemProps) {
       )}
       {...props}
     >
+      <div
+        id={product.handle + "-out-of-stock"}
+        className="absolute invisible top-2 right-2 bg-red-500 text-white px-2 z-10"
+      >
+        out of stock
+      </div>
       <p className="absolute text-center left-4 top-4 bg-background border px-2  z-10">
         {product.productType}
       </p>
@@ -33,7 +39,7 @@ function ProductItem({ product, className, ...props }: ProductItemProps) {
           alt={product.images?.nodes?.[0]?.altText || product.title}
           width={600}
           height={300}
-          className="w-full h-full object-cover group-hover:scale-110 duration-500 transition-transform"
+          className="w-full h-auto object-cover group-hover:scale-110 duration-500 transition-transform"
         />
       </figure>
       {/* <span className="golden-x-line block mb-4" /> */}

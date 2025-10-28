@@ -20,6 +20,13 @@ query getProductByHandle($handle: String!) {
         title
         sku
         availableForSale
+        quantityAvailable
+        currentlyNotInStock
+        quantityRule {
+          increment
+          maximum
+          minimum
+        }
         price {
           amount
           currencyCode

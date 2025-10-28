@@ -11,7 +11,7 @@ import {
 import { useCartStore } from "@/stores/cart.store";
 import { ScrollArea } from "@workspace/ui/components/scroll-area";
 import { Button } from "@workspace/ui/components/button";
-import { MinusIcon, PlusIcon, TrashIcon } from "lucide-react";
+import { MinusIcon, PlusIcon, ShoppingCartIcon, TrashIcon } from "lucide-react";
 import { ButtonGroup } from "@workspace/ui/components/button-group";
 import { formatAmount } from "@/helpers/currency.helper";
 import {
@@ -27,6 +27,17 @@ import { Spinner } from "@workspace/ui/components/spinner";
 import { GetCartQuery } from "@/graphql";
 import { cn } from "@workspace/ui/lib/utils";
 import { Separator } from "@workspace/ui/components/separator";
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@workspace/ui/components/alert-dialog";
+import { motion } from "motion/react";
 
 function CartSheet() {
   const { state, actions } = useCartStore();
@@ -283,32 +294,62 @@ const LineItem = ({ data, lineIndex, className, ...props }: LineItemProps) => {
 };
 
 type CartActionProps = Omit<React.ComponentProps<"div">, "children"> & {
+  setActiveVariantIndex?: React.Dispatch<React.SetStateAction<number>>;
   data: {
-    merchandiseId: string;
-    currentItemQuantity: number;
-    lineId?: string;
+    options: { values: string[]; name: string; id: string }[];
+    variants: {
+      id: string;
+      title: string;
+      price: { amount: number; currencyCode: string };
+      availableForSale: boolean;
+      quantityAvailable: number | null;
+      currentlyNotInStock: boolean;
+      quantityRule: {
+        increment: number;
+        maximum?: number | null;
+        minimum: number;
+      };
+    }[];
   };
-  disabled?: boolean;
 };
 
-export function CartActions({ className, data, ...props }: CartActionProps) {
+export function CartActions({
+  className,
+  data,
+  setActiveVariantIndex,
+  ...props
+}: CartActionProps) {
+  const option: Record<string, string> = {};
+  data.options.forEach((op) => {
+    option[op.name] = op.values[0];
+  });
+  const [selectedOption, setSelectedOption] =
+    React.useState<Record<string, string>>(option);
+
+  const [variantIndex, setVariantIndex] = React.useState(0);
+
   const { data: cache } = useGetCartQuery();
+
+  const isAdded = cache?.lines?.nodes?.find(
+    (line) => line.merchandise.id === data.variants[variantIndex].id
+  );
+
   const { mutateAsync: addProduct, isPending: isAdding } = useCartLinesAdd();
   const { mutateAsync: removeProduct, isPending: isRemoving } =
     useCartLinesRemove();
   const { mutateAsync: updateLines, isPending: isUpdating } =
     useCartLinesUpdate();
 
-  const handleAddProduct = () => {
+  const handleAddProduct = async () => {
     const cartId = localStorage.getItem("cartId")!;
-    if (!cartId || !data.merchandiseId) return;
-    addProduct({
+    if (!cartId || variantIndex === -1) return;
+    await addProduct({
       cartId,
       lines: [
         {
           attributes: [],
           quantity: 1,
-          merchandiseId: data.merchandiseId,
+          merchandiseId: data.variants[variantIndex].id,
           sellingPlanId: null,
           parent: null,
         },
@@ -318,12 +359,12 @@ export function CartActions({ className, data, ...props }: CartActionProps) {
 
   const handleRemoveProduct = () => {
     const cartId = localStorage.getItem("cartId")!;
-    if (!cartId || !data.lineId) return;
+    if (!cartId || !isAdded) return;
 
-    if (data.currentItemQuantity === 1) {
+    if (isAdded?.quantity === 1) {
       removeProduct({
         cartId,
-        lineIds: [data.lineId],
+        lineIds: [isAdded.id],
       });
     } else {
       updateLines({
@@ -331,20 +372,200 @@ export function CartActions({ className, data, ...props }: CartActionProps) {
         lines: [
           // @ts-expect-error: Ignored keys can cause issue
           {
-            id: data.merchandiseId,
-            quantity: data.currentItemQuantity - 1,
+            id: isAdded.id,
+            quantity: isAdded.quantity - 1,
           },
         ],
       });
     }
   };
 
+  const disabled =
+    isAdding ||
+    isRemoving ||
+    isUpdating ||
+    data.variants[variantIndex].availableForSale === false;
+  const isOutOfStock =
+    data.variants[variantIndex].quantityAvailable === 0 ||
+    !data.variants[variantIndex].availableForSale;
+
+  React.useEffect(() => {
+    const names = data.options.map((op) => op.name);
+    const title = names.map((name) => selectedOption[name]).join(" / ");
+
+    const index = data.variants.findIndex((variant) => variant.title === title);
+    if (index > -1) {
+      setVariantIndex(index);
+      setActiveVariantIndex?.(index);
+    }
+  }, [selectedOption]);
+
   return (
     <div
       className={cn("flex gap-2 items-center", className)}
       {...props}
       data-slot="cart-action-buttons"
-    ></div>
+    >
+      {isAdded && isAdded.quantity > 0 ? (
+        <ButtonGroup orientation="horizontal">
+          <Button
+            size="icon"
+            variant="outline"
+            aria-label="increase quantity"
+            disabled={disabled}
+            onClick={handleRemoveProduct}
+          >
+            {isUpdating || isRemoving ? <Spinner /> : <MinusIcon />}
+          </Button>
+          <Button
+            size="icon"
+            variant="outline"
+            aria-label="quantity"
+            aria-readonly
+          >
+            {isAdded.quantity}
+          </Button>
+          <Button
+            size="icon"
+            variant="outline"
+            aria-label="decrease quantity"
+            disabled={disabled}
+            onClick={handleAddProduct}
+          >
+            {isAdding ? <Spinner /> : <PlusIcon />}
+          </Button>
+        </ButtonGroup>
+      ) : data.variants.length > 1 ? (
+        <VariantSelectorAlert
+          handleAddQuantity={handleAddProduct}
+          options={data.options}
+          selectedOption={selectedOption}
+          setSelectedOption={setSelectedOption}
+          isOutOfStock={isOutOfStock}
+          isPending={isAdding}
+          price={{
+            amount: data.variants[variantIndex].price.amount,
+            currencyCode: data.variants[variantIndex].price.currencyCode,
+          }}
+        />
+      ) : (
+        <Button
+          size="icon"
+          className="ml-auto"
+          onClick={handleAddProduct}
+          disabled={isOutOfStock || disabled}
+        >
+          {isAdding ? <Spinner /> : <ShoppingCartIcon />}
+        </Button>
+      )}
+    </div>
+  );
+}
+
+function VariantSelectorAlert({
+  options,
+  setSelectedOption,
+  selectedOption,
+  isOutOfStock,
+  handleAddQuantity,
+  isPending,
+  price,
+}: {
+  options: { values: string[]; name: string; id: string }[];
+  selectedOption: Record<string, string>;
+  setSelectedOption: React.Dispatch<
+    React.SetStateAction<Record<string, string>>
+  >;
+  isOutOfStock: boolean;
+  handleAddQuantity: () => Promise<void>;
+  isPending: boolean;
+  price: {
+    amount: number;
+    currencyCode: string;
+  };
+}) {
+  const [open, setOpen] = React.useState(false);
+  return (
+    <AlertDialog open={open} onOpenChange={setOpen}>
+      <AlertDialogTrigger asChild>
+        <Button size="icon" className="ml-auto">
+          <ShoppingCartIcon />
+        </Button>
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Add to Cart</AlertDialogTitle>
+          <AlertDialogDescription>
+            Select size and quantity
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <div className="flex gap-4">
+          <div data-slot={"option selector"} className="flex flex-col gap-4">
+            {options.map((option, i) => (
+              <div key={option.id} className="flex flex-col gap-2">
+                <label>{option.name}</label>
+                <ul className="flex border w-fit">
+                  {option.values.map((value, j) => (
+                    <li
+                      role="button"
+                      key={j}
+                      className="relative flex-1 px-3 py-2 text-lg cursor-pointer border-r last:border-r-0"
+                      onClick={() => {
+                        setSelectedOption({
+                          ...selectedOption,
+                          [option.name]: value,
+                        });
+                      }}
+                    >
+                      {value === selectedOption[option.name] && (
+                        <motion.span
+                          layoutId={`active-${option.name}`}
+                          className="absolute top-0 left-0 h-full w-full rounded-[inherit] bg-primary"
+                        />
+                      )}
+                      <span className="z-[10] relative text-nowrap">
+                        {value}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+
+          <div className="flex flex-col gap-4 justify-center items-center h-full flex-1 border p-3">
+            <strong className="text-green-600 text-2xl font-bold">
+              {formatAmount(price.amount, price.currencyCode as any)}
+            </strong>
+            {!isOutOfStock ? (
+              <div className="rounded-full bg-green-500/10 text-green-600 border border-green-500/20 flex items-center gap-2 px-2 text-xs py-1">
+                <div className="size-1.5 rounded-full bg-green-500" /> In Stock
+              </div>
+            ) : (
+              <div className="rounded-full bg-red-500/10 text-red-600 border border-red-500/20 flex items-center gap-2 px-2 text-xs py-1">
+                <div className="size-1.5 rounded-full bg-red-500" /> Out of
+                Stock
+              </div>
+            )}
+          </div>
+        </div>
+        <AlertDialogFooter>
+          <AlertDialogCancel className="mr-auto">Cancel</AlertDialogCancel>
+          <Button
+            onClick={() => handleAddQuantity().then(() => setOpen(false))}
+            disabled={isPending || isOutOfStock}
+          >
+            {isPending ? (
+              <>
+                <Spinner /> Adding to cart...
+              </>
+            ) : (
+              "Add to Cart"
+            )}
+          </Button>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }
 

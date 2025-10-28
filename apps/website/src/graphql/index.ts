@@ -9712,20 +9712,20 @@ export type GetCartQuery = {
               title: string;
               sku: string | null;
               availableForSale: boolean;
-              currentlyNotInStock: boolean;
               quantityAvailable: number | null;
+              currentlyNotInStock: boolean;
               requiresShipping: boolean;
-              selectedOptions: Array<{
-                __typename?: "SelectedOption";
-                name: string;
-                value: string;
-              }>;
               quantityRule: {
                 __typename?: "QuantityRule";
                 increment: number;
                 maximum: number | null;
                 minimum: number;
               };
+              selectedOptions: Array<{
+                __typename?: "SelectedOption";
+                name: string;
+                value: string;
+              }>;
               image: {
                 __typename?: "Image";
                 id: string | null;
@@ -9793,20 +9793,20 @@ export type GetCartQuery = {
               title: string;
               sku: string | null;
               availableForSale: boolean;
-              currentlyNotInStock: boolean;
               quantityAvailable: number | null;
+              currentlyNotInStock: boolean;
               requiresShipping: boolean;
-              selectedOptions: Array<{
-                __typename?: "SelectedOption";
-                name: string;
-                value: string;
-              }>;
               quantityRule: {
                 __typename?: "QuantityRule";
                 increment: number;
                 maximum: number | null;
                 minimum: number;
               };
+              selectedOptions: Array<{
+                __typename?: "SelectedOption";
+                name: string;
+                value: string;
+              }>;
               image: {
                 __typename?: "Image";
                 id: string | null;
@@ -10329,6 +10329,75 @@ export type GetSingleCollectionQuery = {
         productType: string;
         handle: string;
         vendor: string;
+        options: Array<{
+          __typename?: "ProductOption";
+          id: string;
+          name: string;
+          values: Array<string>;
+          optionValues: Array<{
+            __typename?: "ProductOptionValue";
+            id: string;
+            name: string;
+            swatch: {
+              __typename?: "ProductOptionValueSwatch";
+              color: any | null;
+              image:
+                | {
+                    __typename?: "ExternalVideo";
+                    id: string;
+                    alt: string | null;
+                    previewImage: {
+                      __typename?: "Image";
+                      altText: string | null;
+                      id: string | null;
+                      width: number | null;
+                      height: number | null;
+                      url: any;
+                    } | null;
+                  }
+                | {
+                    __typename?: "MediaImage";
+                    id: string;
+                    alt: string | null;
+                    previewImage: {
+                      __typename?: "Image";
+                      altText: string | null;
+                      id: string | null;
+                      width: number | null;
+                      height: number | null;
+                      url: any;
+                    } | null;
+                  }
+                | {
+                    __typename?: "Model3d";
+                    id: string;
+                    alt: string | null;
+                    previewImage: {
+                      __typename?: "Image";
+                      altText: string | null;
+                      id: string | null;
+                      width: number | null;
+                      height: number | null;
+                      url: any;
+                    } | null;
+                  }
+                | {
+                    __typename?: "Video";
+                    id: string;
+                    alt: string | null;
+                    previewImage: {
+                      __typename?: "Image";
+                      altText: string | null;
+                      id: string | null;
+                      width: number | null;
+                      height: number | null;
+                      url: any;
+                    } | null;
+                  }
+                | null;
+            } | null;
+          }>;
+        }>;
         variants: {
           __typename?: "ProductVariantConnection";
           nodes: Array<{
@@ -10336,10 +10405,18 @@ export type GetSingleCollectionQuery = {
             id: string;
             title: string;
             availableForSale: boolean;
+            quantityAvailable: number | null;
+            currentlyNotInStock: boolean;
             price: {
               __typename?: "MoneyV2";
               amount: any;
               currencyCode: CurrencyCode;
+            };
+            quantityRule: {
+              __typename?: "QuantityRule";
+              increment: number;
+              maximum: number | null;
+              minimum: number;
             };
           }>;
         };
@@ -10665,6 +10742,14 @@ export type GetProductByHandleQuery = {
         title: string;
         sku: string | null;
         availableForSale: boolean;
+        quantityAvailable: number | null;
+        currentlyNotInStock: boolean;
+        quantityRule: {
+          __typename?: "QuantityRule";
+          increment: number;
+          maximum: number | null;
+          minimum: number;
+        };
         price: {
           __typename?: "MoneyV2";
           amount: any;
@@ -10852,6 +10937,8 @@ export type GetProductsQuery = {
           id: string;
           title: string;
           availableForSale: boolean;
+          quantityAvailable: number | null;
+          currentlyNotInStock: boolean;
           price: {
             __typename?: "MoneyV2";
             amount: any;
@@ -10862,6 +10949,12 @@ export type GetProductsQuery = {
             name: string;
             value: string;
           }>;
+          quantityRule: {
+            __typename?: "QuantityRule";
+            increment: number;
+            maximum: number | null;
+            minimum: number;
+          };
         }>;
       };
     }>;
@@ -12772,13 +12865,6 @@ export const GetCartDocument = {
                                           kind: "Field",
                                           name: {
                                             kind: "Name",
-                                            value: "currentlyNotInStock",
-                                          },
-                                        },
-                                        {
-                                          kind: "Field",
-                                          name: {
-                                            kind: "Name",
                                             value: "quantityAvailable",
                                           },
                                         },
@@ -12786,33 +12872,7 @@ export const GetCartDocument = {
                                           kind: "Field",
                                           name: {
                                             kind: "Name",
-                                            value: "requiresShipping",
-                                          },
-                                        },
-                                        {
-                                          kind: "Field",
-                                          name: {
-                                            kind: "Name",
-                                            value: "selectedOptions",
-                                          },
-                                          selectionSet: {
-                                            kind: "SelectionSet",
-                                            selections: [
-                                              {
-                                                kind: "Field",
-                                                name: {
-                                                  kind: "Name",
-                                                  value: "name",
-                                                },
-                                              },
-                                              {
-                                                kind: "Field",
-                                                name: {
-                                                  kind: "Name",
-                                                  value: "value",
-                                                },
-                                              },
-                                            ],
+                                            value: "currentlyNotInStock",
                                           },
                                         },
                                         {
@@ -12843,6 +12903,39 @@ export const GetCartDocument = {
                                                 name: {
                                                   kind: "Name",
                                                   value: "minimum",
+                                                },
+                                              },
+                                            ],
+                                          },
+                                        },
+                                        {
+                                          kind: "Field",
+                                          name: {
+                                            kind: "Name",
+                                            value: "requiresShipping",
+                                          },
+                                        },
+                                        {
+                                          kind: "Field",
+                                          name: {
+                                            kind: "Name",
+                                            value: "selectedOptions",
+                                          },
+                                          selectionSet: {
+                                            kind: "SelectionSet",
+                                            selections: [
+                                              {
+                                                kind: "Field",
+                                                name: {
+                                                  kind: "Name",
+                                                  value: "name",
+                                                },
+                                              },
+                                              {
+                                                kind: "Field",
+                                                name: {
+                                                  kind: "Name",
+                                                  value: "value",
                                                 },
                                               },
                                             ],
@@ -14983,6 +15076,146 @@ export const GetSingleCollectionDocument = {
                             },
                             {
                               kind: "Field",
+                              name: { kind: "Name", value: "options" },
+                              arguments: [
+                                {
+                                  kind: "Argument",
+                                  name: { kind: "Name", value: "first" },
+                                  value: { kind: "IntValue", value: "10" },
+                                },
+                              ],
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "name" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: {
+                                      kind: "Name",
+                                      value: "optionValues",
+                                    },
+                                    selectionSet: {
+                                      kind: "SelectionSet",
+                                      selections: [
+                                        {
+                                          kind: "Field",
+                                          name: { kind: "Name", value: "id" },
+                                        },
+                                        {
+                                          kind: "Field",
+                                          name: { kind: "Name", value: "name" },
+                                        },
+                                        {
+                                          kind: "Field",
+                                          name: {
+                                            kind: "Name",
+                                            value: "swatch",
+                                          },
+                                          selectionSet: {
+                                            kind: "SelectionSet",
+                                            selections: [
+                                              {
+                                                kind: "Field",
+                                                name: {
+                                                  kind: "Name",
+                                                  value: "color",
+                                                },
+                                              },
+                                              {
+                                                kind: "Field",
+                                                name: {
+                                                  kind: "Name",
+                                                  value: "image",
+                                                },
+                                                selectionSet: {
+                                                  kind: "SelectionSet",
+                                                  selections: [
+                                                    {
+                                                      kind: "Field",
+                                                      name: {
+                                                        kind: "Name",
+                                                        value: "id",
+                                                      },
+                                                    },
+                                                    {
+                                                      kind: "Field",
+                                                      name: {
+                                                        kind: "Name",
+                                                        value: "alt",
+                                                      },
+                                                    },
+                                                    {
+                                                      kind: "Field",
+                                                      name: {
+                                                        kind: "Name",
+                                                        value: "previewImage",
+                                                      },
+                                                      selectionSet: {
+                                                        kind: "SelectionSet",
+                                                        selections: [
+                                                          {
+                                                            kind: "Field",
+                                                            name: {
+                                                              kind: "Name",
+                                                              value: "altText",
+                                                            },
+                                                          },
+                                                          {
+                                                            kind: "Field",
+                                                            name: {
+                                                              kind: "Name",
+                                                              value: "id",
+                                                            },
+                                                          },
+                                                          {
+                                                            kind: "Field",
+                                                            name: {
+                                                              kind: "Name",
+                                                              value: "width",
+                                                            },
+                                                          },
+                                                          {
+                                                            kind: "Field",
+                                                            name: {
+                                                              kind: "Name",
+                                                              value: "height",
+                                                            },
+                                                          },
+                                                          {
+                                                            kind: "Field",
+                                                            name: {
+                                                              kind: "Name",
+                                                              value: "url",
+                                                            },
+                                                          },
+                                                        ],
+                                                      },
+                                                    },
+                                                  ],
+                                                },
+                                              },
+                                            ],
+                                          },
+                                        },
+                                      ],
+                                    },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "values" },
+                                  },
+                                ],
+                              },
+                            },
+                            {
+                              kind: "Field",
                               name: { kind: "Name", value: "variants" },
                               arguments: [
                                 {
@@ -15042,6 +15275,53 @@ export const GetSingleCollectionDocument = {
                                           name: {
                                             kind: "Name",
                                             value: "availableForSale",
+                                          },
+                                        },
+                                        {
+                                          kind: "Field",
+                                          name: {
+                                            kind: "Name",
+                                            value: "quantityAvailable",
+                                          },
+                                        },
+                                        {
+                                          kind: "Field",
+                                          name: {
+                                            kind: "Name",
+                                            value: "currentlyNotInStock",
+                                          },
+                                        },
+                                        {
+                                          kind: "Field",
+                                          name: {
+                                            kind: "Name",
+                                            value: "quantityRule",
+                                          },
+                                          selectionSet: {
+                                            kind: "SelectionSet",
+                                            selections: [
+                                              {
+                                                kind: "Field",
+                                                name: {
+                                                  kind: "Name",
+                                                  value: "increment",
+                                                },
+                                              },
+                                              {
+                                                kind: "Field",
+                                                name: {
+                                                  kind: "Name",
+                                                  value: "maximum",
+                                                },
+                                              },
+                                              {
+                                                kind: "Field",
+                                                name: {
+                                                  kind: "Name",
+                                                  value: "minimum",
+                                                },
+                                              },
+                                            ],
                                           },
                                         },
                                       ],
@@ -16419,6 +16699,41 @@ export const GetProductByHandleDocument = {
                             },
                             {
                               kind: "Field",
+                              name: {
+                                kind: "Name",
+                                value: "quantityAvailable",
+                              },
+                            },
+                            {
+                              kind: "Field",
+                              name: {
+                                kind: "Name",
+                                value: "currentlyNotInStock",
+                              },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "quantityRule" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "increment" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "maximum" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "minimum" },
+                                  },
+                                ],
+                              },
+                            },
+                            {
+                              kind: "Field",
                               name: { kind: "Name", value: "price" },
                               selectionSet: {
                                 kind: "SelectionSet",
@@ -17061,6 +17376,53 @@ export const GetProductsDocument = {
                                     name: {
                                       kind: "Name",
                                       value: "availableForSale",
+                                    },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: {
+                                      kind: "Name",
+                                      value: "quantityAvailable",
+                                    },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: {
+                                      kind: "Name",
+                                      value: "currentlyNotInStock",
+                                    },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: {
+                                      kind: "Name",
+                                      value: "quantityRule",
+                                    },
+                                    selectionSet: {
+                                      kind: "SelectionSet",
+                                      selections: [
+                                        {
+                                          kind: "Field",
+                                          name: {
+                                            kind: "Name",
+                                            value: "increment",
+                                          },
+                                        },
+                                        {
+                                          kind: "Field",
+                                          name: {
+                                            kind: "Name",
+                                            value: "maximum",
+                                          },
+                                        },
+                                        {
+                                          kind: "Field",
+                                          name: {
+                                            kind: "Name",
+                                            value: "minimum",
+                                          },
+                                        },
+                                      ],
                                     },
                                   },
                                 ],

@@ -18,6 +18,29 @@ query GetSingleCollection($collectionId: ID!) {
         productType
         handle
         vendor
+        options(first: 10) {
+          id
+          name
+          optionValues {
+            id
+            name
+            swatch {
+              color
+              image {
+                id
+                alt
+                previewImage {
+                  altText
+                  id
+                  width
+                  height
+                  url
+                }
+              }
+            }
+          }
+          values
+        }
         variants(first: 10) {
           nodes {
             id
@@ -27,6 +50,13 @@ query GetSingleCollection($collectionId: ID!) {
               currencyCode
             }
             availableForSale
+            quantityAvailable
+            currentlyNotInStock
+            quantityRule {
+              increment
+              maximum
+              minimum
+            }
           }
         }
         images(first: 5) {

@@ -22,14 +22,14 @@ export default async function middleware(req: NextRequest) {
   if (isApiRoute) return NextResponse.next();
   const session = await getSession();
 
-  console.log({
-    isAuthRoute,
-    isPublicRoute,
-    isAuthApiRoute: isApiRoute,
-    pathname,
-    session,
-    publicRoutes: PUBLIC_ROUTES,
-  });
+  // console.log({
+  //   isAuthRoute,
+  //   isPublicRoute,
+  //   isAuthApiRoute: isApiRoute,
+  //   pathname,
+  //   session,
+  //   publicRoutes: PUBLIC_ROUTES,
+  // });
 
   if (isAuthRoute) {
     if (session) {

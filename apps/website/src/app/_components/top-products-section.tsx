@@ -107,7 +107,6 @@ const css = `
   background: none;
 }
 `;
-interface CarouselProps {}
 
 type FeaturedProductsProps = Omit<
   React.ComponentProps<"section">,
@@ -191,6 +190,12 @@ const TopProductsSection: React.FC<FeaturedProductsProps> = ({
     return null;
   }
 
+  // for looping duplicate products
+  const products = [
+    ...data.collection.products.nodes,
+    ...data.collection.products.nodes,
+  ];
+
   return (
     <section className="w-ace-y-4 mb-30">
       <style>{css}</style>
@@ -241,7 +246,7 @@ const TopProductsSection: React.FC<FeaturedProductsProps> = ({
                 }
                 modules={[EffectCoverflow, Autoplay, Pagination, Navigation]}
               >
-                {data.collection.products.nodes.map((product, index) => (
+                {products.map((product, index) => (
                   <SwiperSlide
                     key={index}
                     className="border rounded-2xl bg-background relative min-h-[450px] flex flex-col overflow-hidden"

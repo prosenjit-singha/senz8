@@ -17,17 +17,17 @@ query GetCart($cartId: ID!) {
             title
             sku
             availableForSale
-            currentlyNotInStock
             quantityAvailable
-            requiresShipping
-            selectedOptions {
-              name
-              value
-            }
+            currentlyNotInStock
             quantityRule {
               increment
               maximum
               minimum
+            }
+            requiresShipping
+            selectedOptions {
+              name
+              value
             }
             image {
               id

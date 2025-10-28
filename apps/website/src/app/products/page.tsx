@@ -19,7 +19,7 @@ const ShopPage = async (pageProps: { params: Promise<{ id: string }> }) => {
   const res = await getProducts();
 
   return (
-    <div className="mt-20">
+    <div className="my-page-margin">
       <ShopFilterSection />
       <ProductList data={res.data} />
     </div>
