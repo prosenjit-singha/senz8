@@ -27,6 +27,7 @@ export function RegistrationFormProvider({
 }: RegistrationFormProviderProps) {
   const form = useForm<CustomerSignUpBody>({
     defaultValues,
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error: zod version mismatch
     resolver: zodResolver(zCustomerSignUpSchema),
   });

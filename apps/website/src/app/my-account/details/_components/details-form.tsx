@@ -47,6 +47,7 @@ export function CustomerDetailsForm() {
           IApiSuccessResponse<GetCustomerQuery["customer"]>
         >("/customers/me", { next: { tags: ["my-account-details"] } })
         .then((res) => res.data),
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error: zodResolver is not compatible with useForm
     resolver: zodResolver(schema),
   });

@@ -25,6 +25,7 @@ export function DefaultAddressFormProvider({
       zip: "",
       company: "",
     },
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error: zod version mismatch
     resolver: zodResolver(zShopifyCustomerAddress),
   });
