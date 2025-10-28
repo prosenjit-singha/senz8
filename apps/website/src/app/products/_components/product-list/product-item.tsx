@@ -1,5 +1,4 @@
 import { ComponentProps } from "react";
-import { GetShopifyProductsRes } from "@/interfaces/shopify/shopify-products.interface";
 import { cn } from "@workspace/ui/lib/utils";
 import Image from "next/image";
 import ProductItemActions from "./product-item-actions";
@@ -30,7 +29,7 @@ function ProductItem({ product, className, ...props }: ProductItemProps) {
         {product.productType}
       </p>
       {/* <div className="absolute rounded-lg w-full h-full group-hover:h-[60%] bg-transparent group-hover:bg-black/50 bottom-0 left-0 z-[-1] transition-all" /> */}
-      <figure className="w-full bg-blue-200 h-[300px] overflow-hidden">
+      <figure className="w-full h-[300px] overflow-hidden">
         <Image
           src={
             product.images?.nodes?.[0]?.url ||
