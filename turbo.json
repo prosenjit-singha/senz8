@@ -2,10 +2,10 @@
   "$schema": "https://turbo.build/schema.json",
   "ui": "tui",
   "tasks": {
-    "website#build": {
+    "build": {
       "dependsOn": ["^build"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*", "apps/website/.env*"],
-      "outputs": ["apps/website/.next/**", "!apps/website/.next/cache/**"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": [".next/**", "!.next/cache/**"],
       "env": [
         "NEXT_PUBLIC_HOST_URL",
         "MONGODB_URI",
@@ -19,33 +19,8 @@
         "SHOPIFY_STOREFRONT_ACCESS_TOKEN"
       ]
     },
-    "website#dev": {
-      "cache": false,
-      "persistent": true,
-      "env": ["NEXT_PUBLIC_WEBSITE_API_URL", "DATABASE_URL"]
-    },
-
-    "landing#build": {
-      "dependsOn": ["^build"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*", "apps/landing/.env*"],
-      "outputs": ["apps/landing/.next/**", "!apps/landing/.next/cache/**"],
-      "env": [
-        "NEXT_PUBLIC_LANDING_API_URL",
-        "NEXT_PUBLIC_GTM_ID",
-        "NEXT_PUBLIC_MARKETING_EMAIL"
-      ]
-    },
-    "landing#dev": {
-      "cache": false,
-      "persistent": true,
-      "env": ["NEXT_PUBLIC_LANDING_API_URL"]
-    },
-
-    "lint": {
-      "dependsOn": ["^lint"]
-    },
-    "check-types": {
-      "dependsOn": ["^check-types"]
-    }
+    "lint": { "dependsOn": ["^lint"] },
+    "check-types": { "dependsOn": ["^check-types"] },
+    "dev": { "cache": false, "persistent": true }
   }
 }
