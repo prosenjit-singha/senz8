@@ -25,11 +25,10 @@ interface RegistrationFormProviderProps {
 export function RegistrationFormProvider({
   children,
 }: RegistrationFormProviderProps) {
-  const form = useForm<CustomerSignUpBody>({
+  const form = useForm({
     defaultValues,
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error: zod version mismatch
-    resolver: zodResolver(zCustomerSignUpSchema),
+    // incompatible zod version to resolve typescript warning
+    resolver: zodResolver(zCustomerSignUpSchema as any),
   });
   return <FormProvider {...form}>{children}</FormProvider>;
 }

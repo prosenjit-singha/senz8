@@ -6,7 +6,9 @@ import { z } from "zod";
  */
 const zE164Regex = /^\+?[1-9]\d{1,14}$/;
 
-export const zPhoneNumber = z.string().regex(zE164Regex, "Phone must be E.164 format");
+export const zPhoneNumber = z
+  .string()
+  .regex(zE164Regex, "Phone must be E.164 format");
 
 const zPassword = z
   .string()
@@ -116,28 +118,21 @@ export const zCustomerInputSchema = z
     }
   );
 
-export const zCustomerSignUpSchema = z
-  .object({
-    firstName: z.string().trim().min(2, "First must be at least 2 characters long"),
-    lastName: z.string().trim(),
-    email: z.email(),
-    phone: z
-      .string()
-      .regex(zE164Regex, "Phone must be in E.164 format (e.g. +91465555555)")
-      .optional(),
-    password: zPassword,
-    confirmPassword: z.string().trim().min(1, "Confirm password is required"),
-    acceptsMarketing: z.coerce.boolean<boolean>(),
-  })
-  .superRefine((data, ctx) => {
-    if (data.password !== data.confirmPassword) {
-      ctx.addIssue({
-        code: "custom",
-        message: "Passwords do not match",
-        path: ["confirmPassword"],
-      });
-    }
-  });
+export const zCustomerSignUpSchema = z.object({
+  firstName: z
+    .string()
+    .trim()
+    .min(2, "First must be at least 2 characters long"),
+  lastName: z.string().trim(),
+  email: z.email(),
+  phone: z
+    .string()
+    .regex(zE164Regex, "Phone must be in E.164 format (e.g. +91465555555)")
+    .optional(),
+  password: zPassword,
+  confirmPassword: z.string().trim().min(1, "Confirm password is required"),
+  acceptsMarketing: z.coerce.boolean<boolean>(),
+});
 
 export const zCustomerSignInSchema = z.object({
   email: z.email(),

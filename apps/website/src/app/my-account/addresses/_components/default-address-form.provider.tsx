@@ -5,14 +5,14 @@ import React from "react";
 import { FormProvider, useForm, useFormContext } from "react-hook-form";
 import z from "zod";
 
-type Value = z.infer<typeof zShopifyCustomerAddress>;
+type FormValues = z.infer<typeof zShopifyCustomerAddress>;
 
 export function DefaultAddressFormProvider({
   children,
 }: {
   children: React.ReactNode | React.ReactNode[];
 }) {
-  const form = useForm({
+  const form = useForm<FormValues>({
     defaultValues: {
       address1: "",
       address2: "",
@@ -25,11 +25,10 @@ export function DefaultAddressFormProvider({
       zip: "",
       company: "",
     },
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error: zod version mismatch
-    resolver: zodResolver(zShopifyCustomerAddress),
+    // zod version mismatch. using any to resolve typescript error
+    resolver: zodResolver(zShopifyCustomerAddress as any),
   });
   return <FormProvider {...form}>{children}</FormProvider>;
 }
 
-export const useCustomerAddressForm = () => useFormContext<Value>();
+export const useCustomerAddressForm = () => useFormContext<FormValues>();

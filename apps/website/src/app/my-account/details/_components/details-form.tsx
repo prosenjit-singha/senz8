@@ -3,7 +3,7 @@ import React from "react";
 import { Card } from "@workspace/ui/components/card";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import z from "zod";
+import z, { ZodObject } from "zod";
 import {
   Field,
   FieldDescription,
@@ -47,14 +47,13 @@ export function CustomerDetailsForm() {
           IApiSuccessResponse<GetCustomerQuery["customer"]>
         >("/customers/me", { next: { tags: ["my-account-details"] } })
         .then((res) => res.data),
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error: zodResolver is not compatible with useForm
+    // @ts-expect-error defaultValues return and schema type mismatch
     resolver: zodResolver(schema),
   });
 
   const handleSave = form.handleSubmit(async (data) => {
     setIsSubmitting(true);
-    // @ts-expect-error: password is not required
+    // @ts-expect-error password is not required
     toast.promise(updateDetails(data), {
       loading: "Saving...",
       success: "Saved successfully",

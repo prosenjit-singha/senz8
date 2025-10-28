@@ -31,18 +31,20 @@ const schema = zCustomerSignUpSchema.pick({
   confirmPassword: true,
 });
 
+type FormValues = z.infer<typeof schema>;
+
 export function CustomerPasswordForm() {
   const [showPassword, setShowPassword] = React.useState(false);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const { mutateAsync: updateDetails } = useUpdateMyAccountDetailsMutation();
 
-  const form = useForm({
+  const form = useForm<FormValues>({
     defaultValues: {
       password: "",
       confirmPassword: "",
     },
-    // @ts-expect-error Zod version mismatch
-    resolver: zodResolver(schema),
+    // zod version mismatch. using any to resolve typescript error
+    resolver: zodResolver(schema as any),
   });
 
   const togglePasswordVisibility = () => {
