@@ -27,6 +27,7 @@ export function RegistrationFormProvider({
 }: RegistrationFormProviderProps) {
   const form = useForm<CustomerSignUpBody>({
     defaultValues,
+    // @ts-expect-error: zod version mismatch
     resolver: zodResolver(zCustomerSignUpSchema),
   });
   return <FormProvider {...form}>{children}</FormProvider>;

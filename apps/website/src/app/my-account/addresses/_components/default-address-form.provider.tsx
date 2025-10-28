@@ -25,6 +25,7 @@ export function DefaultAddressFormProvider({
       zip: "",
       company: "",
     },
+    // @ts-expect-error: zod version mismatch
     resolver: zodResolver(zShopifyCustomerAddress),
   });
   return <FormProvider {...form}>{children}</FormProvider>;

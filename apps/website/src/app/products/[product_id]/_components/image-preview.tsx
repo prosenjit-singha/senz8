@@ -48,7 +48,7 @@ export default function ProductImagePreview({
         className="mySwiper2 border"
       >
         {data.nodes.map((img) => (
-          <SwiperSlide>
+          <SwiperSlide key={img.id}>
             <Image
               width={800}
               height={800}
@@ -70,7 +70,7 @@ export default function ProductImagePreview({
         className="swiper-thumbs border border-t-0"
       >
         {data.nodes.map((img) => (
-          <SwiperSlide>
+          <SwiperSlide key={img.id}>
             <Image
               width={100}
               height={100}

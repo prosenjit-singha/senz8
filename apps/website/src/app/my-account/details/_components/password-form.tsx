@@ -41,6 +41,7 @@ export function CustomerPasswordForm() {
       password: "",
       confirmPassword: "",
     },
+    // @ts-expect-error Zod version mismatch
     resolver: zodResolver(schema),
   });
 
