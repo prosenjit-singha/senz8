@@ -1,0 +1,48 @@
+query GetSingleCollection($collectionId: ID!) {
+  collection(id: $collectionId) {
+    id
+    handle
+    title
+    description
+    image {
+      id
+      url
+      altText
+      width
+      height
+    }
+    products(first: 50) {
+      nodes {
+        id
+        title
+        productType
+        handle
+        vendor
+        variants(first: 10) {
+          nodes {
+            id
+            title
+            price {
+              amount
+              currencyCode
+            }
+            availableForSale
+          }
+        }
+        images(first: 5) {
+          nodes {
+            id
+            url
+            altText
+            width
+            height
+          }
+        }
+      }
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
+    }
+  }
+}

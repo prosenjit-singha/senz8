@@ -8,11 +8,18 @@ import "swiper/css";
 import "swiper/css/effect-coverflow";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-import { Autoplay, EffectCoverflow, Navigation, Pagination } from "swiper/modules";
+import {
+  Autoplay,
+  EffectCoverflow,
+  Navigation,
+  Pagination,
+} from "swiper/modules";
 import Swiper from "swiper";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { Rating, RatingButton } from "@workspace/ui/components/rating";
+import { GetSingleCollectionQuery } from "@/graphql";
+import { formatAmount } from "@/helpers/currency.helper";
 
 const PRODUCTS = [
   {
@@ -100,16 +107,23 @@ const css = `
   background: none;
 }
 `;
-interface CarouselProps {
+interface CarouselProps {}
+
+type FeaturedProductsProps = Omit<
+  React.ComponentProps<"section">,
+  "children"
+> & {
   autoplayDelay?: number;
   showPagination?: boolean;
   showNavigation?: boolean;
-}
+  data: GetSingleCollectionQuery | null;
+};
 
-const TopProductsSection: React.FC<CarouselProps> = ({
-  autoplayDelay = 1500,
+const TopProductsSection: React.FC<FeaturedProductsProps> = ({
+  autoplayDelay = 5000,
   showPagination = true,
   showNavigation = true,
+  data,
 }) => {
   const { contextSafe } = useGSAP(() => {});
 
@@ -173,6 +187,10 @@ const TopProductsSection: React.FC<CarouselProps> = ({
     });
   });
 
+  if (!data?.collection) {
+    return null;
+  }
+
   return (
     <section className="w-ace-y-4 mb-30">
       <style>{css}</style>
@@ -187,12 +205,9 @@ const TopProductsSection: React.FC<CarouselProps> = ({
           </Badge> */}
           <div className="flex flex-col gap-2 items-center w-full py-10 px-10">
             <h3 className="text-4xl text-center opacity-85 font-bold tracking-tight">
-              Our Top Products
+              {data.collection.title}
             </h3>
-            <p className="text-center">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia aliquam error expedita
-              ipsum. Eaque vel cupiditate, delectus voluptates non obcaecati.
-            </p>
+            <p className="text-center">{data.collection.description}</p>
           </div>
 
           <div className="flex w-full items-center justify-center gap-4">
@@ -226,25 +241,28 @@ const TopProductsSection: React.FC<CarouselProps> = ({
                 }
                 modules={[EffectCoverflow, Autoplay, Pagination, Navigation]}
               >
-                {PRODUCTS.map((product, index) => (
+                {data.collection.products.nodes.map((product, index) => (
                   <SwiperSlide
                     key={index}
-                    className="border rounded-2xl bg-background relative min-h-[400px] flex flex-col overflow-hidden"
+                    className="border rounded-2xl bg-background relative min-h-[450px] flex flex-col overflow-hidden"
                   >
-                    <div className="absolute w-full top-0 left-0 p-2 flex gap-2 items-center justify-between">
+                    <div className="absolute w-full top-0 left-0 p-2 flex gap-2 items-center justify-between z-10">
                       <Rating value={3}>
                         {Array.from({ length: 5 }, (_, i) => (
                           <RatingButton key={i} className="text-primary" />
                         ))}
                       </Rating>
                       <span className="font-bold text-center bg-primary text-white rounded-full px-2 py-1 text-sm">
-                        ₹ {product.price}
+                        {formatAmount(
+                          product.variants.nodes[0].price.amount,
+                          product.variants.nodes[0].price.currencyCode as any
+                        )}
                       </span>
                     </div>
                     <figure className="image-container absolute top-0 left-0 w-full h-full flex justify-center items-center">
                       <Image
-                        src={product.image}
-                        alt={product.name[0]}
+                        src={product.images.nodes[0].url}
+                        alt={product.images.nodes[0].altText ?? product.title}
                         width={400}
                         height={500}
                         className="object-cover"
@@ -252,12 +270,16 @@ const TopProductsSection: React.FC<CarouselProps> = ({
                     </figure>
                     <div
                       data-slot="content"
-                      className="overflow-hidden content w-full  absolute bottom-0 left-0 p-4"
+                      className="overflow-hidden content w-full  absolute bottom-0 left-0 p-4 flex flex-col"
                     >
-                      <p className="text-xl font-semibold text-center">{product.name[0]}</p>
-                      <p className="text-center">{product.name[1]}</p>
+                      <p className="text-xl font-semibold text-center">
+                        {product.title}
+                      </p>
+                      <p className="text-center text-muted-foreground mb-2">
+                        {product.productType}
+                      </p>
 
-                      <button className="text-sm border rounded-full px-2 py-1">
+                      <button className="text-sm border rounded-full px-3 py-1 hover:bg-primary mt-auto hover:text-white transition-colors hover:border-primary hover:shadow mx-auto">
                         View Product
                       </button>
                     </div>

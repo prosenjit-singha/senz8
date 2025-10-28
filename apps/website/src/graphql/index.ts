@@ -9713,6 +9713,19 @@ export type GetCartQuery = {
               sku: string | null;
               availableForSale: boolean;
               currentlyNotInStock: boolean;
+              quantityAvailable: number | null;
+              requiresShipping: boolean;
+              selectedOptions: Array<{
+                __typename?: "SelectedOption";
+                name: string;
+                value: string;
+              }>;
+              quantityRule: {
+                __typename?: "QuantityRule";
+                increment: number;
+                maximum: number | null;
+                minimum: number;
+              };
               image: {
                 __typename?: "Image";
                 id: string | null;
@@ -9781,6 +9794,19 @@ export type GetCartQuery = {
               sku: string | null;
               availableForSale: boolean;
               currentlyNotInStock: boolean;
+              quantityAvailable: number | null;
+              requiresShipping: boolean;
+              selectedOptions: Array<{
+                __typename?: "SelectedOption";
+                name: string;
+                value: string;
+              }>;
+              quantityRule: {
+                __typename?: "QuantityRule";
+                increment: number;
+                maximum: number | null;
+                minimum: number;
+              };
               image: {
                 __typename?: "Image";
                 id: string | null;
@@ -10250,6 +10276,94 @@ export type CartDeliveryAddressesUpdateMutation = {
   } | null;
 };
 
+export type GetCollectionsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetCollectionsQuery = {
+  __typename?: "QueryRoot";
+  collections: {
+    __typename?: "CollectionConnection";
+    nodes: Array<{
+      __typename?: "Collection";
+      id: string;
+      handle: string;
+      title: string;
+      description: string;
+      image: {
+        __typename?: "Image";
+        id: string | null;
+        url: any;
+        altText: string | null;
+        width: number | null;
+        height: number | null;
+      } | null;
+    }>;
+  };
+};
+
+export type GetSingleCollectionQueryVariables = Exact<{
+  collectionId: Scalars["ID"]["input"];
+}>;
+
+export type GetSingleCollectionQuery = {
+  __typename?: "QueryRoot";
+  collection: {
+    __typename?: "Collection";
+    id: string;
+    handle: string;
+    title: string;
+    description: string;
+    image: {
+      __typename?: "Image";
+      id: string | null;
+      url: any;
+      altText: string | null;
+      width: number | null;
+      height: number | null;
+    } | null;
+    products: {
+      __typename?: "ProductConnection";
+      nodes: Array<{
+        __typename?: "Product";
+        id: string;
+        title: string;
+        productType: string;
+        handle: string;
+        vendor: string;
+        variants: {
+          __typename?: "ProductVariantConnection";
+          nodes: Array<{
+            __typename?: "ProductVariant";
+            id: string;
+            title: string;
+            availableForSale: boolean;
+            price: {
+              __typename?: "MoneyV2";
+              amount: any;
+              currencyCode: CurrencyCode;
+            };
+          }>;
+        };
+        images: {
+          __typename?: "ImageConnection";
+          nodes: Array<{
+            __typename?: "Image";
+            id: string | null;
+            url: any;
+            altText: string | null;
+            width: number | null;
+            height: number | null;
+          }>;
+        };
+      }>;
+      pageInfo: {
+        __typename?: "PageInfo";
+        hasNextPage: boolean;
+        endCursor: string | null;
+      };
+    };
+  } | null;
+};
+
 export type CustomerAddressCreateMutationVariables = Exact<{
   customerAccessToken: Scalars["String"]["input"];
   address: MailingAddressInput;
@@ -10520,6 +10634,114 @@ export type GetCustomerOrdersQuery = {
   } | null;
 };
 
+export type GetProductByHandleQueryVariables = Exact<{
+  handle: Scalars["String"]["input"];
+}>;
+
+export type GetProductByHandleQuery = {
+  __typename?: "QueryRoot";
+  product: {
+    __typename?: "Product";
+    id: string;
+    title: string;
+    descriptionHtml: any;
+    productType: string;
+    vendor: string;
+    tags: Array<string>;
+    availableForSale: boolean;
+    createdAt: any;
+    updatedAt: any;
+    options: Array<{
+      __typename?: "ProductOption";
+      id: string;
+      name: string;
+      values: Array<string>;
+    }>;
+    variants: {
+      __typename?: "ProductVariantConnection";
+      nodes: Array<{
+        __typename?: "ProductVariant";
+        id: string;
+        title: string;
+        sku: string | null;
+        availableForSale: boolean;
+        price: {
+          __typename?: "MoneyV2";
+          amount: any;
+          currencyCode: CurrencyCode;
+        };
+        image: {
+          __typename?: "Image";
+          url: any;
+          altText: string | null;
+          width: number | null;
+          height: number | null;
+        } | null;
+        selectedOptions: Array<{
+          __typename?: "SelectedOption";
+          name: string;
+          value: string;
+        }>;
+      }>;
+    };
+    images: {
+      __typename?: "ImageConnection";
+      nodes: Array<{
+        __typename?: "Image";
+        id: string | null;
+        url: any;
+        altText: string | null;
+        width: number | null;
+        height: number | null;
+      }>;
+    };
+  } | null;
+  shop: {
+    __typename?: "Shop";
+    name: string;
+    paymentSettings: {
+      __typename?: "PaymentSettings";
+      currencyCode: CurrencyCode;
+      countryCode: CountryCode;
+    };
+    privacyPolicy: {
+      __typename?: "ShopPolicy";
+      title: string;
+      body: string;
+      handle: string;
+      url: any;
+    } | null;
+    refundPolicy: {
+      __typename?: "ShopPolicy";
+      title: string;
+      body: string;
+      handle: string;
+      url: any;
+    } | null;
+    termsOfService: {
+      __typename?: "ShopPolicy";
+      title: string;
+      body: string;
+      handle: string;
+      url: any;
+    } | null;
+    shippingPolicy: {
+      __typename?: "ShopPolicy";
+      title: string;
+      body: string;
+      handle: string;
+      url: any;
+    } | null;
+    subscriptionPolicy: {
+      __typename?: "ShopPolicyWithDefault";
+      title: string;
+      body: string;
+      handle: string;
+      url: any;
+    } | null;
+  };
+};
+
 export type GetProductsQueryVariables = Exact<{
   first: Scalars["Int"]["input"];
   after: InputMaybe<Scalars["String"]["input"]>;
@@ -10545,16 +10767,13 @@ export type GetProductsQuery = {
       tags: Array<string>;
       images: {
         __typename?: "ImageConnection";
-        edges: Array<{
-          __typename?: "ImageEdge";
-          node: {
-            __typename?: "Image";
-            id: string | null;
-            altText: string | null;
-            width: number | null;
-            height: number | null;
-            url: any;
-          };
+        nodes: Array<{
+          __typename?: "Image";
+          id: string | null;
+          altText: string | null;
+          width: number | null;
+          height: number | null;
+          url: any;
         }>;
       };
       options: Array<{
@@ -10638,6 +10857,11 @@ export type GetProductsQuery = {
             amount: any;
             currencyCode: CurrencyCode;
           };
+          selectedOptions: Array<{
+            __typename?: "SelectedOption";
+            name: string;
+            value: string;
+          }>;
         }>;
       };
     }>;
@@ -10645,6 +10869,101 @@ export type GetProductsQuery = {
       __typename?: "PageInfo";
       hasNextPage: boolean;
       endCursor: string | null;
+    };
+  };
+};
+
+export type GetShopDetailsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetShopDetailsQuery = {
+  __typename?: "QueryRoot";
+  shop: {
+    __typename?: "Shop";
+    id: string;
+    description: string | null;
+    moneyFormat: string;
+    name: string;
+    brand: {
+      __typename?: "Brand";
+      slogan: string | null;
+      shortDescription: string | null;
+      colors: {
+        __typename?: "BrandColors";
+        primary: Array<{
+          __typename?: "BrandColorGroup";
+          background: any | null;
+          foreground: any | null;
+        }>;
+        secondary: Array<{
+          __typename?: "BrandColorGroup";
+          background: any | null;
+          foreground: any | null;
+        }>;
+      };
+      coverImage: {
+        __typename?: "MediaImage";
+        image: {
+          __typename?: "Image";
+          altText: string | null;
+          src: any;
+        } | null;
+      } | null;
+      logo: {
+        __typename?: "MediaImage";
+        image: {
+          __typename?: "Image";
+          altText: string | null;
+          src: any;
+        } | null;
+      } | null;
+      squareLogo: {
+        __typename?: "MediaImage";
+        image: {
+          __typename?: "Image";
+          altText: string | null;
+          src: any;
+        } | null;
+      } | null;
+    } | null;
+    privacyPolicy: {
+      __typename?: "ShopPolicy";
+      title: string;
+      body: string;
+      handle: string;
+      url: any;
+    } | null;
+    refundPolicy: {
+      __typename?: "ShopPolicy";
+      title: string;
+      body: string;
+      handle: string;
+      url: any;
+    } | null;
+    termsOfService: {
+      __typename?: "ShopPolicy";
+      title: string;
+      body: string;
+      handle: string;
+      url: any;
+    } | null;
+    shippingPolicy: {
+      __typename?: "ShopPolicy";
+      title: string;
+      body: string;
+      handle: string;
+      url: any;
+    } | null;
+    subscriptionPolicy: {
+      __typename?: "ShopPolicyWithDefault";
+      title: string;
+      body: string;
+      handle: string;
+      url: any;
+    } | null;
+    paymentSettings: {
+      __typename?: "PaymentSettings";
+      currencyCode: CurrencyCode;
+      countryCode: CountryCode;
     };
   };
 };
@@ -12454,6 +12773,79 @@ export const GetCartDocument = {
                                           name: {
                                             kind: "Name",
                                             value: "currentlyNotInStock",
+                                          },
+                                        },
+                                        {
+                                          kind: "Field",
+                                          name: {
+                                            kind: "Name",
+                                            value: "quantityAvailable",
+                                          },
+                                        },
+                                        {
+                                          kind: "Field",
+                                          name: {
+                                            kind: "Name",
+                                            value: "requiresShipping",
+                                          },
+                                        },
+                                        {
+                                          kind: "Field",
+                                          name: {
+                                            kind: "Name",
+                                            value: "selectedOptions",
+                                          },
+                                          selectionSet: {
+                                            kind: "SelectionSet",
+                                            selections: [
+                                              {
+                                                kind: "Field",
+                                                name: {
+                                                  kind: "Name",
+                                                  value: "name",
+                                                },
+                                              },
+                                              {
+                                                kind: "Field",
+                                                name: {
+                                                  kind: "Name",
+                                                  value: "value",
+                                                },
+                                              },
+                                            ],
+                                          },
+                                        },
+                                        {
+                                          kind: "Field",
+                                          name: {
+                                            kind: "Name",
+                                            value: "quantityRule",
+                                          },
+                                          selectionSet: {
+                                            kind: "SelectionSet",
+                                            selections: [
+                                              {
+                                                kind: "Field",
+                                                name: {
+                                                  kind: "Name",
+                                                  value: "increment",
+                                                },
+                                              },
+                                              {
+                                                kind: "Field",
+                                                name: {
+                                                  kind: "Name",
+                                                  value: "maximum",
+                                                },
+                                              },
+                                              {
+                                                kind: "Field",
+                                                name: {
+                                                  kind: "Name",
+                                                  value: "minimum",
+                                                },
+                                              },
+                                            ],
                                           },
                                         },
                                         {
@@ -14408,6 +14800,344 @@ export const CartDeliveryAddressesUpdateDocument = {
   CartDeliveryAddressesUpdateMutation,
   CartDeliveryAddressesUpdateMutationVariables
 >;
+export const GetCollectionsDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "GetCollections" },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "collections" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "first" },
+                value: { kind: "IntValue", value: "50" },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "nodes" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "handle" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "title" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "description" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "image" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "url" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "altText" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "width" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "height" },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GetCollectionsQuery, GetCollectionsQueryVariables>;
+export const GetSingleCollectionDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "GetSingleCollection" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "collectionId" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: { kind: "NamedType", name: { kind: "Name", value: "ID" } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "collection" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "id" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "collectionId" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                { kind: "Field", name: { kind: "Name", value: "handle" } },
+                { kind: "Field", name: { kind: "Name", value: "title" } },
+                { kind: "Field", name: { kind: "Name", value: "description" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "image" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      { kind: "Field", name: { kind: "Name", value: "url" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "altText" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "width" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "height" },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "products" },
+                  arguments: [
+                    {
+                      kind: "Argument",
+                      name: { kind: "Name", value: "first" },
+                      value: { kind: "IntValue", value: "50" },
+                    },
+                  ],
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "nodes" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "title" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "productType" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "handle" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "vendor" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "variants" },
+                              arguments: [
+                                {
+                                  kind: "Argument",
+                                  name: { kind: "Name", value: "first" },
+                                  value: { kind: "IntValue", value: "10" },
+                                },
+                              ],
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "nodes" },
+                                    selectionSet: {
+                                      kind: "SelectionSet",
+                                      selections: [
+                                        {
+                                          kind: "Field",
+                                          name: { kind: "Name", value: "id" },
+                                        },
+                                        {
+                                          kind: "Field",
+                                          name: {
+                                            kind: "Name",
+                                            value: "title",
+                                          },
+                                        },
+                                        {
+                                          kind: "Field",
+                                          name: {
+                                            kind: "Name",
+                                            value: "price",
+                                          },
+                                          selectionSet: {
+                                            kind: "SelectionSet",
+                                            selections: [
+                                              {
+                                                kind: "Field",
+                                                name: {
+                                                  kind: "Name",
+                                                  value: "amount",
+                                                },
+                                              },
+                                              {
+                                                kind: "Field",
+                                                name: {
+                                                  kind: "Name",
+                                                  value: "currencyCode",
+                                                },
+                                              },
+                                            ],
+                                          },
+                                        },
+                                        {
+                                          kind: "Field",
+                                          name: {
+                                            kind: "Name",
+                                            value: "availableForSale",
+                                          },
+                                        },
+                                      ],
+                                    },
+                                  },
+                                ],
+                              },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "images" },
+                              arguments: [
+                                {
+                                  kind: "Argument",
+                                  name: { kind: "Name", value: "first" },
+                                  value: { kind: "IntValue", value: "5" },
+                                },
+                              ],
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "nodes" },
+                                    selectionSet: {
+                                      kind: "SelectionSet",
+                                      selections: [
+                                        {
+                                          kind: "Field",
+                                          name: { kind: "Name", value: "id" },
+                                        },
+                                        {
+                                          kind: "Field",
+                                          name: { kind: "Name", value: "url" },
+                                        },
+                                        {
+                                          kind: "Field",
+                                          name: {
+                                            kind: "Name",
+                                            value: "altText",
+                                          },
+                                        },
+                                        {
+                                          kind: "Field",
+                                          name: {
+                                            kind: "Name",
+                                            value: "width",
+                                          },
+                                        },
+                                        {
+                                          kind: "Field",
+                                          name: {
+                                            kind: "Name",
+                                            value: "height",
+                                          },
+                                        },
+                                      ],
+                                    },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "pageInfo" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "hasNextPage" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "endCursor" },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  GetSingleCollectionQuery,
+  GetSingleCollectionQueryVariables
+>;
 export const CustomerAddressCreateDocument = {
   kind: "Document",
   definitions: [
@@ -15580,6 +16310,361 @@ export const GetCustomerOrdersDocument = {
   GetCustomerOrdersQuery,
   GetCustomerOrdersQueryVariables
 >;
+export const GetProductByHandleDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "getProductByHandle" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "handle" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "String" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "product" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "handle" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "handle" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                { kind: "Field", name: { kind: "Name", value: "title" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "descriptionHtml" },
+                },
+                { kind: "Field", name: { kind: "Name", value: "productType" } },
+                { kind: "Field", name: { kind: "Name", value: "vendor" } },
+                { kind: "Field", name: { kind: "Name", value: "tags" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "availableForSale" },
+                },
+                { kind: "Field", name: { kind: "Name", value: "createdAt" } },
+                { kind: "Field", name: { kind: "Name", value: "updatedAt" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "options" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "values" },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "variants" },
+                  arguments: [
+                    {
+                      kind: "Argument",
+                      name: { kind: "Name", value: "first" },
+                      value: { kind: "IntValue", value: "20" },
+                    },
+                  ],
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "nodes" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "title" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "sku" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "availableForSale" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "price" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "amount" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: {
+                                      kind: "Name",
+                                      value: "currencyCode",
+                                    },
+                                  },
+                                ],
+                              },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "image" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "url" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "altText" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "width" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "height" },
+                                  },
+                                ],
+                              },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "selectedOptions" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "name" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "value" },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "images" },
+                  arguments: [
+                    {
+                      kind: "Argument",
+                      name: { kind: "Name", value: "first" },
+                      value: { kind: "IntValue", value: "10" },
+                    },
+                  ],
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "nodes" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "url" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "altText" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "width" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "height" },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "shop" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "name" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "paymentSettings" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "currencyCode" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "countryCode" },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "privacyPolicy" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "title" } },
+                      { kind: "Field", name: { kind: "Name", value: "body" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "handle" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "url" } },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "refundPolicy" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "title" } },
+                      { kind: "Field", name: { kind: "Name", value: "body" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "handle" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "url" } },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "termsOfService" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "title" } },
+                      { kind: "Field", name: { kind: "Name", value: "body" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "handle" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "url" } },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "shippingPolicy" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "title" } },
+                      { kind: "Field", name: { kind: "Name", value: "body" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "handle" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "url" } },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "subscriptionPolicy" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "title" } },
+                      { kind: "Field", name: { kind: "Name", value: "body" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "handle" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "url" } },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "paymentSettings" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "currencyCode" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "countryCode" },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  GetProductByHandleQuery,
+  GetProductByHandleQueryVariables
+>;
 export const GetProductsDocument = {
   kind: "Document",
   definitions: [
@@ -15734,47 +16819,29 @@ export const GetProductsDocument = {
                           selections: [
                             {
                               kind: "Field",
-                              name: { kind: "Name", value: "edges" },
+                              name: { kind: "Name", value: "nodes" },
                               selectionSet: {
                                 kind: "SelectionSet",
                                 selections: [
                                   {
                                     kind: "Field",
-                                    name: { kind: "Name", value: "node" },
-                                    selectionSet: {
-                                      kind: "SelectionSet",
-                                      selections: [
-                                        {
-                                          kind: "Field",
-                                          name: { kind: "Name", value: "id" },
-                                        },
-                                        {
-                                          kind: "Field",
-                                          name: {
-                                            kind: "Name",
-                                            value: "altText",
-                                          },
-                                        },
-                                        {
-                                          kind: "Field",
-                                          name: {
-                                            kind: "Name",
-                                            value: "width",
-                                          },
-                                        },
-                                        {
-                                          kind: "Field",
-                                          name: {
-                                            kind: "Name",
-                                            value: "height",
-                                          },
-                                        },
-                                        {
-                                          kind: "Field",
-                                          name: { kind: "Name", value: "url" },
-                                        },
-                                      ],
-                                    },
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "altText" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "width" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "height" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "url" },
                                   },
                                 ],
                               },
@@ -15970,6 +17037,29 @@ export const GetProductsDocument = {
                                     kind: "Field",
                                     name: {
                                       kind: "Name",
+                                      value: "selectedOptions",
+                                    },
+                                    selectionSet: {
+                                      kind: "SelectionSet",
+                                      selections: [
+                                        {
+                                          kind: "Field",
+                                          name: { kind: "Name", value: "name" },
+                                        },
+                                        {
+                                          kind: "Field",
+                                          name: {
+                                            kind: "Name",
+                                            value: "value",
+                                          },
+                                        },
+                                      ],
+                                    },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: {
+                                      kind: "Name",
                                       value: "availableForSale",
                                     },
                                   },
@@ -16007,3 +17097,266 @@ export const GetProductsDocument = {
     },
   ],
 } as unknown as DocumentNode<GetProductsQuery, GetProductsQueryVariables>;
+export const GetShopDetailsDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "GetShopDetails" },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "shop" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                { kind: "Field", name: { kind: "Name", value: "description" } },
+                { kind: "Field", name: { kind: "Name", value: "moneyFormat" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "brand" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "colors" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "primary" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "background" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "foreground" },
+                                  },
+                                ],
+                              },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "secondary" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "background" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "foreground" },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "coverImage" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "image" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "altText" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "src" },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "logo" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "image" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "altText" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "src" },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "slogan" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "shortDescription" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "squareLogo" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "image" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "altText" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "src" },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+                { kind: "Field", name: { kind: "Name", value: "name" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "privacyPolicy" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "title" } },
+                      { kind: "Field", name: { kind: "Name", value: "body" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "handle" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "url" } },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "refundPolicy" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "title" } },
+                      { kind: "Field", name: { kind: "Name", value: "body" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "handle" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "url" } },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "termsOfService" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "title" } },
+                      { kind: "Field", name: { kind: "Name", value: "body" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "handle" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "url" } },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "shippingPolicy" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "title" } },
+                      { kind: "Field", name: { kind: "Name", value: "body" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "handle" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "url" } },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "subscriptionPolicy" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "title" } },
+                      { kind: "Field", name: { kind: "Name", value: "body" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "handle" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "url" } },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "paymentSettings" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "currencyCode" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "countryCode" },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GetShopDetailsQuery, GetShopDetailsQueryVariables>;

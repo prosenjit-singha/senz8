@@ -6,13 +6,15 @@ import { cn } from "@workspace/ui/lib/utils";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
+import { GetCollectionsQuery } from "@/graphql";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const categories = [
   {
     name: "Top Sales",
-    image: "https://liveaevi.com/cdn/shop/files/Aevi-Web-FaceSerum-03.png?v=1741102733&width=500",
+    image:
+      "https://liveaevi.com/cdn/shop/files/Aevi-Web-FaceSerum-03.png?v=1741102733&width=500",
   },
   {
     name: "Latest Products",
@@ -41,7 +43,10 @@ const Category = ({
 }) => {
   return (
     <figure
-      className={cn("category-container relative overflow-hidden max-h-[400px] group", className)}
+      className={cn(
+        "category-container relative overflow-hidden max-h-[400px] group",
+        className
+      )}
     >
       <Image
         src={image}
@@ -50,12 +55,27 @@ const Category = ({
         height={height}
         className="category-image object-cover h-full w-full group-hover:scale-110 transition-transform duration-500"
       />
-      <figcaption className="category-name absolute bottom-4 left-4 opacity-0">{name}</figcaption>
+      <figcaption className="category-name absolute bottom-4 left-4 opacity-0">
+        {name}
+      </figcaption>
     </figure>
   );
 };
 
-const FeaturedCategorySection = () => {
+type FeaturedCategorySectionProps = Omit<
+  React.ComponentProps<"section">,
+  "children"
+> & {
+  data: GetCollectionsQuery;
+};
+
+const FeaturedCategorySection = ({
+  data,
+  className,
+  ...props
+}: FeaturedCategorySectionProps) => {
+  console.log(data);
+
   const scope = React.useRef<HTMLElement>(null);
   useGSAP(
     () => {
@@ -92,7 +112,14 @@ const FeaturedCategorySection = () => {
     { scope }
   );
   return (
-    <section ref={scope} className="max-w-page mx-auto max-h-[min(100vh,800px)] mb-[100px]">
+    <section
+      ref={scope}
+      className={cn(
+        "max-w-page mx-auto max-h-[min(100vh,800px)] mb-[100px]",
+        className
+      )}
+      {...props}
+    >
       <div className="grid grid-cols-12">
         <Category
           name={categories[0].name}

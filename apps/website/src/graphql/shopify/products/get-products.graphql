@@ -23,14 +23,12 @@ query GetProducts(
       publishedAt
       tags
       images(first: 10) {
-        edges {
-          node {
-            id
-            altText
-            width
-            height
-            url
-          }
+        nodes {
+          id
+          altText
+          width
+          height
+          url
         }
       }
       options(first: 10) {
@@ -63,6 +61,10 @@ query GetProducts(
           price {
             amount
             currencyCode
+          }
+          selectedOptions {
+            name
+            value
           }
           availableForSale
         }

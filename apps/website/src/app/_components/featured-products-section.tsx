@@ -9,8 +9,24 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
+import { GetSingleCollectionQuery } from "@/graphql";
+import { cn } from "@workspace/ui/lib/utils";
+import { formatAmount } from "@/helpers/currency.helper";
+import Link from "next/link";
+import { Separator } from "@workspace/ui/components/separator";
 
-const FeaturedProductsSection = () => {
+type FeaturedProductsProps = Omit<
+  React.ComponentProps<"section">,
+  "children"
+> & {
+  data: GetSingleCollectionQuery | null;
+};
+
+const FeaturedProductsSection = ({
+  data,
+  className,
+  ...props
+}: FeaturedProductsProps) => {
   const scope = React.useRef<HTMLElement>(null);
   useGSAP(
     () => {
@@ -64,7 +80,8 @@ const FeaturedProductsSection = () => {
 
       gsap.set(".product-container", { alpha: 0 });
 
-      const products = gsap.utils.toArray<HTMLLinkElement>(".product-container");
+      const products =
+        gsap.utils.toArray<HTMLLinkElement>(".product-container");
 
       products.forEach((product) => {
         gsap.fromTo(
@@ -86,39 +103,62 @@ const FeaturedProductsSection = () => {
     },
     { scope }
   );
+
+  if (!data?.collection) {
+    return null;
+  }
+
   return (
     <section
       ref={scope}
-      className="px-page-margin-auto py-page-margin flex flex-col overflow-hidden"
+      className={cn(
+        "px-page-margin-auto py-page-margin flex flex-col overflow-hidden",
+        className
+      )}
+      {...props}
     >
       <div className="section-header mx-auto max-w-2xl mb-8">
-        <h2 className="section-heading text-center font-black mb-2">Featured products</h2>
+        <h2 className="section-heading text-center font-black mb-2">
+          {data.collection.title}
+        </h2>
         <p className="section-sub-heading text-center">
-          Nam ac egestas est. Mauris et pulvinar risus, at tincidunt lorem. Maecenas tristique sit
-          amet odio sit amet aliquet. Quisque a pharetra quam. Sed in ultrices diam, eget sodales
-          ligula. Sed ut tincidunt lacus.
+          {data.collection.description}
         </p>
       </div>
 
       <ul className="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] xl:grid-cols-4 xl:gap-8 gap-4">
-        {PRODUCTS.map((product, i) => (
-          <li key={i} className="product-container relative group border-golden rounded-lg">
+        {data.collection.products.nodes.map((product, i) => (
+          <li
+            key={i}
+            className="product-container relative group border rounded-lg"
+          >
+            <div className="flex absolute top-2 right-2 z-10">
+              <Button size="icon" className="ml-auto">
+                <ShoppingCartIcon />
+              </Button>
+            </div>
             {/* <div className="absolute rounded-lg w-full h-full group-hover:h-[60%] bg-transparent group-hover:bg-black/50 bottom-0 left-0 z-[-1] transition-all" /> */}
-            <div>
+            <div className="overflow-hidden">
               <Image
-                src={product.image}
-                alt={product.name.join(" ")}
+                src={product.images.nodes[0].url}
+                alt={product.images.nodes[0].altText || product.title}
                 width={250}
                 height={250}
-                className="w-full h-full object-cover group-hover:scale-125 group-hover:-translate-y-10 transition-transform"
+                className="w-full h-full object-cover group-hover:scale-110 duration-500 transition-transform"
               />
             </div>
-            <span className="golden-x-line block mb-4" />
-            <div>
-              <p className="font-bold text-lg text-center">{product.name[0]}</p>
-              <p className="text-center">{product.name[1]}</p>
-              <div className="flex gap-4 items-center justify-between px-4 mt-4">
-                <Rating defaultValue={3} readOnly>
+            {/* <span className="golden-x-line block mb-4" /> */}
+            <Separator />
+            <div className="p-2">
+              <Link
+                href={`/products/${product.handle}`}
+                className="flex font-bold text-lg !text-center w-full hover:text-primary transition-colors hover:underline"
+              >
+                {product.title}
+              </Link>
+              <p className="text-center mb-4">{product.productType}</p>
+              <div className="flex gap-4 items-center justify-center px-4 mt-auto">
+                {/* <Rating defaultValue={3} readOnly>
                   {Array.from({ length: 5 }).map((_, index) => (
                     <RatingButton
                       // className="text-yellow-500"
@@ -126,22 +166,14 @@ const FeaturedProductsSection = () => {
                       size={16}
                     />
                   ))}
-                </Rating>
+                </Rating> */}
 
-                <span className="text-primary font-black">₹ 4000</span>
-              </div>
-              <div className="grid grid-cols-2 p-4 gap-4">
-                <button
-                  className="cursor-pointer group"
-                  aria-label="Add to wishlist"
-                  title="Add to wishlist"
-                  data-selected="false"
-                >
-                  <HeartIcon className="group-data-[selected=true]:fill-current text-yellow-400 group-hover:scale-110 transition-all duration-300 active:scale-90" />
-                </button>
-                <Button size="icon" className="ml-auto">
-                  <ShoppingCartIcon />
-                </Button>
+                <span className="text-primary text-xl font-black">
+                  {formatAmount(
+                    product.variants.nodes[0].price.amount,
+                    product.variants.nodes[0].price.currencyCode as any
+                  )}
+                </span>
               </div>
             </div>
           </li>

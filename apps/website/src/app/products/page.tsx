@@ -1,11 +1,16 @@
 import React from "react";
 import ShopFilterSection from "./_components/filter-section";
-import ProductList from "./_components/product-list";
 import { shopifyAPI } from "../../helpers/api.helpers";
-import { GetShopifyProductsRes } from "@/interfaces/shopify/shopify-products.interface";
+import { GetProductsQuery } from "@/graphql";
+import { IApiSuccessResponse } from "@/interfaces";
+import ProductList from "./_components/product-list";
 
-export async function getProducts(): Promise<GetShopifyProductsRes> {
-  return await shopifyAPI.get<GetShopifyProductsRes>("/products/list?first=50");
+export async function getProducts(): Promise<
+  IApiSuccessResponse<GetProductsQuery["products"]>
+> {
+  return await shopifyAPI.get<
+    IApiSuccessResponse<GetProductsQuery["products"]>
+  >("/products/list?first=50");
 }
 
 export const dynamic = "force-dynamic";
@@ -16,7 +21,7 @@ const ShopPage = async (pageProps: { params: Promise<{ id: string }> }) => {
   return (
     <div className="mt-20">
       <ShopFilterSection />
-      <ProductList data={res} />
+      <ProductList data={res.data} />
     </div>
   );
 };

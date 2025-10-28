@@ -18,6 +18,17 @@ query GetCart($cartId: ID!) {
             sku
             availableForSale
             currentlyNotInStock
+            quantityAvailable
+            requiresShipping
+            selectedOptions {
+              name
+              value
+            }
+            quantityRule {
+              increment
+              maximum
+              minimum
+            }
             image {
               id
               altText

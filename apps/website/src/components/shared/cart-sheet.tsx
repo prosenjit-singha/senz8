@@ -27,12 +27,7 @@ import { Spinner } from "@workspace/ui/components/spinner";
 import { GetCartQuery } from "@/graphql";
 import { cn } from "@workspace/ui/lib/utils";
 import { Separator } from "@workspace/ui/components/separator";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-} from "@workspace/ui/components/select";
+
 function CartSheet() {
   const { state, actions } = useCartStore();
   const { data } = useGetCartQuery();
@@ -99,9 +94,9 @@ const LineItem = ({ data, lineIndex, className, ...props }: LineItemProps) => {
   const { mutateAsync: updateLines, isPending: isUpdating } =
     useCartLinesUpdate();
 
-  const sample = data.attributes.find((att) => att.key === PRODUCT_SAMPLES.key);
+  const isPending = isAdding || isRemoving || isUpdating;
 
-  const handleAddQuantity = () => {
+  const handleAddProduct = () => {
     const item = cache?.lines.nodes[lineIndex];
     const cartId = localStorage.getItem("cartId")!;
     if (!cartId || !item) return;
@@ -223,16 +218,16 @@ const LineItem = ({ data, lineIndex, className, ...props }: LineItemProps) => {
             </span>
           </div>
 
-          <div className="flex gap-2 justify-between items-center">
+          <div className="flex gap-2 items-center">
             <ButtonGroup orientation="horizontal">
               <Button
                 size="icon"
                 variant="outline"
                 aria-label="increase quantity"
-                disabled={isRemoving || isUpdating}
+                disabled={isPending}
                 onClick={handleRemoveProduct}
               >
-                {isRemoving || isUpdating ? <Spinner /> : <MinusIcon />}
+                {isPending ? <Spinner /> : <MinusIcon />}
               </Button>
               <Button
                 size="icon"
@@ -246,13 +241,22 @@ const LineItem = ({ data, lineIndex, className, ...props }: LineItemProps) => {
                 size="icon"
                 variant="outline"
                 aria-label="decrease quantity"
-                disabled={isAdding}
-                onClick={handleAddQuantity}
+                disabled={isPending}
+                onClick={handleAddProduct}
               >
                 {isAdding ? <Spinner /> : <PlusIcon />}
               </Button>
             </ButtonGroup>
-            <p className="font-black text-xl">
+
+            <div className="leading-none text-sm space-y-1.5">
+              {data.merchandise.selectedOptions.map((option) => (
+                <p key={option.name}>
+                  {option.name}: {option.value}
+                </p>
+              ))}
+            </div>
+
+            <p className="font-black text-xl ml-auto">
               {formatAmount(
                 data.cost.totalAmount.amount,
                 data.cost.totalAmount.currencyCode as any
@@ -274,29 +278,74 @@ const LineItem = ({ data, lineIndex, className, ...props }: LineItemProps) => {
         </div>
       </div>
       <Separator />
-      <div className="">
-        <Select
-          defaultValue={
-            data.attributes.find((att) => att.key === "sample")?.value ??
-            undefined
-          }
-          onValueChange={handleSampleChange}
-          disabled={isUpdating || isRemoving}
-        >
-          <SelectTrigger className="border-0 p-1 flex justify-center items-center cursor-pointer text-primary w-full hover:bg-amber-500/10 text-sm">
-            {sample ? `+ ${sample.value} sample` : "Choose Sample"}
-          </SelectTrigger>
-          <SelectContent>
-            {PRODUCT_SAMPLES.vales.map((value) => (
-              <SelectItem key={value} value={value}>
-                {value}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
     </li>
   );
 };
+
+type CartActionProps = Omit<React.ComponentProps<"div">, "children"> & {
+  data: {
+    merchandiseId: string;
+    currentItemQuantity: number;
+    lineId?: string;
+  };
+  disabled?: boolean;
+};
+
+export function CartActions({ className, data, ...props }: CartActionProps) {
+  const { data: cache } = useGetCartQuery();
+  const { mutateAsync: addProduct, isPending: isAdding } = useCartLinesAdd();
+  const { mutateAsync: removeProduct, isPending: isRemoving } =
+    useCartLinesRemove();
+  const { mutateAsync: updateLines, isPending: isUpdating } =
+    useCartLinesUpdate();
+
+  const handleAddProduct = () => {
+    const cartId = localStorage.getItem("cartId")!;
+    if (!cartId || !data.merchandiseId) return;
+    addProduct({
+      cartId,
+      lines: [
+        {
+          attributes: [],
+          quantity: 1,
+          merchandiseId: data.merchandiseId,
+          sellingPlanId: null,
+          parent: null,
+        },
+      ],
+    });
+  };
+
+  const handleRemoveProduct = () => {
+    const cartId = localStorage.getItem("cartId")!;
+    if (!cartId || !data.lineId) return;
+
+    if (data.currentItemQuantity === 1) {
+      removeProduct({
+        cartId,
+        lineIds: [data.lineId],
+      });
+    } else {
+      updateLines({
+        cartId,
+        lines: [
+          // @ts-expect-error: Ignored keys can cause issue
+          {
+            id: data.merchandiseId,
+            quantity: data.currentItemQuantity - 1,
+          },
+        ],
+      });
+    }
+  };
+
+  return (
+    <div
+      className={cn("flex gap-2 items-center", className)}
+      {...props}
+      data-slot="cart-action-buttons"
+    ></div>
+  );
+}
 
 export default CartSheet;

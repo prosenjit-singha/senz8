@@ -219,7 +219,7 @@ export default function CustomerOrdersPage() {
                         data-resizing={header.column.getIsResizing()}
                         onTouchStart={header.getResizeHandler()}
                         onMouseDown={header.getResizeHandler()}
-                        className="group-hover:pointer-events-auto group-hover:opacity-100 opacity-0 pointer-events-none absolute right-0 h-full top-0 w-0.5 bg-primary hover:cursor-e-resize data-[resizing=true]:bg-green-600 z-[2]"
+                        className="group-hover:pointer-events-auto group-hover:opacity-100 opacity-0 pointer-events-none absolute right-0 h-full top-0 w-0.5 bg-primary hover:cursor-col-resize data-[resizing=true]:bg-green-600 z-[2]"
                       />
                     </TableHead>
                   ))}

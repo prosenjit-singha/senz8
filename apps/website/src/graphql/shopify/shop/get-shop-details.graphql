@@ -1,0 +1,75 @@
+query GetShopDetails {
+  shop {
+    id
+    description
+    moneyFormat
+    brand {
+      colors {
+        primary {
+          background
+          foreground
+        }
+        secondary {
+          background
+          foreground
+        }
+      }
+      coverImage {
+        image {
+          altText
+          src
+        }
+      }
+      logo {
+        image {
+          altText
+          src
+        }
+      }
+      slogan
+      shortDescription
+      squareLogo {
+        image {
+          altText
+          src
+        }
+      }
+    }
+    name
+    privacyPolicy {
+      title
+      body
+      handle
+      url
+    }
+    refundPolicy {
+      title
+      body
+      handle
+      url
+    }
+    termsOfService {
+      title
+      body
+      handle
+      url
+    }
+    shippingPolicy {
+      title
+      body
+      handle
+      url
+    }
+    subscriptionPolicy {
+      title
+      body
+      handle
+      url
+    }
+
+    paymentSettings {
+      currencyCode
+      countryCode
+    }
+  }
+}

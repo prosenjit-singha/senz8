@@ -23,7 +23,6 @@ const state: InitialState = {
 export const useCartStore = createStore({
   name: "cart",
   persist: true,
-  storage: "local",
   state,
   actions: (set) => ({
     setOpenState: (isOpen: boolean) =>

@@ -4,9 +4,10 @@ import { cn } from "@workspace/ui/lib/utils";
 import Image from "next/image";
 import ProductItemActions from "./product-item-actions";
 import { Separator } from "@workspace/ui/components/separator";
-
+import Link from "next/link";
+import { GetProductsQuery } from "@/graphql";
 type ProductItemProps = Omit<ComponentProps<"li">, "children"> & {
-  product: GetShopifyProductsRes["products"][number];
+  product: GetProductsQuery["products"]["nodes"][number];
 };
 
 function ProductItem({ product, className, ...props }: ProductItemProps) {
@@ -26,20 +27,24 @@ function ProductItem({ product, className, ...props }: ProductItemProps) {
       <figure className="w-full bg-blue-200 h-[300px] overflow-hidden">
         <Image
           src={
-            product.images?.[0]?.url ||
+            product.images?.nodes?.[0]?.url ||
             "https://media.istockphoto.com/id/2173059563/vector/coming-soon-image-on-white-background-no-photo-available.jpg?s=612x612&w=0&k=20&c=v0a_B58wPFNDPULSiw_BmPyhSNCyrP_d17i2BPPyDTk="
           }
-          alt={product.images?.[0]?.altText || product.title}
+          alt={product.images?.nodes?.[0]?.altText || product.title}
           width={600}
           height={300}
           className="w-full h-full object-cover group-hover:scale-110 duration-500 transition-transform"
         />
       </figure>
-      <div className="w-full h-auto max-h-[250px]  flex justify-center items-center"></div>
       {/* <span className="golden-x-line block mb-4" /> */}
       <Separator />
       <div className="p-4">
-        <p className="font-medium text-lg text-center">{product.title}</p>
+        <Link
+          href={`/products/${product.handle}`}
+          className="block font-medium text-lg text-center hover:text-primary hover:underline transition-colors duration-300"
+        >
+          {product.title}
+        </Link>
         <div className="flex gap-4 items-center justify-between px-4 mt-4">
           {/* <Rating defaultValue={3} readOnly>
                   {Array.from({ length: 5 }).map((_, index) => (
