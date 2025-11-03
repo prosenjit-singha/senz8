@@ -8,13 +8,22 @@ import {
 } from "@/zod-schemas/shopify/customer.z";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+// const defaultValues: CustomerSignUpBody = {
+//   email: "aheibamprosenjit@gmail.com",
+//   firstName: "Prosenjit",
+//   lastName: "Singha",
+//   phone: "+8801763943389",
+//   password: "1P@ssword",
+//   confirmPassword: "1P@ssword",
+//   acceptsMarketing: true,
+// };
 const defaultValues: CustomerSignUpBody = {
-  email: "aheibamprosenjit@gmail.com",
-  firstName: "Prosenjit",
-  lastName: "Singha",
-  phone: "+8801763943389",
-  password: "1P@ssword",
-  confirmPassword: "1P@ssword",
+  email: "",
+  firstName: "",
+  lastName: "",
+  phone: "",
+  password: "",
+  confirmPassword: "",
   acceptsMarketing: true,
 };
 

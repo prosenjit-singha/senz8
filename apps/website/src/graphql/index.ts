@@ -10597,6 +10597,87 @@ export type GetCustomerQuery = {
   } | null;
 };
 
+export type CustomerRecoverMutationVariables = Exact<{
+  email: Scalars["String"]["input"];
+}>;
+
+export type CustomerRecoverMutation = {
+  __typename?: "Mutation";
+  customerRecover: {
+    __typename?: "CustomerRecoverPayload";
+    customerUserErrors: Array<{
+      __typename?: "CustomerUserError";
+      code: CustomerErrorCode | null;
+      field: Array<string> | null;
+      message: string;
+    }>;
+  } | null;
+};
+
+export type CustomerResetByUrlMutationVariables = Exact<{
+  resetUrl: Scalars["URL"]["input"];
+  password: Scalars["String"]["input"];
+}>;
+
+export type CustomerResetByUrlMutation = {
+  __typename?: "Mutation";
+  customerResetByUrl: {
+    __typename?: "CustomerResetByUrlPayload";
+    customer: {
+      __typename?: "Customer";
+      id: string;
+      email: string | null;
+      firstName: string | null;
+      lastName: string | null;
+      phone: string | null;
+      acceptsMarketing: boolean;
+    } | null;
+    customerAccessToken: {
+      __typename?: "CustomerAccessToken";
+      accessToken: string;
+      expiresAt: any;
+    } | null;
+    customerUserErrors: Array<{
+      __typename?: "CustomerUserError";
+      code: CustomerErrorCode | null;
+      field: Array<string> | null;
+      message: string;
+    }>;
+  } | null;
+};
+
+export type CustomerResetMutationVariables = Exact<{
+  id: Scalars["ID"]["input"];
+  input: CustomerResetInput;
+}>;
+
+export type CustomerResetMutation = {
+  __typename?: "Mutation";
+  customerReset: {
+    __typename?: "CustomerResetPayload";
+    customer: {
+      __typename?: "Customer";
+      id: string;
+      email: string | null;
+      firstName: string | null;
+      lastName: string | null;
+      phone: string | null;
+      acceptsMarketing: boolean;
+    } | null;
+    customerAccessToken: {
+      __typename?: "CustomerAccessToken";
+      accessToken: string;
+      expiresAt: any;
+    } | null;
+    customerUserErrors: Array<{
+      __typename?: "CustomerUserError";
+      code: CustomerErrorCode | null;
+      field: Array<string> | null;
+      message: string;
+    }>;
+  } | null;
+};
+
 export type UpdateCustomerMutationVariables = Exact<{
   customerAccessToken: Scalars["String"]["input"];
   customer: CustomerUpdateInput;
@@ -16040,6 +16121,327 @@ export const GetCustomerDocument = {
     },
   ],
 } as unknown as DocumentNode<GetCustomerQuery, GetCustomerQueryVariables>;
+export const CustomerRecoverDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "customerRecover" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "email" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "String" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "customerRecover" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "email" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "email" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "customerUserErrors" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "code" } },
+                      { kind: "Field", name: { kind: "Name", value: "field" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "message" },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  CustomerRecoverMutation,
+  CustomerRecoverMutationVariables
+>;
+export const CustomerResetByUrlDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "customerResetByUrl" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "resetUrl" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: { kind: "NamedType", name: { kind: "Name", value: "URL" } },
+          },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "password" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "String" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "customerResetByUrl" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "resetUrl" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "resetUrl" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "password" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "password" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "customer" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      { kind: "Field", name: { kind: "Name", value: "email" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "firstName" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "lastName" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "phone" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "acceptsMarketing" },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "customerAccessToken" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "accessToken" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "expiresAt" },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "customerUserErrors" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "code" } },
+                      { kind: "Field", name: { kind: "Name", value: "field" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "message" },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  CustomerResetByUrlMutation,
+  CustomerResetByUrlMutationVariables
+>;
+export const CustomerResetDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "customerReset" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+          type: {
+            kind: "NonNullType",
+            type: { kind: "NamedType", name: { kind: "Name", value: "ID" } },
+          },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "input" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "CustomerResetInput" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "customerReset" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "id" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "id" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "input" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "input" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "customer" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      { kind: "Field", name: { kind: "Name", value: "email" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "firstName" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "lastName" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "phone" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "acceptsMarketing" },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "customerAccessToken" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "accessToken" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "expiresAt" },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "customerUserErrors" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "code" } },
+                      { kind: "Field", name: { kind: "Name", value: "field" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "message" },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  CustomerResetMutation,
+  CustomerResetMutationVariables
+>;
 export const UpdateCustomerDocument = {
   kind: "Document",
   definitions: [

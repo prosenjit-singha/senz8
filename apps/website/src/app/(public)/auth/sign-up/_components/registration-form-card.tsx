@@ -13,6 +13,8 @@ import CustomerRegistrationForm from "./registration-form";
 import RegistrationFormAction from "./registration-form-action";
 import { signup } from "@/lib/auth/customer-auth.action";
 import { toast } from "sonner";
+import Link from "next/link";
+import { AUTH_ROUTES_OBJ } from "@/lib/auth/auth.const";
 
 export default function SignUpFormCard() {
   const form = useRegistrationForm();
@@ -48,8 +50,17 @@ export default function SignUpFormCard() {
           <CustomerRegistrationForm />
         </CardContent>
 
-        <CardFooter>
+        <CardFooter className="flex flex-col gap-4">
           <RegistrationFormAction />
+          <p>
+            Already have an account?{" "}
+            <Link
+              href={AUTH_ROUTES_OBJ.signIn!}
+              className="text-primary hover:underline cursor-pointer"
+            >
+              Sign In
+            </Link>
+          </p>
         </CardFooter>
       </Card>
     </form>

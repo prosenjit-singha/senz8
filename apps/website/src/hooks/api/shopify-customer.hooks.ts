@@ -5,7 +5,11 @@ import {
   CustomerAddressUpdateMutation,
   CustomerAddressUpdateMutationVariables,
   CustomerDefaultAddressUpdateMutation,
-  CustomerDefaultAddressUpdateMutationVariables,
+  CustomerRecoverMutation,
+  CustomerResetByUrlMutation,
+  CustomerResetByUrlMutationVariables,
+  CustomerResetMutation,
+  CustomerResetMutationVariables,
   GetCustomerQuery,
   UpdateCustomerMutation,
   UpdateCustomerMutationVariables,
@@ -18,6 +22,9 @@ export const myAccountQueryKey = {
   details: ["my-account-details"],
   updateDetails: ["my-account-details-update"],
   addAddress: ["my-account-details-add-address"],
+  recoverAccount: ["customer-recover"],
+  resetPassword: ["customer-reset-password"],
+  resetPasswordByUrl: ["customer-reset-password-by-url"],
 };
 
 export const useGetMyAccountDetailsQuery = () => {
@@ -149,5 +156,60 @@ export const useUpdateDeliveryDefaultAddress = () => {
     meta: {
       invalidateQueries: myAccountQueryKey.details,
     },
+  });
+};
+
+/** RESET PASSWORD */
+export const useSendRecoveryEmail = () => {
+  return useMutation<
+    NonNullable<CustomerRecoverMutation["customerRecover"]>,
+    IApiFailedResponse,
+    string
+  >({
+    mutationFn: async (email) =>
+      shopifyAPI
+        .post<
+          IApiSuccessResponse<
+            NonNullable<CustomerRecoverMutation["customerRecover"]>
+          >
+        >("/customers/recover", { email })
+        .then((res) => res.data),
+    mutationKey: myAccountQueryKey.recoverAccount,
+  });
+};
+
+export const useResetPassword = () => {
+  return useMutation<
+    NonNullable<CustomerResetMutation["customerReset"]>,
+    IApiFailedResponse,
+    CustomerResetMutationVariables
+  >({
+    mutationFn: async (body) =>
+      shopifyAPI
+        .post<
+          IApiSuccessResponse<
+            NonNullable<CustomerResetMutation["customerReset"]>
+          >
+        >("/customers/reset-password", body)
+        .then((res) => res.data),
+    mutationKey: myAccountQueryKey.resetPassword,
+  });
+};
+
+export const useResetPasswordByUrl = () => {
+  return useMutation<
+    NonNullable<CustomerResetByUrlMutation["customerResetByUrl"]>,
+    IApiFailedResponse,
+    CustomerResetByUrlMutationVariables
+  >({
+    mutationFn: async (body) =>
+      shopifyAPI
+        .post<
+          IApiSuccessResponse<
+            NonNullable<CustomerResetByUrlMutation["customerResetByUrl"]>
+          >
+        >("/customers/reset-password-by-url", body)
+        .then((res) => res.data),
+    mutationKey: myAccountQueryKey.resetPasswordByUrl,
   });
 };

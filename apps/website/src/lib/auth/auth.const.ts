@@ -17,15 +17,19 @@ export const PUBLIC_ROUTES: string[] = [
 
 type PageOptions = {
   signIn: string;
+  signUp: string;
   signOut: string; // '/auth/signout';
   error: string; // '/auth/error';
   verifyRequest: string; // '/auth/login',
   newUser: string; // '/auth/new-user';
+  recoverAccount: string;
   resetPassword: string;
 };
 
 export const AUTH_ROUTES_OBJ: Partial<PageOptions> = {
   signIn: "/auth/sign-in",
+  signUp: "/auth/sign-up",
+  recoverAccount: "/auth/recover-account",
   resetPassword: "/auth/reset-password",
 };
 
@@ -34,10 +38,7 @@ export const AUTH_ROUTES_OBJ: Partial<PageOptions> = {
  * These routes will redirect users to the dashboard
  * @type {string[]}
  */
-export const AUTH_ROUTES_ARRAY: string[] = [
-  AUTH_ROUTES_OBJ.signIn!,
-  AUTH_ROUTES_OBJ.resetPassword!,
-];
+export const AUTH_ROUTES_ARRAY: string[] = Object.values(AUTH_ROUTES_OBJ);
 
 /**
  * The prefix for API authentication routes

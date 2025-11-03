@@ -24,7 +24,7 @@ import { Button } from "@workspace/ui/components/button";
 import { Spinner } from "@workspace/ui/components/spinner";
 import { useSession } from "@/components/providers/session.provider";
 import { useRouter, useSearchParams } from "next/navigation";
-import { DEFAULT_LOGIN_REDIRECT } from "@/lib/auth/auth.const";
+import { AUTH_ROUTES_OBJ, DEFAULT_LOGIN_REDIRECT } from "@/lib/auth/auth.const";
 import Link from "next/link";
 
 type LoginFormProps = Omit<React.ComponentProps<"div">, "children">;
@@ -104,9 +104,12 @@ export default function LoginForm({ className, ...props }: LoginFormProps) {
             <FieldError errors={[{ message: state.errors.password[0] }]} />
           )}
 
-          <button type="button" className="text-xs text-left text-primary">
+          <Link
+            href={AUTH_ROUTES_OBJ.recoverAccount!}
+            className="text-sm text-left text-primary w-fit hover:underline"
+          >
             Forgot Password?
-          </button>
+          </Link>
         </form>
       </CardContent>
       <CardFooter className="flex flex-col gap-2">

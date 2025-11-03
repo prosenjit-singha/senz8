@@ -1,6 +1,6 @@
 import React from "react";
 import { RegistrationFormProvider } from "./_components/registration-form.provider";
-import SignUpFormCard from "./_components/registraction-form-card";
+import SignUpFormCard from "./_components/registration-form-card";
 
 export default function RegistrationPage() {
   return (
