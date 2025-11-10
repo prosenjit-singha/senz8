@@ -19,10 +19,42 @@ export const GET = apiHandler(
   }
 );
 
+// create session
 export const POST = apiHandler(
   {
+    successMsg: "User session created successfully",
+    errorMsg: "Failed to create user session",
+  },
+  async ({ req }) => {
+    const body = (await req.json()) as Session;
+    const session = await updateSession(body);
+    if (session) {
+      return {
+        statusCode: 200,
+        data: session,
+        error: null,
+        success: true,
+      };
+    } else {
+      return {
+        statusCode: 400,
+        data: null,
+        error: {
+          type: "validation",
+          message: "Bad request",
+          data: null,
+        },
+        success: false,
+      };
+    }
+  }
+);
+
+// update session
+export const PATCH = apiHandler(
+  {
     validateSession: true,
-    errorMsg: "User session updated successfully",
+    errorMsg: "Failed to update user session",
     successMsg: "User session updated successfully",
   },
   async ({ req }) => {
@@ -31,7 +63,6 @@ export const POST = apiHandler(
     if (session) {
       return {
         statusCode: 200,
-        message: "User session updated successfully",
         data: session,
         error: null,
         success: true,
@@ -39,7 +70,6 @@ export const POST = apiHandler(
     } else {
       return {
         statusCode: 401,
-        message: "User session not found",
         data: null,
         error: {
           message: "User session not found or expired",
@@ -54,17 +84,16 @@ export const POST = apiHandler(
 
 export const DELETE = apiHandler(
   {
-    errorMsg: "User session deleted successfully",
+    errorMsg: "Failed to delete user session",
     successMsg: "User session deleted successfully",
   },
   async () => {
-    const result = await deleteSession();
+    await deleteSession();
     return {
+      success: true,
       statusCode: 200,
-      message: "User session deleted successfully",
       data: null,
       error: null,
-      success: true,
     };
   }
 );

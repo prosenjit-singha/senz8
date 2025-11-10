@@ -86,7 +86,7 @@ export const SessionProvider = ({ children }: SessionProviderProps) => {
       status: "loading",
     });
     const res = await localAPI
-      .post<IApiSuccessResponse<Session>>("/auth/session", session, {
+      .patch<IApiSuccessResponse<Session>>("/auth/session", session, {
         headers: {
           "Content-Type": "application/json",
         },
