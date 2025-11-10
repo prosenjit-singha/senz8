@@ -9,9 +9,11 @@ import {
   GetCustomerQuery,
   GetCustomerQueryVariables,
 } from "@/graphql";
+import { createSession } from "@/lib/auth/auth.session";
 const schema = z.object({
   email: z.email(),
   password: z.string().min(8),
+  createSession: z.boolean().optional(),
 });
 
 export const POST = apiHandler(
@@ -21,7 +23,7 @@ export const POST = apiHandler(
   },
   async ({ req }) => {
     const body = await req.json();
-    const input = schema.parse(body);
+    const { createSession: createSessionFlag, ...input } = schema.parse(body);
     const { customerAccessTokenCreate } = await storefrontGraphQlRequest<
       CreateCustomerAccessTokenMutation,
       CreateCustomerAccessTokenMutationVariables
@@ -39,6 +41,21 @@ export const POST = apiHandler(
       });
 
       if (customer.customer) {
+        if (createSessionFlag) {
+          await createSession({
+            accessToken:
+              customerAccessTokenCreate.customerAccessToken.accessToken,
+            user: {
+              id: customer.customer.id,
+              displayName:
+                customer.customer.displayName ?? customer.customer.firstName,
+              email: customer.customer.email!,
+              phone: customer.customer.phone!,
+              role: "customer",
+            },
+            expiredAt: customerAccessTokenCreate.customerAccessToken.expiresAt,
+          });
+        }
         return {
           success: true,
           statusCode: 200,

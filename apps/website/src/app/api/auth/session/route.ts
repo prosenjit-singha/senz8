@@ -1,5 +1,9 @@
 import { apiHandler } from "@/helpers/api.handler";
-import { deleteSession, updateSession } from "@/lib/auth/auth.session";
+import {
+  createSession,
+  deleteSession,
+  updateSession,
+} from "@/lib/auth/auth.session";
 import { Session } from "@/lib/auth/auth.type";
 
 export const GET = apiHandler(
@@ -27,7 +31,7 @@ export const POST = apiHandler(
   },
   async ({ req }) => {
     const body = (await req.json()) as Session;
-    const session = await updateSession(body);
+    const session = await createSession(body);
     if (session) {
       return {
         statusCode: 200,
