@@ -1,7 +1,14 @@
 import z from "zod";
 import { apiHandler } from "@/helpers/api.handler";
-import { createToken } from "@/lib/shopify/shopify.customer.service";
-
+import { storefrontGraphQlRequest } from "@/graphql/shopify";
+import {
+  CreateCustomerAccessTokenDocument,
+  CreateCustomerAccessTokenMutation,
+  CreateCustomerAccessTokenMutationVariables,
+  GetCustomerDocument,
+  GetCustomerQuery,
+  GetCustomerQueryVariables,
+} from "@/graphql";
 const schema = z.object({
   email: z.email(),
   password: z.string().min(8),
@@ -14,14 +21,47 @@ export const POST = apiHandler(
   },
   async ({ req }) => {
     const body = await req.json();
-    const data = schema.parse(body);
-    const result = await createToken(data.email, data.password);
+    const input = schema.parse(body);
+    const { customerAccessTokenCreate } = await storefrontGraphQlRequest<
+      CreateCustomerAccessTokenMutation,
+      CreateCustomerAccessTokenMutationVariables
+    >(CreateCustomerAccessTokenDocument, {
+      input,
+    });
 
-    if (result.customer) {
+    if (customerAccessTokenCreate?.customerAccessToken) {
+      const customer = await storefrontGraphQlRequest<
+        GetCustomerQuery,
+        GetCustomerQueryVariables
+      >(GetCustomerDocument, {
+        customerAccessToken:
+          customerAccessTokenCreate.customerAccessToken.accessToken,
+      });
+
+      if (customer.customer) {
+        return {
+          success: true,
+          statusCode: 200,
+          data: {
+            customer: customer.customer,
+            token: {
+              accessToken:
+                customerAccessTokenCreate.customerAccessToken.accessToken,
+              expiresAt:
+                customerAccessTokenCreate.customerAccessToken.expiresAt,
+            },
+          },
+        };
+      }
+
       return {
-        success: true,
-        statusCode: 200,
-        data: { customer: result.customer, token: result.data },
+        success: false,
+        statusCode: 404,
+        error: {
+          type: "bad-request",
+          message: "Customer not found",
+          data: null,
+        },
       };
     } else {
       return {
@@ -30,7 +70,7 @@ export const POST = apiHandler(
         error: {
           type: "authentication",
           message: "Invalid email or password",
-          data: result.errors,
+          data: customerAccessTokenCreate?.customerUserErrors,
         },
       };
     }

@@ -10533,6 +10533,67 @@ export type CustomerAddressUpdateMutation = {
   } | null;
 };
 
+export type CreateCustomerAccessTokenMutationVariables = Exact<{
+  input: CustomerAccessTokenCreateInput;
+}>;
+
+export type CreateCustomerAccessTokenMutation = {
+  __typename?: "Mutation";
+  customerAccessTokenCreate: {
+    __typename?: "CustomerAccessTokenCreatePayload";
+    customerAccessToken: {
+      __typename?: "CustomerAccessToken";
+      accessToken: string;
+      expiresAt: any;
+    } | null;
+    customerUserErrors: Array<{
+      __typename?: "CustomerUserError";
+      message: string;
+      code: CustomerErrorCode | null;
+      field: Array<string> | null;
+    }>;
+  } | null;
+};
+
+export type DeleteCustomerAccessTokenMutationVariables = Exact<{
+  customerAccessToken: Scalars["String"]["input"];
+}>;
+
+export type DeleteCustomerAccessTokenMutation = {
+  __typename?: "Mutation";
+  customerAccessTokenDelete: {
+    __typename?: "CustomerAccessTokenDeletePayload";
+    deletedAccessToken: string | null;
+    deletedCustomerAccessTokenId: string | null;
+    userErrors: Array<{
+      __typename?: "UserError";
+      field: Array<string> | null;
+      message: string;
+    }>;
+  } | null;
+};
+
+export type RenewCustomerAccessTokenMutationVariables = Exact<{
+  customerAccessToken: Scalars["String"]["input"];
+}>;
+
+export type RenewCustomerAccessTokenMutation = {
+  __typename?: "Mutation";
+  customerAccessTokenRenew: {
+    __typename?: "CustomerAccessTokenRenewPayload";
+    customerAccessToken: {
+      __typename?: "CustomerAccessToken";
+      accessToken: string;
+      expiresAt: any;
+    } | null;
+    userErrors: Array<{
+      __typename?: "UserError";
+      field: Array<string> | null;
+      message: string;
+    }>;
+  } | null;
+};
+
 export type GetCustomerQueryVariables = Exact<{
   customerAccessToken: Scalars["String"]["input"];
 }>;
@@ -15896,6 +15957,250 @@ export const CustomerAddressUpdateDocument = {
 } as unknown as DocumentNode<
   CustomerAddressUpdateMutation,
   CustomerAddressUpdateMutationVariables
+>;
+export const CreateCustomerAccessTokenDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "CreateCustomerAccessToken" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "input" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "CustomerAccessTokenCreateInput" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "customerAccessTokenCreate" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "input" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "input" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "customerAccessToken" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "accessToken" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "expiresAt" },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "customerUserErrors" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "message" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "code" } },
+                      { kind: "Field", name: { kind: "Name", value: "field" } },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  CreateCustomerAccessTokenMutation,
+  CreateCustomerAccessTokenMutationVariables
+>;
+export const DeleteCustomerAccessTokenDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "DeleteCustomerAccessToken" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "customerAccessToken" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "String" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "customerAccessTokenDelete" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "customerAccessToken" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "customerAccessToken" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "deletedAccessToken" },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "deletedCustomerAccessTokenId" },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "userErrors" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "field" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "message" },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  DeleteCustomerAccessTokenMutation,
+  DeleteCustomerAccessTokenMutationVariables
+>;
+export const RenewCustomerAccessTokenDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "RenewCustomerAccessToken" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "customerAccessToken" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "String" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "customerAccessTokenRenew" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "customerAccessToken" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "customerAccessToken" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "customerAccessToken" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "accessToken" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "expiresAt" },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "userErrors" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "field" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "message" },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  RenewCustomerAccessTokenMutation,
+  RenewCustomerAccessTokenMutationVariables
 >;
 export const GetCustomerDocument = {
   kind: "Document",
