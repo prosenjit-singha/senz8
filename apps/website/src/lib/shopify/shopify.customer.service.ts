@@ -2,6 +2,12 @@
 import { CustomerSignUpBody } from "@/zod-schemas/shopify/customer.z";
 import { ClientResponse } from "@shopify/storefront-api-client";
 import { storefrontGraphQlApi } from "./shopify.client";
+import { storefrontGraphQlRequest } from "@/graphql/shopify";
+import {
+  RenewCustomerAccessTokenDocument,
+  RenewCustomerAccessTokenMutation,
+  RenewCustomerAccessTokenMutationVariables,
+} from "@/graphql";
 
 const fetcher = storefrontGraphQlApi;
 
@@ -75,7 +81,9 @@ export async function createToken(email: string, password: string) {
   };
 }
 
-export async function createCustomer(input: Omit<CustomerSignUpBody, "confirmPassword">) {
+export async function createCustomer(
+  input: Omit<CustomerSignUpBody, "confirmPassword">
+) {
   const query = `mutation customerCreate($input: CustomerCreateInput!) {
       customerCreate(input: $input) {
         customer {
@@ -117,17 +125,11 @@ export async function createCustomer(input: Omit<CustomerSignUpBody, "confirmPas
 
 /** Renew Shopify token */
 export async function renewToken(token: string) {
-  const query = `
-    mutation customerAccessTokenRenew($customerAccessToken: String!) {
-      customerAccessTokenRenew(customerAccessToken: $customerAccessToken) {
-        customerAccessToken { accessToken expiresAt }
-        userErrors { message }
-      }
-    }
-  `;
-  const result = await storefrontGraphQlApi.post("/", {
-    query,
-    variables: { customerAccessToken: token },
+  const result = await storefrontGraphQlRequest<
+    RenewCustomerAccessTokenMutation,
+    RenewCustomerAccessTokenMutationVariables
+  >(RenewCustomerAccessTokenDocument, {
+    customerAccessToken: token,
   });
   return result;
 }

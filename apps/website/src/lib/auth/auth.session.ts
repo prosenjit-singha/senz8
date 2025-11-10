@@ -128,14 +128,19 @@ export async function renewSession() {
   if (cookie) {
     const session = await decryptSession(cookie);
     if (session && session.accessToken) {
-      if (session.user.role === "customer") {
-        const result = await renewToken(session.accessToken);
-        console.log(result);
-        // set the session
-        // const newSession: Session = {};
-        // await updateSession(newSession);
-        // // return new session
-        // return newSession;
+      const { customerAccessTokenRenew } = await renewToken(
+        session.accessToken
+      );
+      // set the session
+      if (customerAccessTokenRenew?.customerAccessToken) {
+        const newSession: Session = {
+          user: session.user,
+          accessToken:
+            customerAccessTokenRenew?.customerAccessToken.accessToken,
+          expiredAt: customerAccessTokenRenew?.customerAccessToken.expiresAt,
+        };
+        await updateSession(newSession);
+        return newSession;
       }
     }
     revalidateTag("session");
