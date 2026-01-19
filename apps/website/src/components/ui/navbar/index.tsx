@@ -22,7 +22,7 @@ gsap.registerPlugin(SplitText);
 const links = [
   { href: "/", label: "Home" },
   { href: "/products", label: "Products" },
-  { href: "/about", label: "About US" },
+  { href: "/about-us", label: "About US" },
   { href: "/contact", label: "Contact" },
 ];
 
