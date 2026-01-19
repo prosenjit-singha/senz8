@@ -1,36 +1,65 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Perfume Ecommerce Store
 
-## Getting Started
+A modern, high-performance ecommerce platform for perfumes, fully integrated with Shopify, built with **Next.js**, and optimized for SEO.
 
-First, run the development server:
+🌐 [Check Out the Live Demo](https://senz8-website.vercel.app)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Project Overview
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+This project is a feature-rich ecommerce website for perfumes where every detail — from products to inventory — is fully synced with the Shopify store. The platform is designed to provide a seamless shopping experience while being fast, SEO-friendly, and easy to maintain.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## Key Features & Contributions
 
-To learn more about Next.js, take a look at the following resources:
+- **Shopify API Integration**  
+  Integrated Shopify APIs to fetch product listings, inventory, and order details in real-time, ensuring that the website is always up-to-date with the store.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **User Authentication**  
+  Implemented secure **user registration and login** functionality, allowing customers to create accounts, track orders, and manage their profiles.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Shopping Cart Functionality**  
+  Developed the **add-to-cart and cart management system** fully synced with Shopify, so customers can seamlessly add products, update quantities, and checkout.
 
-## Deploy on Vercel
+- **Server Components for SEO**  
+  Leveraged **Next.js server components** for the homepage and product pages to improve SEO, fast initial load times, and better search engine indexing.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **Next.js Frontend Development**  
+  Built with a focus on performance, scalability, and maintainability, using modern **React + Next.js architecture**.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Real-Time Data Sync**  
+  Every product detail, pricing, and inventory update is automatically synced with Shopify, ensuring consistency between the store and website.
+
+---
+
+## Technology Stack
+
+- **Frontend & Framework:** Next.js (React, Server Components)
+- **Backend & API Integration:** Next.js App Router (`app/api` routes) and Server Actions
+- **State Management:** Zustand for global state
+- **Forms & Validation:** React Hook Form + Zod for robust form handling and schema validation
+- **Authentication:** Custom session provider and middleware
+- **SEO Optimization:** Server-side rendering for products & homepage
+
+---
+
+## Highlights / Impact
+
+- Delivered a **fully functional ecommerce platform** synced with Shopify with minimal latency.
+- Ensured **SEO-friendly pages** that improve search engine visibility and traffic.
+- Developed **robust authentication and cart workflows**, enhancing user experience.
+- Built a scalable architecture ready for future feature expansion, like subscriptions or personalization.
+
+---
+
+## Next Steps / Future Improvements
+
+- Implement **payment gateway integration** for a full checkout experience.
+- Add **personalized product recommendations** based on user behavior.
+- Extend the platform with **analytics dashboards** for store performance insights.
+
+---
+
+This project demonstrates my ability to build **full-stack, production-ready ecommerce solutions**, integrate external APIs, and optimize web applications for both **performance and SEO**. It reflects not just coding skills but also architectural planning and problem-solving.
