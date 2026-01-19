@@ -213,7 +213,12 @@ export default function Page() {
       {/* <PageLoader /> */}
       {/* <LightRays className="z-[-1] fixed top-0 left-0 w-full h-full" /> */}
 
-      <main className="content-wrapper">
+      <main
+        className="content-wrapper"
+        style={{
+          opacity: state.isLoading || dreiProgress.progress !== 100 ? 0 : 1,
+        }}
+      >
         <div className="snap-section w-full h-screen" id="hero-section">
           <div
             id="canvas-wrapper"

@@ -7,7 +7,11 @@ import "../styles/page-loader.css";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 
-const PageLoader = ({ isLoading = true }: { isLoading: boolean | "instant" }) => {
+const PageLoader = ({
+  isLoading = true,
+}: {
+  isLoading: boolean | "instant";
+}) => {
   const timerRef = React.useRef<NodeJS.Timeout>(null);
   const container = React.useRef<HTMLDivElement>(null);
   const animationTimeline = React.useRef<gsap.core.Timeline>(null);
@@ -32,6 +36,7 @@ const PageLoader = ({ isLoading = true }: { isLoading: boolean | "instant" }) =>
           height: "150vmax",
           ease: "power2.out",
         })
+        .addLabel("fully-visible")
         .to(
           ".logo-wrapper",
           {
@@ -43,7 +48,7 @@ const PageLoader = ({ isLoading = true }: { isLoading: boolean | "instant" }) =>
           },
           "<0.25"
         )
-        .addLabel("finish");
+        .addLabel("fully-hidden");
     },
     { scope: container }
   );
