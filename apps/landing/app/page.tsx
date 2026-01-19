@@ -1,10 +1,10 @@
 "use client";
-import Camera from "@/components/threejs/camera";
-import { GizmoHelper, GizmoViewport } from "@react-three/drei";
+// import Camera from "@/components/threejs/camera";
+// import { GizmoHelper, GizmoViewport } from "@react-three/drei";
+// import LightRays from "@workspace/next-ui/components/light-rays-bg";
+// import Navbar from "@workspace/next-ui/components/navbar";
 import { Canvas } from "@react-three/fiber";
-import LightRays from "@workspace/next-ui/components/light-rays-bg";
-import Navbar from "@workspace/next-ui/components/navbar";
-import React from "react";
+import React, { Suspense } from "react";
 import HomeHeroContent from "./_components/content";
 import BottlesScene from "./_components/bottles";
 import PageLoader from "@workspace/next-ui/components/page-loader";
@@ -18,6 +18,8 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import SkyWithGUI from "@/components/threejs/sky";
 
+import { useProgress } from "@react-three/drei";
+
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 const SLIDE_DURATION = 1.5;
 const SLIDE_STAGGER = 0.05;
@@ -30,6 +32,7 @@ const gsapSlideConfig = {
 };
 
 export default function Page() {
+  const dreiProgress = useProgress();
   const [activeView, setActiveView] = React.useState<string>("hero-section");
   const { state, actions } = useGlobalState();
   const [activeProduct, setActiveProduct] = React.useState(0);
@@ -57,7 +60,9 @@ export default function Page() {
     });
 
     const snapPoints = snapSections.map(
-      (sec) => sec.offsetTop / (document.documentElement.scrollHeight - window.innerHeight)
+      (sec) =>
+        sec.offsetTop /
+        (document.documentElement.scrollHeight - window.innerHeight)
     );
 
     ScrollTrigger.create({
@@ -96,7 +101,10 @@ export default function Page() {
       `[data-slot='product-details'][data-index='${nextIndex}']`
     );
 
-    const nextChildren = gsap.utils.toArray<HTMLElement>(":scope > *", nextParent);
+    const nextChildren = gsap.utils.toArray<HTMLElement>(
+      ":scope > *",
+      nextParent
+    );
 
     // Animate all children
     gsap.to(nextChildren, {
@@ -131,7 +139,10 @@ export default function Page() {
       `[data-slot='product-details'][data-index='${prevIndex}']`
     );
 
-    const nextChildren = gsap.utils.toArray<HTMLElement>(":scope > *", nextParent);
+    const nextChildren = gsap.utils.toArray<HTMLElement>(
+      ":scope > *",
+      nextParent
+    );
 
     // Animate all children
     gsap.to(nextChildren, {
@@ -195,14 +206,19 @@ export default function Page() {
   return (
     <>
       {/* <Navbar /> */}
-      {/* <PageLoader isLoading={state.isLoading === "instant"} /> */}
+      <PageLoader
+        isLoading={state.isLoading || dreiProgress.progress !== 100}
+      />
 
       {/* <PageLoader /> */}
       {/* <LightRays className="z-[-1] fixed top-0 left-0 w-full h-full" /> */}
 
       <main className="content-wrapper">
         <div className="snap-section w-full h-screen" id="hero-section">
-          <div id="canvas-wrapper" className="h-full w-full relative pointer-events-none">
+          <div
+            id="canvas-wrapper"
+            className="h-full w-full relative pointer-events-none"
+          >
             {/* <div
             data-slot="window-light"
             className="absolute top-[45%] left-1/2 w-20 h-30 grid grid-cols-2 gap-4 -translate-x-1/2 -translate-y-1/2 opacity-80 blur-md -skew-y-12"
@@ -219,8 +235,9 @@ export default function Page() {
               fov={50}
               lookAt={[0, 0.5, 0]}
               useOrbitControls
-            /> */}
+              /> */}
               <ambientLight intensity={80} />
+
               <SkyWithGUI
                 distance={4000}
                 turbidity={1.2}
@@ -234,7 +251,10 @@ export default function Page() {
                 showGUI
               />
 
-              <BottlesScene activeSection={activeView} activeProductIndex={activeProduct} />
+              <BottlesScene
+                activeSection={activeView}
+                activeProductIndex={activeProduct}
+              />
               {/* 
               <GizmoHelper alignment="bottom-right" margin={[80, 80]}>
                 <GizmoViewport />
@@ -290,8 +310,12 @@ export default function Page() {
                             data-slot="product-details"
                             className="absolute top-0 left-0 w-full h-full *:opacity-0 text-3xl *:translate-x-[100%]"
                           >
-                            <p className="text-golden-linear-gradient">{product.name[0]}</p>
-                            <p className="text-golden-linear-gradient">{product.name[1]}</p>
+                            <p className="text-golden-linear-gradient">
+                              {product.name[0]}
+                            </p>
+                            <p className="text-golden-linear-gradient">
+                              {product.name[1]}
+                            </p>
                             <p className="text-xs mt-1 text-golden-linear-gradient">
                               {product.flavor}
                             </p>
@@ -302,7 +326,10 @@ export default function Page() {
 
                     <button
                       onClick={handleNextProduct}
-                      disabled={disableChangeBtn || activeProduct === PRODUCTS.length - 1}
+                      disabled={
+                        disableChangeBtn ||
+                        activeProduct === PRODUCTS.length - 1
+                      }
                       className="border-golden p-2 rounded-full hover:cursor-pointer shadow-xl shadow-transparent hover:shadow-amber-200/10 text-amber-200 hover:text-amber-100 transition-all disabled:cursor-not-allowed disabled:opacity-50"
                     >
                       <ArrowRightIcon />

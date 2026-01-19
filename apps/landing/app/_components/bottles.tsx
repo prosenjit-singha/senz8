@@ -2,7 +2,7 @@ import PerfumeBottleModel from "@/components/perfume-bottle.model";
 import DirectionalLight from "@/components/threejs/directional";
 import { useGSAP } from "@gsap/react";
 import { useThree } from "@react-three/fiber";
-import React from "react";
+import React, { Suspense } from "react";
 import * as THREE from "three";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -14,6 +14,7 @@ import {
   getArcPositions,
   getPerfectTriangleCount,
 } from "@/helpers/threejs/3d-position.helper";
+import { useProgress } from "@react-three/drei";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -57,9 +58,16 @@ const BOTTLES = [
     scale: 20,
   },
 ];
-const INITIAL_BOTTLE_POSITIONS = generateTrianglePositions(BOTTLES.length, 2, 1);
+const INITIAL_BOTTLE_POSITIONS = generateTrianglePositions(
+  BOTTLES.length,
+  2,
+  1
+);
 const PERFECT_TRIANGLE_BOTTLE_COUNT = getPerfectTriangleCount(BOTTLES.length);
-const PERFECT_TRIANGLE_BOTTLES = BOTTLES.slice(0, PERFECT_TRIANGLE_BOTTLE_COUNT);
+const PERFECT_TRIANGLE_BOTTLES = BOTTLES.slice(
+  0,
+  PERFECT_TRIANGLE_BOTTLE_COUNT
+);
 
 const REMAINING_BOTTLES = BOTTLES.slice(PERFECT_TRIANGLE_BOTTLE_COUNT);
 
@@ -70,6 +78,7 @@ const BottlesScene = ({
   activeSection: string;
   activeProductIndex: number;
 }) => {
+  const dreiProgress = useProgress();
   // ref to store initial camera state
   const cameraState = React.useRef<{
     position: THREE.Vector3;
@@ -79,7 +88,8 @@ const BottlesScene = ({
 
   const bottlesRef = React.useRef<THREE.Group[]>([]);
 
-  const [isFirstAnimationComplete, setIsFirstAnimationComplete] = React.useState(false);
+  const [isFirstAnimationComplete, setIsFirstAnimationComplete] =
+    React.useState(false);
   const topLight = React.useRef<THREE.DirectionalLight>(null);
   const leftLight = React.useRef<THREE.DirectionalLight>(null);
   const rightLight = React.useRef<THREE.DirectionalLight>(null);
@@ -144,21 +154,21 @@ const BottlesScene = ({
         perspectiveCamera.lookAt(0, 0, 0);
         perspectiveCamera.fov = 50;
         perspectiveCamera.updateProjectionMatrix();
-        gsap.to(camera.position, {
-          x: 0,
-          y: 0.5,
-          z: 6,
-          duration: 3,
-          ease: "power2.inOut",
-          onUpdate: () => {
-            perspectiveCamera.lookAt(0, 0.5, 0);
-            camera.updateProjectionMatrix(); // keep FOV and projection in sync
-          },
-          onComplete: () => {
-            console.log("First animation complete");
-            setIsFirstAnimationComplete(true);
-          },
-        });
+        // gsap.to(camera.position, {
+        //   x: 0,
+        //   y: 0.5,
+        //   z: 6,
+        //   duration: 3,
+        //   ease: "power2.inOut",
+        //   onUpdate: () => {
+        //     perspectiveCamera.lookAt(0, 0.5, 0);
+        //     camera.updateProjectionMatrix(); // keep FOV and projection in sync
+        //   },
+        //   onComplete: () => {
+        //     console.log("First animation complete");
+        //     setIsFirstAnimationComplete(true);
+        //   },
+        // });
 
         // animate remaining bottles
         // bottlesRef.current.forEach((bottle, index) => {
@@ -273,8 +283,36 @@ const BottlesScene = ({
       }
     },
     {
-      dependencies: [activeSection, activeProductIndex, isFirstAnimationComplete],
+      dependencies: [
+        activeSection,
+        activeProductIndex,
+        isFirstAnimationComplete,
+      ],
     }
+  );
+
+  useGSAP(
+    () => {
+      if (dreiProgress.progress === 100) {
+        gsap.to(camera.position, {
+          x: 0,
+          y: 0.5,
+          z: 6,
+          duration: 3,
+          delay: 1.75,
+          ease: "power2.inOut",
+          onUpdate: () => {
+            perspectiveCamera.lookAt(0, 0.5, 0);
+            camera.updateProjectionMatrix(); // keep FOV and projection in sync
+          },
+          onComplete: () => {
+            console.log("First animation complete");
+            setIsFirstAnimationComplete(true);
+          },
+        });
+      }
+    },
+    { dependencies: [camera, perspectiveCamera, dreiProgress.progress] }
   );
 
   return (
@@ -288,8 +326,8 @@ const BottlesScene = ({
       />
       <group
         position={[0, -1.3, 0]}
-        // onPointerEnter={onPointerEnter}
-        // onPointerLeave={onPointerLeave}
+        onPointerEnter={onPointerEnter}
+        onPointerLeave={onPointerLeave}
       >
         {/* <Environment preset="studio" background={false} /> */}
         {/* <DirectionalLight
@@ -321,36 +359,38 @@ const BottlesScene = ({
           useHelper={showHelpers}
         />
 
-        {PERFECT_TRIANGLE_BOTTLES.map((bottle, index) => (
-          <PerfumeBottleModel
-            ref={(el: THREE.Group) => {
-              bottlesRef.current[index] = el;
-            }}
-            key={bottle.id}
-            position={INITIAL_BOTTLE_POSITIONS[index]}
-            scale={bottle.scale}
-          />
-        ))}
-        {REMAINING_BOTTLES.map((bottle, i) => {
-          const index = PERFECT_TRIANGLE_BOTTLE_COUNT + i;
-          if (INITIAL_BOTTLE_POSITIONS[index]) {
-            return (
-              <PerfumeBottleModel
-                ref={(el: THREE.Group) => {
-                  bottlesRef.current[index] = el;
-                }}
-                key={bottle.id}
-                position={[
-                  INITIAL_BOTTLE_POSITIONS[index][0],
-                  INITIAL_EXTRA_BOTTLE_Y_POSITION,
-                  INITIAL_BOTTLE_POSITIONS[index][2],
-                ]}
-                scale={bottle.scale}
-              />
-            );
-          }
-          return null;
-        })}
+        <Suspense fallback={<PerfumeBottleModel.ModelLoader />}>
+          {PERFECT_TRIANGLE_BOTTLES.map((bottle, index) => (
+            <PerfumeBottleModel
+              ref={(el: THREE.Group) => {
+                bottlesRef.current[index] = el;
+              }}
+              key={bottle.id}
+              position={INITIAL_BOTTLE_POSITIONS[index]}
+              scale={bottle.scale}
+            />
+          ))}
+          {REMAINING_BOTTLES.map((bottle, i) => {
+            const index = PERFECT_TRIANGLE_BOTTLE_COUNT + i;
+            if (INITIAL_BOTTLE_POSITIONS[index]) {
+              return (
+                <PerfumeBottleModel
+                  ref={(el: THREE.Group) => {
+                    bottlesRef.current[index] = el;
+                  }}
+                  key={bottle.id}
+                  position={[
+                    INITIAL_BOTTLE_POSITIONS[index][0],
+                    INITIAL_EXTRA_BOTTLE_Y_POSITION,
+                    INITIAL_BOTTLE_POSITIONS[index][2],
+                  ]}
+                  scale={bottle.scale}
+                />
+              );
+            }
+            return null;
+          })}
+        </Suspense>
       </group>
       <Ocean />
       {/* <WaterSimulation
