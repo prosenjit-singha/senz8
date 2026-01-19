@@ -22,8 +22,8 @@ gsap.registerPlugin(SplitText);
 const links = [
   { href: "/", label: "Home" },
   { href: "/products", label: "Products" },
-  { href: "/about-us", label: "About US" },
-  { href: "/contact", label: "Contact" },
+  { href: "/about-us", label: "About Us" },
+  { href: "/contact-us", label: "Contact Us" },
 ];
 
 const Navbar = () => {
