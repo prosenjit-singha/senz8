@@ -36,13 +36,18 @@ const SkyWithGUI: React.FC<SkyWithGUIProps> = ({
     exposure: skyProps.exposure ?? 0.5,
   });
 
-  const parameters = useFramerMotion(skyConfig as Record<string, number> & SkyParameters, {
-    animationConfig: { duration: 0.5 },
-  });
+  const parameters = useFramerMotion(
+    skyConfig as Record<string, number> & SkyParameters,
+    {
+      animationConfig: { duration: 0.5 },
+    }
+  );
 
   const guiRef = useRef<GUI>(null);
   const { gl } = useThree();
-  const sunPositionRef = useRef(calcPosFromAngles(parameters.inclination, parameters.azimuth));
+  const sunPositionRef = useRef(
+    calcPosFromAngles(parameters.inclination, parameters.azimuth)
+  );
 
   // Initialize GUI
   useEffect(() => {
@@ -117,7 +122,7 @@ const SkyWithGUI: React.FC<SkyWithGUIProps> = ({
         gl.toneMappingExposure = value;
       }
 
-      console.log({ newParams });
+      // console.log({ newParams });
 
       onParametersChange?.(newParams);
       return newParams;
