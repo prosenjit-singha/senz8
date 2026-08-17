@@ -3,6 +3,7 @@ import "@workspace/ui/styles/globals.css";
 import "@/styles/website.styles.css";
 import { FuturaLTPro, WalbaumPro } from "@/lib/fonts";
 import { Providers } from "@/components/providers";
+import SmoothScrollProvider from "@/components/providers/smooth-scroll-provider";
 
 export const metadata: Metadata = {
   title: "SENZ8",
@@ -19,7 +20,9 @@ export default function RootLayout({
       <body
         className={`${FuturaLTPro.variable} ${WalbaumPro.variable} font-sans antialiased`}
       >
-        <Providers>{children}</Providers>
+        <SmoothScrollProvider>
+          <Providers>{children}</Providers>
+        </SmoothScrollProvider>
       </body>
     </html>
   );
