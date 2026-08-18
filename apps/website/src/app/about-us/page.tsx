@@ -139,9 +139,9 @@ export default function AboutUsPage() {
               >
                 <div className="relative h-[330px] lg:h-[440px] xl:h-[600px]">
                   <img
-                    alt="Charter team member working"
+                    alt="Perfume bottles on display"
                     className="object-cover"
-                    src="https://deifkwefumgah.cloudfront.net/shadcnblocks/block/placeholder-1.svg"
+                    src="https://images.unsplash.com/photo-1587017539504-67cfbddac569?q=80&w=1200&auto=format&fit=crop"
                   />
                 </div>
               </div>
@@ -153,9 +153,9 @@ export default function AboutUsPage() {
               >
                 <div className="relative h-[330px] lg:h-[440px] xl:h-[600px]">
                   <img
-                    alt="Modern workspace setup"
+                    alt="Luxury fragrance bottle with gold accents"
                     className="object-cover"
-                    src="https://deifkwefumgah.cloudfront.net/shadcnblocks/block/placeholder-1.svg"
+                    src="https://images.unsplash.com/photo-1541643600914-78b084683601?q=80&w=1200&auto=format&fit=crop"
                   />
                 </div>
               </div>
@@ -167,9 +167,9 @@ export default function AboutUsPage() {
               >
                 <div className="relative h-[330px] lg:h-[440px] xl:h-[600px]">
                   <img
-                    alt="Team collaboration"
+                    alt="Perfume being sprayed into the air"
                     className="object-cover"
-                    src="https://deifkwefumgah.cloudfront.net/shadcnblocks/block/placeholder-1.svg"
+                    src="https://images.unsplash.com/photo-1594035910387-fea47794261f?q=80&w=1200&auto=format&fit=crop"
                   />
                 </div>
               </div>
@@ -177,25 +177,35 @@ export default function AboutUsPage() {
           </div>
         </div>
       </section>
-      <section className="container">
-        <div className="mr-0 ml-auto max-w-2xl space-y-5 md:space-y-8 lg:space-y-10">
-          <p className="text-lg">
-            We began crafting our fragrances in 2019 and officially launched in
-            2022. Every scent is developed from the ground up — no mass-produced
-            formulas, no shortcuts, no recycled blends. We’re purpose-built to
-            create fragrances that stand the test of time, not trends.
-          </p>
-          <h2 className="text-2xl font-medium tracking-tight md:text-3xl">
-            We’re a bit different — not your typical perfume brand.
-          </h2>
-          <p className="text-lg">
-            We’re 100% founder- and team-owned, sustainably profitable, and
-            intentionally lean. That means every decision is driven by quality,
-            not pressure from investors or inflated margins. Over time, this
-            page will evolve, but right now our focus is simple: creating
-            exceptional fragrances and delivering them reliably to our
-            customers.
-          </p>
+      <section className="container py-10 md:py-12 lg:py-15">
+        <div className="grid gap-5 md:grid-cols-2 md:gap-10 lg:gap-16">
+          <img
+            alt="Perfume oil being blended by a perfumer"
+            width="480"
+            height="400"
+            className="order-2 aspect-[6/5] w-full max-h-[350px] object-cover md:order-1"
+            src="https://images.unsplash.com/photo-1557170334-a9632e77c6e4?q=80&w=1200&auto=format&fit=crop"
+          />
+          <div className="order-1 space-y-5 md:order-2 md:space-y-8 lg:space-y-10">
+            <p className="text-lg">
+              We began crafting our fragrances in 2019 and officially launched
+              in 2022. Every scent is developed from the ground up — no
+              mass-produced formulas, no shortcuts, no recycled blends. We’re
+              purpose-built to create fragrances that stand the test of time,
+              not trends.
+            </p>
+            <h2 className="text-2xl font-medium tracking-tight md:text-3xl">
+              We’re a bit different — not your typical perfume brand.
+            </h2>
+            <p className="text-lg">
+              We’re 100% founder- and team-owned, sustainably profitable, and
+              intentionally lean. That means every decision is driven by
+              quality, not pressure from investors or inflated margins. Over
+              time, this page will evolve, but right now our focus is simple:
+              creating exceptional fragrances and delivering them reliably to
+              our customers.
+            </p>
+          </div>
         </div>
       </section>
       <section className="container py-10 md:py-12 lg:py-15">
@@ -221,11 +231,11 @@ export default function AboutUsPage() {
             </p>
           </div>
           <img
-            alt="Founding team collaboration"
+            alt="Elegant perfume bottle beside ingredients"
             width="480"
             height="400"
-            className="order-1 object-cover md:order-2"
-            src="https://deifkwefumgah.cloudfront.net/shadcnblocks/block/placeholder-1.svg"
+            className="order-1 aspect-[6/5] w-full max-h-[350px] object-cover md:order-2"
+            src="https://images.unsplash.com/photo-1615634260167-c8cdede054de?q=80&w=1200&auto=format&fit=crop"
           />
         </div>
       </section>
