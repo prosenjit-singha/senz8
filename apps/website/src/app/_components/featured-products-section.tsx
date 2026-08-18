@@ -141,7 +141,6 @@ const FeaturedProductsSection = ({
                     title: v.title,
                     availableForSale: v.availableForSale,
                     price: v.price,
-                    quantityAvailable: v.quantityAvailable,
                     currentlyNotInStock: v.currentlyNotInStock,
                     quantityRule: v.quantityRule,
                   })),

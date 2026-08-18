@@ -302,7 +302,6 @@ type CartActionProps = Omit<React.ComponentProps<"div">, "children"> & {
       title: string;
       price: { amount: number; currencyCode: string };
       availableForSale: boolean;
-      quantityAvailable: number | null;
       currentlyNotInStock: boolean;
       quantityRule: {
         increment: number;
@@ -385,9 +384,7 @@ export function CartActions({
     isRemoving ||
     isUpdating ||
     data.variants[variantIndex].availableForSale === false;
-  const isOutOfStock =
-    data.variants[variantIndex].quantityAvailable === 0 ||
-    !data.variants[variantIndex].availableForSale;
+  const isOutOfStock = !data.variants[variantIndex].availableForSale;
 
   React.useEffect(() => {
     const names = data.options.map((op) => op.name);

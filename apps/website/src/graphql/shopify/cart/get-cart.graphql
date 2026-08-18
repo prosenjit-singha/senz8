@@ -17,7 +17,6 @@ query GetCart($cartId: ID!) {
             title
             sku
             availableForSale
-            quantityAvailable
             currentlyNotInStock
             quantityRule {
               increment

@@ -50,7 +50,6 @@ query GetSingleCollection($collectionId: ID!) {
               currencyCode
             }
             availableForSale
-            quantityAvailable
             currentlyNotInStock
             quantityRule {
               increment

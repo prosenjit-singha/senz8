@@ -1,5 +1,4 @@
 import { TypedDocumentNode } from "@graphql-typed-document-node/core";
-import { ClientResponse } from "@shopify/storefront-api-client";
 import { request } from "graphql-request";
 
 const endpoint = `https://${process.env.NEXT_PUBLIC_SHOP_DOMAIN}/api/2025-10/graphql.json`;

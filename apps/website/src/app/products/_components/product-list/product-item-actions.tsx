@@ -16,7 +16,7 @@ function ProductItemActions({
       product.handle + "-out-of-stock"
     );
     if (outOfStock) {
-      if (product.variants.nodes[variantIndex].quantityAvailable === 0) {
+      if (!product.variants.nodes[variantIndex].availableForSale) {
         outOfStock.classList.remove("invisible");
       }
     }
@@ -39,7 +39,6 @@ function ProductItemActions({
             title: v.title,
             price: v.price,
             availableForSale: v.availableForSale,
-            quantityAvailable: v.quantityAvailable,
             currentlyNotInStock: v.currentlyNotInStock,
             quantityRule: v.quantityRule,
           })),

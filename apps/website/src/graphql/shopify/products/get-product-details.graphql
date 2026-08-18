@@ -20,7 +20,6 @@ query getProductByHandle($handle: String!) {
         title
         sku
         availableForSale
-        quantityAvailable
         currentlyNotInStock
         quantityRule {
           increment
